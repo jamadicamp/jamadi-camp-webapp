@@ -7,10 +7,11 @@ type Props = {
   as: string;
   active?: boolean;
   className?: string;
+  onClick?: () => void
 };
 
 export default function NavLink(props: PropsWithChildren<Props>) {
-  const { href, as, active, className } = props;
+  const { href, as, active, className, ...other } = props;
   return (
     <Link
       href={href}
@@ -18,6 +19,7 @@ export default function NavLink(props: PropsWithChildren<Props>) {
       className={cn("uppercase hover:text-yellow-700 tracking-widest font-light", {
         "text-yellow-700": active,
       }, className)}
+      {...other}
     >
       {props.children}
     </Link>
