@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const token = process.env.LODGIFY_API_KEY;
 export const baseUrl = process.env.SERVER_API_URL
 
