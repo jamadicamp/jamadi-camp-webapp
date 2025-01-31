@@ -2,6 +2,7 @@ import { cache } from "react";
 import { callApi } from "@/app/lib/api";
 import { notFound } from "next/navigation";
 import { Property } from "@/app/types";
+import { PageProps } from "../../../../.next/types/app/layout";
 
 const getCacheProperties = cache(async (id: string) => {
 	const property = await callApi(
@@ -19,7 +20,7 @@ const getCacheProperties = cache(async (id: string) => {
 
 type Props = {
 	params: { id: string };
-};
+} & PageProps;
 
 export default async function PropertyPage(props: Props) {
 	const {
