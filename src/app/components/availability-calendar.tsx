@@ -16,6 +16,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getAvailablities } from "../actions";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import routes from "../lib/routes";
 
 type AvailabilityData = {
   property_id: number;
@@ -99,6 +102,7 @@ function includesDisabledDays(from: Date, to: Date, disabledDates: Date[]) {
 export default function AvailabilityCalendar({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
+    const router = useRouter()
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2025, 0, 20),
     to: addDays(new Date(2025, 0, 20), 20),
@@ -140,6 +144,12 @@ export default function AvailabilityCalendar({
       return; // Don't update state
     }
     setDate(newRange);
+  }
+
+  function callbackSearch() {
+    if (!date || !date.from || !date.to) return;
+    // take the date and pass as parameters to the next /search page
+    router.push(routes.search.href(date.from.toISOString(), date.to.toISOString()))
   }
 
   return (
@@ -189,6 +199,7 @@ export default function AvailabilityCalendar({
           </PopoverContent>
         </Popover>
       </div>
+     <Button disabled={!date || !date.from || !date.to} onClick={callbackSearch}>Search</Button>
     </div>
   );
 }

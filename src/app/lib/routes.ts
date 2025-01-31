@@ -14,6 +14,10 @@ const routes = {
     contact: {
         path: "/contact",
         href: "/contact"
+    },
+    search: {
+        path: "/search",
+        href: (from: string, to: string) => `/search?from=${from}&to=${to}`
     }
 }
 
