@@ -3,6 +3,7 @@ import { callApi } from "@/app/lib/api";
 import { notFound } from "next/navigation";
 import { PropertiesV2Response } from "@/app/types";
 import Image from "next/image";
+import AvailabilityCalendar from "./components/availability-calendar";
 
 const getCacheProperty = cache(async () => {
 	const properties = await callApi(
@@ -55,6 +56,8 @@ export default async function Home() {
 				</div>
 			</div>
 
+
+			<AvailabilityCalendar/>
 			{/* Highlight / Intro Section */}
 			<section
 				id="highlights"
