@@ -1,3 +1,5 @@
+import { Room } from "./Room"
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface PropertiesV2Response {
   count: number
@@ -29,7 +31,7 @@ export interface Property {
   original_min_price: number
   max_price: number
   original_max_price: number
-  rooms: Room[]
+  rooms: Partial<Room>[]
   in_out_max_date: string
   in_out: any
   currency_code: string
@@ -41,11 +43,6 @@ export interface Property {
 
 export interface Contact {
   spoken_languages: any[]
-}
-
-export interface Room {
-  id: number
-  name: string
 }
 
 export interface InOut {

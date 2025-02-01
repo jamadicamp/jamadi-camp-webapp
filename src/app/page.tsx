@@ -8,22 +8,43 @@ import Search from "./components/search";
 import RenderPropertiesList from "./components/render-properties-list";
 
 const getCacheProperty = cache(async () => {
-	const properties = await callApi(
+	const now = Date.now()
+	const response = await callApi(
 		"GET",
 		"/properties?includeCount=true&page=1&size=50",
 		null,
 		"v2"
 	);
 
-	if (!properties?.response || properties?.status !== 200) {
+	if (!response?.response || response?.status !== 200) {
 		return notFound();
 	}
+
+	// for each property, we get the information about the house. We store the data as dictionary Record<room_id, Room>
+	const properties = response?.response as PropertiesV2Response
+	const propertyRoomIds: Array<{property_id: number, room_id: number}> = []
+	properties?.items?.forEach(property => {
+		propertyRoomIds.push({property_id: property.id, room_id: property.rooms[0]?.id as number})
+	})
+
+	// send a promise request to the server for all the data
+	const rooms = await Promise.all(propertyRoomIds.map(async (value) => {
+		const response = await callApi("GET", `/properties/${value.property_id}/rooms/${value.room_id}`);
+		return {...value, room: response?.response}
+	}))
+
+	// merge the rooms inside the properties and change the type
+	for (let i = 0; i < properties.items.length; i++) {
+		properties.items[0].rooms[0] = rooms[i].room;
+	}
+
 	// NOTE: this is where we put the typescript type. So that you get the suggestions.
-	return properties?.response as PropertiesV2Response;
+	console.log(Date.now() - now)
+	return {properties};
 });
 
 export default async function Home() {
-	const properties = await getCacheProperty();
+	const {properties} = await getCacheProperty();
 
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
