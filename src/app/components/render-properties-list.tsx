@@ -12,7 +12,6 @@ export default function RenderPropertiesList({
   date?: DateRange
 }) {
 
-  console.log(properties)
   return (
     <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
       {properties.map((property) => (
@@ -36,7 +35,7 @@ export default function RenderPropertiesList({
               Bedrooms: <span className="font-thin">{property.rooms[0]?.bedrooms || "N/A"}</span>
             </h6>
             <h6 className="text-lg md:text-xl">
-              FROM: <span className="font-thin">${property.rooms[0]?.original_min_price || "N/A"} / night</span>
+              FROM: <span className="font-thin">${property.original_min_price || "N/A"} / night</span>
             </h6>
           </div>
         </Link>

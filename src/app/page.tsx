@@ -6,6 +6,7 @@ import { PropertiesV2Response } from "@/app/types";
 import Image from "next/image";
 import Search from "./components/search";
 import RenderPropertiesList from "./components/render-properties-list";
+import { Room } from "./types/Room";
 
 const getCacheProperty = cache(async () => {
 	const now = Date.now()
@@ -35,7 +36,7 @@ const getCacheProperty = cache(async () => {
 
 	// merge the rooms inside the properties and change the type
 	for (let i = 0; i < properties.items.length; i++) {
-		properties.items[0].rooms[0] = rooms[i].room;
+		properties.items[0].rooms[0] = rooms.find((e) => e.room_id === properties.items[0].rooms[0].id)?.room as Room;
 	}
 
 	// NOTE: this is where we put the typescript type. So that you get the suggestions.

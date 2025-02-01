@@ -22,8 +22,6 @@ export default function Search({properties}: Props) {
         if (info) data.push(info);
     })
 
-    console.log(data, availableProperties)
-
     function callbackSearch(properties: Array<{ property_id: number; room_type_id: number }>, date: DateRange) {
         setAvailableProperties(properties);
         setDate(date)
