@@ -18,7 +18,7 @@ const getCacheProperty = cache(async () => {
 
 export default async function Home() {
 	const properties = await getCacheProperty();
-
+	
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{/* Hero Section */}
