@@ -1,8 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import { cache } from "react";
 import { callApi } from "@/app/lib/api";
 import { notFound } from "next/navigation";
 import { PropertiesV2Response } from "@/app/types";
 import Image from "next/image";
+import Search from "./components/search";
+import RenderPropertiesList from "./components/render-properties-list";
 
 const getCacheProperty = cache(async () => {
 	const properties = await callApi(
@@ -55,6 +58,8 @@ export default async function Home() {
 				</div>
 			</div>
 
+
+			<Search properties={properties.items}/>
 			{/* Highlight / Intro Section */}
 			<section
 				id="highlights"
@@ -85,6 +90,7 @@ export default async function Home() {
 							src="/images/icon-mountain.png"
 							alt="Mountain Icon"
 							className="h-16 w-16 mb-4"
+							
 						/>
 						<h3 className="text-xl font-semibold mb-2">Breathtaking Views</h3>
 						<p className="text-gray-500">
@@ -115,34 +121,7 @@ export default async function Home() {
 				<h3 className="text-3xl md:text-5xl font-medium italic mb-8">
 					Our Cabins in Jamadi
 				</h3>
-				<div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-					{properties.items.map((property) => (
-						<div key={property.id} className="space-y-6">
-							<div
-								className="relative w-full"
-								style={{ aspectRatio: "377/251" }}
-							>
-								<Image
-									src={"https:" + property.image_url}
-									alt={property.name}
-									fill
-									style={{ objectFit: "cover" }}
-								/>
-							</div>
-							<h2 className="text-2xl md:text-3xl font-semibold">
-								{property.name}
-							</h2>
-							<div className="flex justify-center gap-8 items-center">
-								<h6 className="text-lg md:text-xl">
-									Hosts: <span className="font-thin">6</span>
-								</h6>
-								<h6 className="text-lg md:text-xl">
-									Bedrooms: <span className="font-thin">3 King-size</span>
-								</h6>
-							</div>
-						</div>
-					))}
-				</div>
+				<RenderPropertiesList properties={properties.items} />
 			</section>
 
 			{/* Call to Action / Booking Section */}
