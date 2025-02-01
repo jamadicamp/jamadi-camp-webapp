@@ -4,18 +4,22 @@ import { notFound } from "next/navigation";
 import { Property } from "@/app/types";
 import { PageProps } from "../../../../.next/types/app/layout";
 
-const getCacheProperties = cache(async (id: string) => {
-	const property = await callApi(
+const getCacheProperty = cache(async (id: string) => {
+	const response = await callApi(
 		"GET",
 		`/properties/${id}?includeInOut=true`,
 		null,
 		"v2"
 	);
 
-	if (!property?.response || property?.status !== 200) {
+	if (!response?.response || response?.status !== 200) {
 		return notFound();
 	}
-	return property?.response as Property;
+	const property = response?.response as Property;
+	const room = await callApi("GET", `/properties/${property.id}/rooms/${property.rooms[0].id}`);
+
+	property.rooms[0] = room?.response;
+	return property
 });
 
 type Props = {
@@ -28,7 +32,7 @@ export default async function PropertyPage(props: Props) {
 		params: { id },
 		searchParams
 	} = props;
-	const property = await getCacheProperties(id);
+	const property = await getCacheProperty(id);
 	const params = await searchParams;
 
 	console.log(params?.from, params?.to, params?.guests)
@@ -36,6 +40,7 @@ export default async function PropertyPage(props: Props) {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{property.address}
+			{property.rooms[0].description}
 		</div>
 	);
 }
