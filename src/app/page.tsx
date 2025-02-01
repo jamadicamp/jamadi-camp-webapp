@@ -1,52 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 import { cache } from "react";
-import { callApi } from "@/app/lib/api";
 import { notFound } from "next/navigation";
-import { PropertiesV2Response } from "@/app/types";
 import Image from "next/image";
 import Search from "./components/search";
 import RenderPropertiesList from "./components/render-properties-list";
-import { Room } from "./types/Room";
+import { getProperties } from "./lib/queries";
 
 const getCacheProperty = cache(async () => {
-	const now = Date.now()
-	const response = await callApi(
-		"GET",
-		"/properties?includeCount=true&page=1&size=50",
-		null,
-		"v2"
-	);
+	const properties = await getProperties()
 
-	if (!response?.response || response?.status !== 200) {
+	if (!properties) {
 		return notFound();
 	}
 
-	// for each property, we get the information about the house. We store the data as dictionary Record<room_id, Room>
-	const properties = response?.response as PropertiesV2Response
-	const propertyRoomIds: Array<{property_id: number, room_id: number}> = []
-	properties?.items?.forEach(property => {
-		propertyRoomIds.push({property_id: property.id, room_id: property.rooms[0]?.id as number})
-	})
-
-	// send a promise request to the server for all the data
-	const rooms = await Promise.all(propertyRoomIds.map(async (value) => {
-		const response = await callApi("GET", `/properties/${value.property_id}/rooms/${value.room_id}`);
-		return {...value, room: response?.response}
-	}))
-
-	// merge the rooms inside the properties and change the type
-	for (let i = 0; i < properties.items.length; i++) {
-		properties.items[0].rooms[0] = rooms.find((e) => e.room_id === properties.items[0].rooms[0].id)?.room as Room;
-	}
-
-	// NOTE: this is where we put the typescript type. So that you get the suggestions.
-	console.log(Date.now() - now)
-	return {properties};
+	return properties
 });
 
 export default async function Home() {
-	const {properties} = await getCacheProperty();
-
+	const properties = await getCacheProperty();
+	
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{/* Hero Section */}
