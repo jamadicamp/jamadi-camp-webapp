@@ -24,7 +24,7 @@ export type AvailabilityData = {
   property_id: number;
   room_type_id: number;
   period_start: string; // "YYYY-MM-DD"
-  period_end: string;   // "YYYY-MM-DD"
+  period_end: string; // "YYYY-MM-DD"
   available: number;
   total_units: number;
   total_overbooked: number;
@@ -50,19 +50,24 @@ export function convertAvailability(
 ): Record<string, DayAvailability> {
   const result: Record<string, DayAvailability> = {};
 
-  data.forEach(({ period_start, period_end, property_id, room_type_id, is_available }) => {
-    if (!is_available) return; // skip if not available
-    const current = new Date(period_start);
-    const end = new Date(period_end);
-    while (current <= end) {
-      const dateStr = current.toISOString().split("T")[0];
-      if (!result[dateStr]) {
-        result[dateStr] = { availablePropertyIds: [] };
+  data.forEach(
+    ({ period_start, period_end, property_id, room_type_id, is_available }) => {
+      if (!is_available) return; // skip if not available
+      const current = new Date(period_start);
+      const end = new Date(period_end);
+      while (current <= end) {
+        const dateStr = current.toISOString().split("T")[0];
+        if (!result[dateStr]) {
+          result[dateStr] = { availablePropertyIds: [] };
+        }
+        result[dateStr].availablePropertyIds.push({
+          property_id,
+          room_type_id,
+        });
+        current.setDate(current.getDate() + 1);
       }
-      result[dateStr].availablePropertyIds.push({ property_id, room_type_id });
-      current.setDate(current.getDate() + 1);
     }
-  });
+  );
 
   return result;
 }
@@ -181,9 +186,11 @@ export default function AvailabilityCalendar({
   className,
   onSearch,
 }: React.HTMLAttributes<HTMLDivElement> & {
-  onSearch: (properties: Array<{ property_id: number; room_type_id: number }>) => void;
+  onSearch: (
+    properties: Array<{ property_id: number; room_type_id: number }>,
+    date: DateRange
+  ) => void;
 }) {
-
   // Track user’s date range
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
@@ -192,16 +199,19 @@ export default function AvailabilityCalendar({
 
   // We keep track of the loaded date range in state
   const [loadedStart, setLoadedStart] = React.useState<Date>(new Date());
-  const [loadedEnd, setLoadedEnd] = React.useState<Date>(addDays(new Date(), 2));
+  const [loadedEnd, setLoadedEnd] = React.useState<Date>(
+    addDays(new Date(), 2)
+  );
 
   // The in-memory day-based availability
-  const [dayAvailMap, setDayAvailMap] = React.useState<Record<string, DayAvailability>>({});
+  const [dayAvailMap, setDayAvailMap] = React.useState<
+    Record<string, DayAvailability>
+  >({});
   // The fully-unavailable (disabled) dates in that map
   const [disabledDates, setDisabledDates] = React.useState<Date[]>([]);
   // The final computed "fully available" properties for the current range
-  const [fullyAvailableProperties, setFullyAvailableProperties] = React.useState<
-    Array<{ property_id: number; room_type_id: number }>
-  >([]);
+  const [fullyAvailableProperties, setFullyAvailableProperties] =
+    React.useState<Array<{ property_id: number; room_type_id: number }>>([]);
 
   // -------------------------------------------------
   // 1) On mount, fetch the initial [loadedStart, loadedEnd].
@@ -240,11 +250,19 @@ export default function AvailabilityCalendar({
     if (!date?.from || !date?.to) return;
 
     // Rebuild disabledDates from the entire loaded map in [from, to]
-    const newDisabledDates = findFullyUnavailableDates(date.from, date.to, dayAvailMap);
+    const newDisabledDates = findFullyUnavailableDates(
+      date.from,
+      date.to,
+      dayAvailMap
+    );
     setDisabledDates(newDisabledDates);
 
     // Recompute which properties are fully available in [from, to]
-    const fullyAvail = getPropertiesFullyAvailableAcrossRange(dayAvailMap, date.from, date.to);
+    const fullyAvail = getPropertiesFullyAvailableAcrossRange(
+      dayAvailMap,
+      date.from,
+      date.to
+    );
     setFullyAvailableProperties(fullyAvail);
   }, [dayAvailMap, date]);
 
@@ -256,7 +274,12 @@ export default function AvailabilityCalendar({
     try {
       // Safety check: if 'from' > 'to', skip
       if (from > to) return;
-      console.log("Fetching availability from", from.toDateString(), "to", to.toDateString());
+      console.log(
+        "Fetching availability from",
+        from.toDateString(),
+        "to",
+        to.toDateString()
+      );
 
       const response = await getAvailablities(from, to);
       const data = response?.response as AvailabilityData[];
@@ -282,7 +305,7 @@ export default function AvailabilityCalendar({
   function callbackSearch() {
     if (!date?.from || !date?.to) return;
     console.log("Fully available props:", fullyAvailableProperties);
-    onSearch(fullyAvailableProperties);
+    onSearch(fullyAvailableProperties, date);
   }
 
   return (
@@ -302,7 +325,8 @@ export default function AvailabilityCalendar({
               {date?.from ? (
                 date.to ? (
                   <>
-                    {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
+                    {format(date.from, "LLL dd, y")} -{" "}
+                    {format(date.to, "LLL dd, y")}
                   </>
                 ) : (
                   format(date.from, "LLL dd, y")
@@ -330,7 +354,11 @@ export default function AvailabilityCalendar({
       </div>
 
       <div>
-        <Button className="bg-yellow-600" onClick={callbackSearch} disabled={!date?.from || !date?.to}>
+        <Button
+          className="bg-yellow-600"
+          onClick={callbackSearch}
+          disabled={!date?.from || !date?.to}
+        >
           Search
         </Button>
       </div>

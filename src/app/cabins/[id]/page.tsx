@@ -20,13 +20,18 @@ const getCacheProperties = cache(async (id: string) => {
 
 type Props = {
 	params: { id: string };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 } & PageProps;
 
 export default async function PropertyPage(props: Props) {
 	const {
 		params: { id },
+		searchParams
 	} = props;
 	const property = await getCacheProperties(id);
+	const params = await searchParams;
+
+	console.log(params?.from, params?.to, params?.guests)
 
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">

@@ -1,15 +1,20 @@
 import Image from "next/image";
 import { Property } from "../types";
+import routes from "../lib/routes";
+import Link from "next/link";
+import { DateRange } from "react-day-picker";
 
 export default function RenderPropertiesList({
   properties,
+  date
 }: {
   properties: Property[];
+  date?: DateRange
 }) {
   return (
     <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
       {properties.map((property) => (
-        <div key={property.id} className="space-y-6">
+        <Link href={routes.cabin.path} as={routes.cabin.href(property.id, date?.from?.toISOString(), date?.to?.toISOString())} key={property.id} className="space-y-6">
           <div className="relative w-full" style={{ aspectRatio: "377/251" }}>
             <Image
               src={"https:" + property.image_url}
@@ -29,7 +34,7 @@ export default function RenderPropertiesList({
               Bedrooms: <span className="font-thin">3 King-size</span>
             </h6>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
