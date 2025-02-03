@@ -29,7 +29,6 @@ export default async function PropertyPage(props: Props) {
   const params = await searchParams;
 
   console.log(params?.from, params?.to, params?.guests);
-  console.log(property);
 
   const room = property.rooms[0];
   const amenities = room.amenities as any as Record<

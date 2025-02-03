@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { cache } from "react";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Search from "./components/search";
 import RenderPropertiesList from "./components/render-properties-list";
 import { getProperties } from "./lib/queries";
-import ImageSlider from "./components/image-slides";
+import ImageSlider from "./components/image-slider";
+import ImageSlides from "./components/image-slides";
 
 const getCacheProperty = cache(async () => {
 	const properties = await getProperties();
@@ -25,23 +25,13 @@ export default async function Home() {
 	.flatMap(property => 
 	  (property.rooms || []).flatMap(room => room.images || [])
 	);
-
-	console.log(properties?.items?.map(r => r.rooms[0]))
-
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{/* Hero Section */}
 			<div className="relative w-full h-[620px]">
-				<Image
-					src="/images/cabin.webp"
-					fill
-					unoptimized
-					priority
-					alt="Cabin house wallpaper"
-					className="object-cover"
-				/>
+				<ImageSlider images={images} />
 				{/* Overlay */}
-				<div className="absolute inset-0 bg-white opacity-80" />
+				<div className="absolute inset-0 bg-orange-50 opacity-80" />
 				{/* Hero Content */}
 				<div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
 					<h1 className="text-[#3a383a] text-xl font-bold md:text-4xl mb-4">
@@ -116,7 +106,7 @@ export default async function Home() {
 				</div>
 			</section>
 			<div className="my-8">
-				<ImageSlider images={images} />
+				<ImageSlides images={images} />
 			</div>
 
 			{/* Cabins Section */}

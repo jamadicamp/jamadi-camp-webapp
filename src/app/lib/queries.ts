@@ -53,7 +53,6 @@ export async function getProperties() {
       })
     );
   
-    console.log(rooms);
   
     // Merge the fetched room data back into the properties.
     for (let i = 0; i < properties.items.length; i++) {
