@@ -5,24 +5,34 @@ import Image from "next/image";
 import Search from "./components/search";
 import RenderPropertiesList from "./components/render-properties-list";
 import { getProperties } from "./lib/queries";
+import ImageSlider from "./components/image-slides";
 
 const getCacheProperty = cache(async () => {
-	const properties = await getProperties()
+	const properties = await getProperties();
 
 	if (!properties) {
 		return notFound();
 	}
 
-	return properties
+	return properties;
 });
 
 export default async function Home() {
 	const properties = await getCacheProperty();
-	
+
+	const images = properties.items
+		.map((property) => {
+			const images = property.rooms[0].images || [];
+			return images.map((image) => ({
+				...image,
+			}));
+		})
+		.flat();
+
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{/* Hero Section */}
-			<div className="relative w-full h-screen">
+			<div className="relative w-full h-[620px]">
 				<Image
 					src="/images/cabin.webp"
 					fill
@@ -32,28 +42,29 @@ export default async function Home() {
 					className="object-cover"
 				/>
 				{/* Overlay */}
-				<div className="absolute inset-0 bg-black opacity-50" />
+				<div className="absolute inset-0 bg-white opacity-80" />
 				{/* Hero Content */}
 				<div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-					<h1 className="text-white text-4xl md:text-6xl italic mb-4">
+					<h1 className="text-[#3a383a] text-xl font-bold md:text-4xl mb-4">
 						Come and enjoy the tranquility of our <br />
-						<span className="text-yellow-400">rustic cabins in Jamadi</span>.
+						<span className="italic font-normal">rustic cabins in Jamadi</span>.
 					</h1>
-					<p className="text-gray-200 max-w-xl mb-8">
+					<p className="text-gray-800 max-w-xl mb-8">
 						Escape the city and immerse yourself in nature. Experience fresh
 						air, cozy fires, and unforgettable moments in our scenic hideaway.
 					</p>
 					<a
 						href="#highlights"
-						className="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition-colors"
+						className="inline-block bg-orange-50 text-[#3a383a] px-6 py-2 border border-[#3a383a] uppercase transition-colors"
 					>
 						Learn More
 					</a>
 				</div>
 			</div>
 
-
-			<Search properties={properties.items}/>
+			<div id="search">
+				<Search properties={properties.items} />
+			</div>
 			{/* Highlight / Intro Section */}
 			<section
 				id="highlights"
@@ -84,7 +95,6 @@ export default async function Home() {
 							src="/images/icon-mountain.png"
 							alt="Mountain Icon"
 							className="h-16 w-16 mb-4"
-							
 						/>
 						<h3 className="text-xl font-semibold mb-2">Breathtaking Views</h3>
 						<p className="text-gray-500">
@@ -106,6 +116,9 @@ export default async function Home() {
 					</div>
 				</div>
 			</section>
+			<div className="my-8">
+				<ImageSlider images={images} />
+			</div>
 
 			{/* Cabins Section */}
 			<section
@@ -119,17 +132,20 @@ export default async function Home() {
 			</section>
 
 			{/* Call to Action / Booking Section */}
-			<section className="relative bg-black text-white py-12 md:py-16 px-4 md:px-20 text-center">
+			<section className="relative bg-white text-[#3a383a] py-12 md:py-16 px-4 md:px-20 text-center">
 				<h3 className="text-3xl md:text-4xl font-bold mb-4">
 					Ready to Book Your Getaway?
 				</h3>
-				<p className="text-gray-300 max-w-2xl mx-auto mb-8">
+				<p className="text-[#3a383a] max-w-lg mx-auto mb-8">
 					Don&apos;t miss the chance to recharge in our tranquil cabins. Reserve
 					your spot now and experience Jamadi at its best.
 				</p>
-				<button className="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition-colors">
+				<a
+					href="#search"
+					className="inline-block bg-orange-50 text-black px-6 py-2 border border-[#3a383a] uppercase transition-colors"
+				>
 					Book Now
-				</button>
+				</a>
 			</section>
 		</div>
 	);
