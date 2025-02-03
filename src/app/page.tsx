@@ -6,6 +6,23 @@ import RenderPropertiesList from "./components/render-properties-list";
 import { getProperties } from "./lib/queries";
 import ImageSlider from "./components/image-slider";
 import ImageSlides from "./components/image-slides";
+import { Metadata } from "next";
+import routes from "./lib/routes";
+
+// metadata
+
+export const metadata: Metadata = {
+	title: "Jamadi Camp",
+	description: "Escape the city and immerse yourself in nature. Experience fresh air, cozy fires, and unforgettable moments in our scenic hideaway.",
+	robots: {
+		index: true,
+		follow: true,
+	},
+	metadataBase: new URL(routes.home.href, process.env.CLIENT_URL),
+	alternates: {
+		canonical: routes.home.href
+	},
+};
 
 const getCacheProperty = cache(async () => {
 	const properties = await getProperties();

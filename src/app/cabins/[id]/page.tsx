@@ -5,8 +5,10 @@ import { getProperty } from "@/app/lib/queries";
 import Image from "next/image";
 import { PageProps } from "../../../../.next/types/app/cabins/[id]/page";
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
+import routes from "@/app/lib/routes";
 
-const getCacheProperty = cache(async (id: string) => {
+const getCacheProperty = cache(async (id: number) => {
   const property = await getProperty(id);
   if (!property) {
     return notFound();
@@ -14,8 +16,38 @@ const getCacheProperty = cache(async (id: string) => {
   return property;
 });
 
+export async function generateMetadata({
+	params: { id },
+  }: Props): Promise<Metadata> {
+	const property = await getProperty(id);
+	if (!property) {
+	  return notFound();
+	}
+
+	const pathname = routes.cabin.href(id)
+
+  
+	return {
+		title: property.name,
+		description: property.description,
+		openGraph: {
+			images: "https:" + property.image_url,
+			siteName: "Jamadi Camp"
+		},
+		metadataBase: new URL(pathname, process.env.CLIENT_URL),
+		alternates: {
+			canonical: pathname
+		},
+		robots: {
+			index: true,
+			follow: true,
+		},
+	}
+  }
+  
+
 type Props = {
-  params: { id: string };
+  params: { id: number };
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 } & PageProps;
 

@@ -2,7 +2,7 @@ import { PropertiesV2Response, Property } from "../types";
 import { Room } from "../types/Room";
 import { callApi } from "./api";
 
-export async function getProperty(id: string) {
+export async function getProperty(id: number) {
     const response = await callApi(
         "GET",
         `/properties/${id}?includeInOut=true`,
