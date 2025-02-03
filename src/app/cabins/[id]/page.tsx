@@ -16,9 +16,8 @@ const getCacheProperty = cache(async (id: number) => {
   return property;
 });
 
-export async function generateMetadata({
-	params: { id },
-  }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+	const {id} = await props.params;
 	const property = await getProperty(id);
 	if (!property) {
 	  return notFound();
@@ -53,12 +52,10 @@ type Props = {
 
 // @ts-exoect-error PropertyPage is not a React component
 export default async function PropertyPage(props: Props) {
-  const {
-    params: { id },
-    searchParams,
-  } = props;
+
+  const {id} = (await props.params)
   const property = await getCacheProperty(id);
-  const params = await searchParams;
+  const params = await props.searchParams
 
   console.log(params?.from, params?.to, params?.guests);
 
