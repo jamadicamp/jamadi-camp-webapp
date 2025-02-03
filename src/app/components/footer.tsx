@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-orange-50 text-[#3a383a]">
       <div className=" max-w-[800px] mx-auto">
         <Faq />
-        <div className="py-12 flex  px-4 md:px-8 ">
+        <div className="py-12 flex  px-4 md:px-8" id="contact">
           <div className="space-y-8">
             <div className="text-4xl font-bold">Jamadi Camp</div>
 

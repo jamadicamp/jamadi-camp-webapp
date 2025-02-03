@@ -12,8 +12,8 @@ const routes = {
     href: "/#cabins",
   },
   contact: {
-    path: "/contact",
-    href: "/contact",
+    path: "#contact",
+    href: "#contact",
   },
   search: {
     path: "/search",
