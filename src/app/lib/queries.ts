@@ -5,7 +5,7 @@ import { callApi } from "./api";
 export async function getProperty(id: number) {
     const response = await callApi(
         "GET",
-        `/properties/${id}?includeInOut=true`,
+        `/properties/${id}?includeInOut=false`,
         null,
         "v2"
     );
