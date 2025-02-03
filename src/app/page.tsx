@@ -21,13 +21,12 @@ export default async function Home() {
 	const properties = await getCacheProperty();
 
 	const images = properties.items
-		.map((property) => {
-			const images = property.rooms[0].images || [];
-			return images.map((image) => ({
-				...image,
-			}));
-		})
-		.flat();
+	// For each property, map to an array of all room images
+	.flatMap(property => 
+	  (property.rooms || []).flatMap(room => room.images || [])
+	);
+
+	console.log(properties?.items?.map(r => r.rooms[0]))
 
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
@@ -125,7 +124,7 @@ export default async function Home() {
 				id="cabins"
 				className="bg-orange-50 py-12 md:py-16 px-4 md:px-20 text-center"
 			>
-				<h3 className="text-3xl md:text-5xl font-medium italic mb-8">
+				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
 					Our Cabins in Jamadi
 				</h3>
 				<RenderPropertiesList properties={properties.items} />

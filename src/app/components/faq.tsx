@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function Faq() {
 	return (
-		<div className="bg-orange-50 py-8 px-4 md:px-8">
+		<div className="bg-orange-50 py-8 px-4 md:px-8"  id="faq">
 			<h2 className="text-2xl text-center font-bold">
 				Frequently Asked Questions
 			</h2>

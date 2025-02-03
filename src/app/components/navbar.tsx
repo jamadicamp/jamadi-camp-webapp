@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import routes from "../lib/routes";
 import { usePathname } from "next/navigation";
 import NavLink from "./nav-link";
+import Link from "next/link";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -37,17 +37,11 @@ export default function Navbar() {
 	};
 
 	return (
-		<nav className="flex items-center justify-between px-4 md:px-20 py-4 bg-orange-50">
+		<nav className="flex items-center justify-between px-4 md:px-20 py-6 bg-orange-50">
 			{/* LOGO */}
-			<div className="relative w-20 h-16">
-				<Image
-					src="/images/Logo_Amealco_white.webp"
-					alt="Jamadi Camp Logo"
-					fill
-					priority
-					unoptimized
-				/>
-			</div>
+			<Link href={routes.home.href} className="text-4xl font-bold">
+				Jamadi Camp
+			</Link>
 
 			{/* Desktop Menu */}
 			<ul className="hidden md:flex flex-row gap-8">
@@ -59,11 +53,11 @@ export default function Navbar() {
 					home
 				</NavLink>
 				<NavLink
-					href={routes.whatToDo.href}
-					as={routes.whatToDo.path}
-					active={pathname === routes.whatToDo.href}
+					href={routes.faq.href}
+					as={routes.faq.path}
+					active={pathname === routes.faq.href}
 				>
-					what to do in the camp
+					Faq
 				</NavLink>
 				<NavLink
 					href={routes.cabins.href}
@@ -132,12 +126,12 @@ export default function Navbar() {
 							</li>
 							<li>
 								<NavLink
-									href={routes.whatToDo.href}
-									as={routes.whatToDo.path}
-									active={pathname === routes.whatToDo.href}
+									href={routes.faq.href}
+									as={routes.faq.path}
+									active={pathname === routes.faq.href}
 									onClick={() => setIsOpen(false)}
 								>
-									what to do in the camp
+									Faq
 								</NavLink>
 							</li>
 							<li>

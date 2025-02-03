@@ -3,13 +3,13 @@ const routes = {
     path: "/",
     href: "/",
   },
-  whatToDo: {
-    path: "/what-to-do",
-    href: "/what-to-do",
+  faq: {
+    path: "#faq",
+    href: "#faq",
   },
   cabins: {
-    path: "/cabins",
-    href: "/cabins",
+    path: "/#cabins",
+    href: "/#cabins",
   },
   contact: {
     path: "/contact",

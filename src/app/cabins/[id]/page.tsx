@@ -4,253 +4,133 @@ import { notFound } from "next/navigation";
 import { getProperty } from "@/app/lib/queries";
 import Image from "next/image";
 import { PageProps } from "../../../../.next/types/app/cabins/[id]/page";
+import { cn } from "@/lib/utils";
 
 const getCacheProperty = cache(async (id: string) => {
-	const property = await getProperty(id);
-	if (!property) {
-		return notFound();
-	}
-	return property;
+  const property = await getProperty(id);
+  if (!property) {
+    return notFound();
+  }
+  return property;
 });
 
 type Props = {
-	params: { id: string };
-	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: { id: string };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 } & PageProps;
 
 // @ts-exoect-error PropertyPage is not a React component
 export default async function PropertyPage(props: Props) {
-	const {
-		params: { id },
-		searchParams,
-	} = props;
-	const property = await getCacheProperty(id);
-	const params = await searchParams;
+  const {
+    params: { id },
+    searchParams,
+  } = props;
+  const property = await getCacheProperty(id);
+  const params = await searchParams;
 
-	console.log(params?.from, params?.to, params?.guests);
+  console.log(params?.from, params?.to, params?.guests);
+  console.log(property);
 
-	return (
-		<div className="font-sans bg-gray-50 min-h-screen">
-			{/* Hero section with main image and name */}
-			<section className="relative w-full h-72 overflow-hidden">
-				{/* If you have a large hero image */}
-				<Image
-					src={"https:" + property?.image_url || "/placeholder.jpg"}
+  const room = property.rooms[0];
+  const amenities = room.amenities as any as Record<
+    string,
+    Array<{ text: string; name: string }>
+  >;
+
+  return (
+    <div className="bg-orange-50 pt-8 font-[family-name:var(--font-geist-sans)] space-y-32 pb-20">
+      <section className="flex flex-col lg:flex-row max-w-[960px] gap-16 mx-auto px-8 lg:px-0">
+        <div className="flex-1">
+          <div className="relative w-full aspect-square">
+            <Image
+              src={"https:" + property?.image_url || "/placeholder.jpg"}
+              alt={property?.name || "Property Image"}
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+        <div className="flex-1 mt-12">
+          <p className="uppercase">home</p>
+          <h1 className="text-4xl font-bold my-1">{property?.name}</h1>
+          <p className="text-lg font-extralight">
+            FROM ${property?.original_max_price?.toLocaleString()} / night
+          </p>
+          <hr className="w-24 bg-black border-black mt-8 mb-2" />
+          <p className="text-lg font-semibold">
+            1 to {room.max_people || 2} guests (
+            {amenities?.sleeping?.[0]?.text ||
+              `${room.bedrooms || 1} bedroom and ${
+                room.bathrooms || 1
+              } bathroom`}
+            )
+          </p>
+          <p className="text-lg font-light">
+            Check in - 3.00pm | Check out - 11.00am
+          </p>
+          <ul className="p-4 pl-8 grid grid-cols-2 gap-y-2">
+            <li
+              className={cn("list-disc", {
+                "line-through": !amenities?.room?.find(
+                  (e) => e.name === "RoomsKitchen"
+                ),
+              })}
+            >
+              Kitchen Available
+            </li>
+
+            {[
+              ...amenities?.parking,
+              ...amenities?.cooking,
+              ...amenities?.entertainment,
+              ...amenities?.outside,
+            ]?.map((item: any) => (
+              <li key={item.text} className={cn("list-disc")}>
+                {item.text}
+              </li>
+            ))}
+
+            <li
+              className={cn("list-disc", {
+                "line-through": !room.pets_allowed,
+              })}
+            >
+              Pet friendly
+            </li>
+            <li
+              className={cn("list-disc", {
+                "line-through": !room.adults_only,
+              })}
+            >
+              Adults only
+            </li>
+          </ul>
+          <a
+            href="#search"
+            className="inline-block bg-orange-50 text-black px-6 py-2 mt-8 border border-[#3a383a] uppercase transition-colors"
+          >
+            Book Now
+          </a>
+        </div>
+      </section>
+	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
+		<h3 className="text-center text-3xl font-bold mb-2">Gallery</h3>
+		<p className="text-center max-w-[600px] mx-auto mb-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum magni autem nisi ut corporis deleniti, odit ipsum, soluta sapiente fugiat vero? Earum vitae libero nostrum incidunt cum quia vel quas!</p>
+		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
+			{room.images?.map((image, index) => (
+				<div key={index} className="relative aspect-[2/3] w-full">
+				<Image 
+					src={"https:" + (image?.src || image?.url) || "/placeholder.jpg"}
 					alt={property?.name || "Property Image"}
 					fill
 					className="object-cover"
 				/>
-				<div className="absolute inset-0 bg-black bg-opacity-30" />
-				<div className="absolute bottom-4 left-4 text-white z-10">
-					<h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
-						{property?.name}
-					</h1>
-					<p className="text-sm md:text-base">
-						{property?.city}, {property?.state}, {property?.country}
-					</p>
-				</div>
-			</section>
-
-			<div className="max-w-7xl mx-auto px-4 py-6">
-				{/* Property details */}
-				<section className="bg-white p-6 rounded-lg shadow mb-6">
-					<h2 className="text-xl font-semibold mb-4">Property Details</h2>
-					<p className="text-gray-600 mb-4">{property?.description}</p>
-
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						{/* Address */}
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">Address:</span>
-							<span className="text-gray-600">
-								{property?.hide_address
-									? "Address Hidden"
-									: property?.address || "Not provided"}
-							</span>
-						</div>
-
-						{/* Rating */}
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">Rating:</span>
-							<span className="text-gray-600">{property?.rating ?? "N/A"}</span>
-						</div>
-
-						{/* Price Range */}
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">
-								Price Range (per {property?.price_unit_in_days ? "day" : "unit"}
-								):
-							</span>
-							<span className="text-gray-600">
-								{property?.min_price} – {property?.max_price}{" "}
-								{property?.currency_code || ""}
-							</span>
-						</div>
-
-						{/* Subscription Plans */}
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">Subscriptions:</span>
-							<span className="text-gray-600">
-								{property?.subscription_plans?.length
-									? property.subscription_plans.join(", ")
-									: "No subscription plans"}
-							</span>
-						</div>
-					</div>
-				</section>
-
-				{/* Rooms list */}
-				<section className="bg-white p-6 rounded-lg shadow mb-6">
-					<h2 className="text-xl font-semibold mb-4">Rooms</h2>
-					{property?.rooms?.length > 0 ? (
-						<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-							{property.rooms.map((room: any) => (
-								<div
-									key={room.id}
-									className="border rounded-lg overflow-hidden bg-white shadow-sm"
-								>
-									{/* Room image */}
-									{room.image_url ? (
-										<img
-											src={"https:" + room.image_url}
-											alt={room.name}
-											className="h-48 w-full object-cover"
-										/>
-									) : (
-										<div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-400">
-											No image
-										</div>
-									)}
-
-									{/* Room details */}
-									<div className="p-4">
-										<h3 className="text-lg font-semibold">{room.name}</h3>
-										<p className="text-sm text-gray-500 mb-2">
-											{room.description}
-										</p>
-										<div className="flex flex-col space-y-1 text-sm text-gray-600">
-											<span>
-												<strong>Max People:</strong> {room.max_people}
-											</span>
-											<span>
-												<strong>Bedrooms:</strong> {room.bedrooms}
-											</span>
-											<span>
-												<strong>Bathrooms:</strong> {room.bathrooms}
-											</span>
-											<span>
-												<strong>Area:</strong> {room.area}
-												{room.area_unit ? ` ${room.area_unit}` : ""}
-											</span>
-										</div>
-										<div className="mt-4 text-gray-800 font-medium">
-											From {room.min_price} {room?.currency?.symbol || ""}
-										</div>
-
-										{/* Amenities */}
-										{room.amenities && (
-											<div className="mt-4">
-												<h4 className="font-semibold text-sm mb-2">
-													Amenities
-												</h4>
-												{Object.entries(room.amenities).map(([key, value]) => (
-													<div key={key} className="text-sm text-gray-600">
-														<strong>{key}: </strong>
-														{Array.isArray(value)
-															? value.map(
-																	(amenity: { name: string }, idx: number) => (
-																		<span key={idx}>
-																			{amenity.name}
-																			{idx < value.length - 1 ? ", " : ""}
-																		</span>
-																	)
-															  )
-															: null}
-													</div>
-												))}
-											</div>
-										)}
-									</div>
-								</div>
-							))}
-						</div>
-					) : (
-						<p className="text-gray-500">No rooms available.</p>
-					)}
-				</section>
-
-				{/* Availability / In-Out Dates */}
-				<section className="bg-white p-6 rounded-lg shadow mb-6">
-					<h2 className="text-xl font-semibold mb-4">Availability</h2>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">
-								Restricted Booking:
-							</span>
-							<span className="text-gray-600">
-								{property?.in_out?.is_restricted ? "Yes" : "No"}
-							</span>
-						</div>
-						<div className="flex flex-col">
-							<span className="font-medium text-gray-700">
-								Not Available On:
-							</span>
-							<span className="text-gray-600">
-								{property?.in_out?.not_available?.length
-									? property.in_out.not_available
-											.map((entry: any) =>
-												new Date(entry.date).toLocaleDateString()
-											)
-											.join(", ")
-									: "Always available"}
-							</span>
-						</div>
-					</div>
-
-					{/* Check-in and Check-out possible dates */}
-					<div className="mt-4 flex flex-col space-y-2">
-						<div>
-							<strong className="text-gray-700">Check In:</strong>{" "}
-							{property?.in_out?.check_in?.length
-								? property.in_out.check_in
-										.map((entry: any) =>
-											new Date(entry.date).toLocaleDateString()
-										)
-										.join(", ")
-								: "No specific dates"}
-						</div>
-						<div>
-							<strong className="text-gray-700">Check Out:</strong>{" "}
-							{property?.in_out?.check_out?.length
-								? property.in_out.check_out
-										.map((entry: any) =>
-											new Date(entry.date).toLocaleDateString()
-										)
-										.join(", ")
-								: "No specific dates"}
-						</div>
-					</div>
-				</section>
-
-				{/* Agreement Section (if needed) */}
-				{property.has_agreement && (
-					<section className="bg-white p-6 rounded-lg shadow">
-						<h2 className="text-xl font-semibold mb-4">Agreement</h2>
-						{property.agreement_text ? (
-							<p className="text-gray-600 mb-2">{property.agreement_text}</p>
-						) : null}
-						{property.agreement_url ? (
-							<a
-								href={property.agreement_url}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-blue-600 underline"
-							>
-								View Agreement
-							</a>
-						) : null}
-					</section>
-				)}
-			</div>
+			  </div>
+			))}
 		</div>
-	);
+
+	  </section>
+      
+    </div>
+  );
 }
