@@ -41,7 +41,7 @@ export default function Navbar() {
 		<nav className="flex items-center justify-between px-4 md:px-20 bg-orange-50">
 			{/* LOGO */}
 			<Link href={routes.home.href} className="text-4xl font-bold">
-				<div className="relative w-16 h-16 md:w-24 md:h-24">
+				<div className="relative w-24 h-24 md:w-28 md:h-28">
 					<Image
 						fill
 						src={"/images/logo-main.webp"}
