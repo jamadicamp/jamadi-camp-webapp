@@ -6,6 +6,7 @@ import routes from "../lib/routes";
 import { usePathname } from "next/navigation";
 import NavLink from "./nav-link";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -37,10 +38,17 @@ export default function Navbar() {
 	};
 
 	return (
-		<nav className="flex items-center justify-between px-4 md:px-20 py-6 bg-orange-50">
+		<nav className="flex items-center justify-between px-4 md:px-20 bg-orange-50">
 			{/* LOGO */}
 			<Link href={routes.home.href} className="text-4xl font-bold">
-				Jamadi Camp
+				<div className="relative w-16 h-16 md:w-24 md:h-24">
+					<Image
+						fill
+						src={"/images/logo-main.webp"}
+						alt="Main logo"
+						objectFit="cover"
+					/>
+				</div>
 			</Link>
 
 			{/* Desktop Menu */}
