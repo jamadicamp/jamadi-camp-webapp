@@ -4,12 +4,12 @@ import Property from '@/lib/models/Property';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const property = await Property.findById(params.id);
+    const property = await Property.findById((await params).id);
 
     if (!property) {
       return NextResponse.json(

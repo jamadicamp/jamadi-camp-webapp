@@ -55,6 +55,20 @@ const propertySchema = new mongoose.Schema<Property>({
       from: { type: Date, required: true },
       to: { type: Date, required: true },
     }],
+    unavailableDays: [{
+      date: { type: Date, required: true },
+      reason: { 
+        type: String, 
+        required: true,
+        enum: ['maintenance', 'booking', 'owner_use', 'seasonal_closure', 'other']
+      },
+      description: { type: String, default: '' },
+      bookingId: { type: String, default: null },
+      bookingGuestName: { type: String, default: null },
+      bookingContactInfo: { type: String, default: null },
+      createdAt: { type: Date, default: Date.now },
+      createdBy: { type: String, required: true } // User ID who created this entry
+    }]
   },
 }, {
   timestamps: true,

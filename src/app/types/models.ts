@@ -1,4 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export interface UnavailableDay {
+  date: Date;
+  reason: 'maintenance' | 'booking' | 'owner_use' | 'seasonal_closure' | 'other';
+  description?: string;
+  bookingId?: string;
+  bookingGuestName?: string;
+  bookingContactInfo?: string;
+  createdAt: Date;
+  createdBy: string;
+}
+
 export interface Property {
   _id?: string;
   id: string;
@@ -62,6 +73,7 @@ export interface Property {
       from: Date;
       to: Date;
     }[];
+    unavailableDays: UnavailableDay[];
   };
 }
 

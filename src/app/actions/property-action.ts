@@ -157,7 +157,7 @@ export async function updateFullProperty(propertyId: string, formData: FormData)
           const errorData = JSON.parse(errorText);
           errorMessage = errorData.error || errorData.message || errorMessage;
         }
-      } catch (parseError) {
+      } catch {
         console.log('Could not parse error response as JSON');
       }
       
@@ -172,7 +172,7 @@ export async function updateFullProperty(propertyId: string, formData: FormData)
       try {
         const data = JSON.parse(responseText);
         console.log('Parsed success response:', data);
-      } catch (parseError) {
+      } catch {
         console.log('Success response is not JSON, but request succeeded');
       }
     } else {
@@ -182,6 +182,46 @@ export async function updateFullProperty(propertyId: string, formData: FormData)
     redirect('/cms');
   } catch (error) {
     console.error('Error updating property:', error);
+    throw error;
+  }
+}
+
+export async function updatePropertyAvailability(
+  propertyId: string, 
+  unavailableDays: Array<{
+    date: string;
+    reason: string;
+    description?: string;
+    bookingId?: string;
+    bookingGuestName?: string;
+    bookingContactInfo?: string;
+  }>
+) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+
+  if (!token) {
+    redirect('/cms/login');
+  }
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${propertyId}/availability`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ unavailableDays }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Failed to update availability');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating availability:', error);
     throw error;
   }
 }

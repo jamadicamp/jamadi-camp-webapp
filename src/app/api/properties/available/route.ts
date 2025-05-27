@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Property from '@/lib/models/Property';
-import { DateRange } from '@/app/types/models';
+import { DateRange, UnavailableDay } from '@/app/types/models';
 
 export async function GET(request: Request) {
   try {
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
       const toDate = new Date(to);
 
       // Check if any blocked date range overlaps with the requested date range
-      return !property.availability.blockedDates.some((blockedDate: DateRange) => {
+      const hasBlockedDateConflict = property.availability.blockedDates.some((blockedDate: DateRange) => {
         const blockedFrom = new Date(blockedDate.from);
         const blockedTo = new Date(blockedDate.to);
         
@@ -37,6 +37,15 @@ export async function GET(request: Request) {
           (fromDate <= blockedFrom && toDate >= blockedTo) // Requested range completely encompasses blocked range
         );
       });
+
+      // Check if any individual unavailable day falls within the requested date range
+      const hasUnavailableDayConflict = property.availability.unavailableDays?.some((unavailableDay: UnavailableDay) => {
+        const unavailableDate = new Date(unavailableDay.date);
+        return unavailableDate >= fromDate && unavailableDate <= toDate;
+      });
+
+      // Property is available if it has no conflicts with either blocked dates or unavailable days
+      return !hasBlockedDateConflict && !hasUnavailableDayConflict;
     });
 
     return NextResponse.json(availableProperties);
