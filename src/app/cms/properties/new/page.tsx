@@ -30,29 +30,43 @@ export default async function NewPropertyPage() {
           name: formData.get('name'),
           internal_name: formData.get('internal_name'),
           description: formData.get('description'),
-          location: {
-            address: formData.get('address'),
-            city: formData.get('city'),
-            state: formData.get('state'),
-            country: formData.get('country'),
-            zipCode: formData.get('zipCode'),
-            coordinates: {
-              latitude: parseFloat(formData.get('latitude') as string),
-              longitude: parseFloat(formData.get('longitude') as string),
-            },
+          latitude: parseFloat(formData.get('latitude') as string),
+          longitude: parseFloat(formData.get('longitude') as string),
+          address: formData.get('address'),
+          hide_address: formData.get('hide_address') === 'true',
+          zip: formData.get('zip'),
+          city: formData.get('city'),
+          state: formData.get('state'),
+          country: formData.get('country'),
+          images: (formData.get('images') as string).split(',').map(url => ({ url: url.trim() })),
+          has_addons: formData.get('has_addons') === 'true',
+          rating: parseFloat(formData.get('rating') as string),
+          is_active: formData.get('is_active') === 'true',
+          currencies: JSON.parse(formData.get('currencies') as string),
+          
+          // Room fields
+          amenities: {
+            additionalProp: (formData.get('amenities') as string).split(',').map(amenity => ({
+              name: amenity.trim(),
+              prefix: '',
+              bracket: '',
+              text: ''
+            }))
           },
-          pricing: {
-            usd: {
-              perNight: parseFloat(formData.get('price') as string),
-            },
-          },
-          amenities: (formData.get('amenities') as string).split(',').map(a => a.trim()),
-          images: (formData.get('images') as string).split(',').map(i => i.trim()),
-          maxGuests: parseInt(formData.get('maxGuests') as string),
+          breakfast_included: formData.get('breakfast_included') === 'true',
+          has_parking: formData.get('has_parking') === 'true',
+          adults_only: formData.get('adults_only') === 'true',
+          pets_allowed: formData.get('pets_allowed') === 'true',
+          show_additional_key_facts: formData.get('show_additional_key_facts') === 'true',
+          image_url: formData.get('image_url'),
+          max_people: parseInt(formData.get('max_people') as string),
+          units: parseInt(formData.get('units') as string),
+          has_wifi: formData.get('has_wifi') === 'true',
+          has_meal_plan: formData.get('has_meal_plan') === 'true',
           bedrooms: parseInt(formData.get('bedrooms') as string),
           bathrooms: parseInt(formData.get('bathrooms') as string),
-          beds: parseInt(formData.get('beds') as string),
-          status: 'active',
+          area_unit: formData.get('area_unit'),
+          area: parseFloat(formData.get('area') as string)
         }),
       });
 
@@ -75,6 +89,7 @@ export default async function NewPropertyPage() {
         
         <form action={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Basic Information */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Property Name
@@ -114,6 +129,7 @@ export default async function NewPropertyPage() {
               />
             </div>
 
+            {/* Location Information */}
             <div>
               <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                 Address
@@ -167,13 +183,13 @@ export default async function NewPropertyPage() {
             </div>
 
             <div>
-              <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="zip" className="block text-sm font-medium text-gray-700">
                 ZIP Code
               </label>
               <input
                 type="text"
-                id="zipCode"
-                name="zipCode"
+                id="zip"
+                name="zip"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               />
@@ -207,54 +223,15 @@ export default async function NewPropertyPage() {
               />
             </div>
 
+            {/* Property Details */}
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                Price per Night (USD)
+              <label htmlFor="max_people" className="block text-sm font-medium text-gray-700">
+                Max People
               </label>
               <input
                 type="number"
-                step="0.01"
-                id="price"
-                name="price"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="amenities" className="block text-sm font-medium text-gray-700">
-                Amenities (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="amenities"
-                name="amenities"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-                Image URLs (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="images"
-                name="images"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="maxGuests" className="block text-sm font-medium text-gray-700">
-                Max Guests
-              </label>
-              <input
-                type="number"
-                id="maxGuests"
-                name="maxGuests"
+                id="max_people"
+                name="max_people"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               />
@@ -287,27 +264,164 @@ export default async function NewPropertyPage() {
             </div>
 
             <div>
-              <label htmlFor="beds" className="block text-sm font-medium text-gray-700">
-                Beds
+              <label htmlFor="area" className="block text-sm font-medium text-gray-700">
+                Area
               </label>
               <input
                 type="number"
-                id="beds"
-                name="beds"
+                step="any"
+                id="area"
+                name="area"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
+
+            <div>
+              <label htmlFor="area_unit" className="block text-sm font-medium text-gray-700">
+                Area Unit
+              </label>
+              <select
+                id="area_unit"
+                name="area_unit"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              >
+                <option value="sqm">Square Meters</option>
+                <option value="sqft">Square Feet</option>
+              </select>
+            </div>
+
+            {/* Features */}
+            <div className="md:col-span-2">
+              <label htmlFor="amenities" className="block text-sm font-medium text-gray-700">
+                Amenities (comma-separated)
+              </label>
+              <input
+                type="text"
+                id="amenities"
+                name="amenities"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+                Image URLs (comma-separated)
+              </label>
+              <input
+                type="text"
+                id="images"
+                name="images"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label htmlFor="currencies" className="block text-sm font-medium text-gray-700">
+                Currencies (JSON array)
+              </label>
+              <textarea
+                id="currencies"
+                name="currencies"
+                rows={4}
+                required
+                placeholder='[{"id": 1, "code": "USD", "name": "US Dollar", "euro_forex": 1.1, "symbol": "$"}]'
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            {/* Checkboxes */}
+            <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="hide_address"
+                  name="hide_address"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="hide_address" className="ml-2 block text-sm text-gray-700">
+                  Hide Address
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="has_addons"
+                  name="has_addons"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="has_addons" className="ml-2 block text-sm text-gray-700">
+                  Has Addons
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="adults_only"
+                  name="adults_only"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="adults_only" className="ml-2 block text-sm text-gray-700">
+                  Adults Only
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="pets_allowed"
+                  name="pets_allowed"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="pets_allowed" className="ml-2 block text-sm text-gray-700">
+                  Pets Allowed
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="has_wifi"
+                  name="has_wifi"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="has_wifi" className="ml-2 block text-sm text-gray-700">
+                  Has WiFi
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="has_meal_plan"
+                  name="has_meal_plan"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="has_meal_plan" className="ml-2 block text-sm text-gray-700">
+                  Has Meal Plan
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="is_active"
+                  name="is_active"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="is_active" className="ml-2 block text-sm text-gray-700">
+                  Is Active
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end space-x-4">
-            {/* <Button
-              type="button"
-              variant="outline"
-              onClick={() => window.history.back()}
-            >
-              Cancel
-            </Button> */}
             <Button type="submit">
               Create Property
             </Button>

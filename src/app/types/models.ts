@@ -1,40 +1,92 @@
 export interface Property {
-  _id: string;
+  id: number;
   name: string;
   internal_name: string;
-  description: {
-    en: string;
-    es: string;
-  };
-  location: {
-    address: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    };
-  };
-  images: string[];
-  amenities: string[];
-  pricing: {
-    usd: {
-      perNight: number;
-      cleaningFee: number;
-      serviceFee: number;
-    };
-    mxn: {
-      perNight: number;
-      cleaningFee: number;
-      serviceFee: number;
-    };
-  };
-  maxGuests: number;
+  description: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  hide_address: boolean;
+  zip: string;
+  city: string;
+  state: string;
+  country: string;
+  images: Image[];
+  has_addons: boolean;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  currencies: Currency[];
+  
+  // Room fields merged into Property
+  amenities: Amenities;
+  breakfast_included: boolean;
+  has_parking: boolean;
+  adults_only: boolean;
+  pets_allowed: boolean;
+  show_additional_key_facts: boolean;
+  image_url: string;
+  max_people: number;
+  units: number;
+  has_wifi: boolean;
+  has_meal_plan: boolean;
   bedrooms: number;
   bathrooms: number;
-  availability: {
-    blockedDates: DateRange[];
-  };
-  createdAt: Date;
-  updatedAt: Date;
+  area_unit: string;
+  area: number;
+}
+
+export interface Image {
+  alt?: string;
+  url: string;
+  src?: string;
+  text?: string;
+}
+
+export interface Amenities {
+  additionalProp: AdditionalProp[];
+}
+
+export interface AdditionalProp {
+  name: string;
+  prefix: string;
+  bracket: string;
+  text: string;
+}
+
+export interface Contact {
+  spoken_languages: any[];
+}
+
+export interface InOut {
+  is_restricted: boolean;
+  check_in: CheckIn[];
+  check_out: CheckOut[];
+  not_available: NotAvailable[];
+}
+
+export interface CheckIn {
+  date: string;
+  for: string;
+}
+
+export interface CheckOut {
+  date: string;
+  for: string;
+}
+
+export interface NotAvailable {
+  date: string;
+  for: string;
+}
+
+export interface Currency {
+  id: number;
+  code: string;
+  name: string;
+  euro_forex: number;
+  symbol: string;
 }
 
 export interface User {
