@@ -19,8 +19,31 @@ export default async function NewPropertyPage() {
       redirect('/cms/login');
     }
 
+    console.log(token)
+
+    // Build currencies array based on checkboxes
+    const currencies = [];
+    if (formData.get('currency_usd') === 'true') {
+      currencies.push({
+        id: 1,
+        code: 'USD',
+        name: 'US Dollar',
+        euro_forex: parseFloat(formData.get('usd_forex') as string),
+        symbol: '$'
+      });
+    }
+    if (formData.get('currency_mxn') === 'true') {
+      currencies.push({
+        id: 2,
+        code: 'MXN',
+        name: 'Mexican Peso',
+        euro_forex: parseFloat(formData.get('mxn_forex') as string),
+        symbol: 'MX$'
+      });
+    }
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cms/properties`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +65,7 @@ export default async function NewPropertyPage() {
           has_addons: formData.get('has_addons') === 'true',
           rating: parseFloat(formData.get('rating') as string),
           is_active: formData.get('is_active') === 'true',
-          currencies: JSON.parse(formData.get('currencies') as string),
+          currencies: currencies,
           
           // Room fields
           amenities: {
@@ -71,14 +94,14 @@ export default async function NewPropertyPage() {
       });
 
       if (!response.ok) {
-        const data = await response.json();
+        const data = await response?.json();
         throw new Error(data.error || 'Failed to create property');
       }
 
       redirect('/cms/properties');
     } catch (error) {
       console.error('Error creating property:', error);
-      throw error;
+      // throw error;
     }
   }
 
@@ -320,17 +343,54 @@ export default async function NewPropertyPage() {
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="currencies" className="block text-sm font-medium text-gray-700">
-                Currencies (JSON array)
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Currencies
               </label>
-              <textarea
-                id="currencies"
-                name="currencies"
-                rows={4}
-                required
-                placeholder='[{"id": 1, "code": "USD", "name": "US Dollar", "euro_forex": 1.1, "symbol": "$"}]'
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
+              <div className="space-y-4">
+                {/* USD Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_usd"
+                    name="currency_usd"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_usd" className="text-sm text-gray-700">
+                    USD (US Dollar)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="usd_forex"
+                    name="usd_forex"
+                    defaultValue={1.1}
+                    placeholder="EUR to USD rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+
+                {/* MXN Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_mxn"
+                    name="currency_mxn"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_mxn" className="text-sm text-gray-700">
+                    MXN (Mexican Peso)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="mxn_forex"
+                    name="mxn_forex"
+                    defaultValue={20.0}
+                    placeholder="EUR to MXN rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Checkboxes */}

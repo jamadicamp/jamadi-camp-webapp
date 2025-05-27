@@ -34,6 +34,8 @@ export default function PropertyList({ properties }: PropertyListProps) {
     }
   };
 
+  console.log(properties) 
+
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {properties.map((property) => (
@@ -62,7 +64,7 @@ export default function PropertyList({ properties }: PropertyListProps) {
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => handleDelete(property._id)}
+                    onClick={() => handleDelete(property?._id?.toString())}
                     className="text-red-600"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
@@ -77,12 +79,12 @@ export default function PropertyList({ properties }: PropertyListProps) {
               {property.name}
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              {property.location.address}
+              {property.address}
             </p>
             <div className="mt-4 flex justify-between items-center">
               <div>
                 <p className="text-sm font-medium text-gray-900">
-                  ${property.pricing.usd.perNight}
+                  ${property?.currencies[0]?.euro_forex}
                 </p>
                 <p className="text-xs text-gray-500">
                   per night

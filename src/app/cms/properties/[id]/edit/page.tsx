@@ -1,17 +1,10 @@
-"use client";
+'use client';
 
-import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { Property } from '@/app/types/models';
-
-export const metadata: Metadata = {
-  title: 'Edit Property',
-  description: 'Edit property details',
-};
+import { updateFullProperty } from '@/app/actions/property-action';
 
 export default function EditPropertyPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -37,78 +30,14 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
     fetchProperty();
   }, [params.id]);
 
-  async function handleSubmit(formData: FormData) {
-    'use server';
-    
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      redirect('/cms/login');
-    }
-
+  const handleSubmit = async (formData: FormData) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          internal_name: formData.get('internal_name'),
-          description: formData.get('description'),
-          latitude: parseFloat(formData.get('latitude') as string),
-          longitude: parseFloat(formData.get('longitude') as string),
-          address: formData.get('address'),
-          hide_address: formData.get('hide_address') === 'true',
-          zip: formData.get('zip'),
-          city: formData.get('city'),
-          state: formData.get('state'),
-          country: formData.get('country'),
-          images: (formData.get('images') as string).split(',').map(url => ({ url: url.trim() })),
-          has_addons: formData.get('has_addons') === 'true',
-          rating: parseFloat(formData.get('rating') as string),
-          is_active: formData.get('is_active') === 'true',
-          currencies: JSON.parse(formData.get('currencies') as string),
-          
-          // Room fields
-          amenities: {
-            additionalProp: (formData.get('amenities') as string).split(',').map(amenity => ({
-              name: amenity.trim(),
-              prefix: '',
-              bracket: '',
-              text: ''
-            }))
-          },
-          breakfast_included: formData.get('breakfast_included') === 'true',
-          has_parking: formData.get('has_parking') === 'true',
-          adults_only: formData.get('adults_only') === 'true',
-          pets_allowed: formData.get('pets_allowed') === 'true',
-          show_additional_key_facts: formData.get('show_additional_key_facts') === 'true',
-          image_url: formData.get('image_url'),
-          max_people: parseInt(formData.get('max_people') as string),
-          units: parseInt(formData.get('units') as string),
-          has_wifi: formData.get('has_wifi') === 'true',
-          has_meal_plan: formData.get('has_meal_plan') === 'true',
-          bedrooms: parseInt(formData.get('bedrooms') as string),
-          bathrooms: parseInt(formData.get('bathrooms') as string),
-          area_unit: formData.get('area_unit'),
-          area: parseFloat(formData.get('area') as string)
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update property');
-      }
-
-      redirect('/cms/properties');
+      await updateFullProperty(params.id, formData);
     } catch (error) {
       console.error('Error updating property:', error);
-      throw error;
+      // Handle error (show toast, etc.)
     }
-  }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -285,6 +214,20 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
             </div>
 
             <div>
+              <label htmlFor="units" className="block text-sm font-medium text-gray-700">
+                Units
+              </label>
+              <input
+                type="number"
+                id="units"
+                name="units"
+                defaultValue={property.units}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div>
               <label htmlFor="bedrooms" className="block text-sm font-medium text-gray-700">
                 Bedrooms
               </label>
@@ -343,6 +286,36 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
               </select>
             </div>
 
+            <div>
+              <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
+                Rating
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                max="5"
+                id="rating"
+                name="rating"
+                defaultValue={property.rating}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">
+                Main Image URL
+              </label>
+              <input
+                type="url"
+                id="image_url"
+                name="image_url"
+                defaultValue={property.image_url || ''}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
             {/* Features */}
             <div className="md:col-span-2">
               <label htmlFor="amenities" className="block text-sm font-medium text-gray-700">
@@ -352,8 +325,7 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
                 type="text"
                 id="amenities"
                 name="amenities"
-                defaultValue={property.amenities.additionalProp.map(a => a.name).join(', ')}
-                required
+                defaultValue={property.amenities.additionalProp?.map(a => a.name).join(', ') || ''}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
@@ -366,24 +338,62 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
                 type="text"
                 id="images"
                 name="images"
-                defaultValue={property.images.map(img => img.url).join(', ')}
-                required
+                defaultValue={property.images?.map(img => img.url).join(', ') || ''}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="currencies" className="block text-sm font-medium text-gray-700">
-                Currencies (JSON array)
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Currencies
               </label>
-              <textarea
-                id="currencies"
-                name="currencies"
-                rows={4}
-                required
-                defaultValue={JSON.stringify(property.currencies, null, 2)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
+              <div className="space-y-4">
+                {/* USD Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_usd"
+                    name="currency_usd"
+                    defaultChecked={property.currencies?.some(c => c.code === 'USD')}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_usd" className="text-sm text-gray-700">
+                    USD (US Dollar)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="usd_forex"
+                    name="usd_forex"
+                    defaultValue={property.currencies?.find(c => c.code === 'USD')?.euro_forex || 1.1}
+                    placeholder="EUR to USD rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+
+                {/* MXN Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_mxn"
+                    name="currency_mxn"
+                    defaultChecked={property.currencies?.some(c => c.code === 'MXN')}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_mxn" className="text-sm text-gray-700">
+                    MXN (Mexican Peso)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="mxn_forex"
+                    name="mxn_forex"
+                    defaultValue={property.currencies?.find(c => c.code === 'MXN')?.euro_forex || 20.0}
+                    placeholder="EUR to MXN rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Checkboxes */}
@@ -469,6 +479,45 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
               <div className="flex items-center">
                 <input
                   type="checkbox"
+                  id="breakfast_included"
+                  name="breakfast_included"
+                  defaultChecked={property.breakfast_included}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="breakfast_included" className="ml-2 block text-sm text-gray-700">
+                  Breakfast Included
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="has_parking"
+                  name="has_parking"
+                  defaultChecked={property.has_parking}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="has_parking" className="ml-2 block text-sm text-gray-700">
+                  Has Parking
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="show_additional_key_facts"
+                  name="show_additional_key_facts"
+                  defaultChecked={property.show_additional_key_facts}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="show_additional_key_facts" className="ml-2 block text-sm text-gray-700">
+                  Show Key Facts
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
                   id="is_active"
                   name="is_active"
                   defaultChecked={property.is_active}
@@ -493,4 +542,4 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
       </div>
     </div>
   );
-} 
+}

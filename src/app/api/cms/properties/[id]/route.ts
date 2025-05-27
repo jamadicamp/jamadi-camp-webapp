@@ -2,9 +2,22 @@ import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 import connectDB from '@/lib/db';
 import Property from '@/lib/models/Property';
+import { cookies } from 'next/headers';
+
 
 async function verifyAuth(request: Request) {
-  const token = request.headers.get('cookie')?.split('token=')[1]?.split(';')[0];
+  // Try to get token from Authorization header first
+  const authHeader = request.headers.get('authorization');
+  let token = authHeader?.replace('Bearer ', '');
+  
+  // If no Authorization header, try cookies
+  if (!token) {
+    const cookieStore = await cookies();
+    token = cookieStore.get('token')?.value;
+  }
+  
+  console.log('Token:', token);
+  console.log('Auth header:', authHeader);
 
   if (!token) {
     return null;
@@ -17,7 +30,8 @@ async function verifyAuth(request: Request) {
     
     const { payload } = await jwtVerify(token, secret);
     return payload;
-  } catch {
+  } catch (error) {
+    console.error('JWT verification failed:', error);
     return null;
   }
 }
@@ -37,6 +51,26 @@ export async function PUT(
     }
 
     const propertyData = await request.json();
+
+    // Validate currencies array if present
+    if (propertyData.currencies) {
+      if (!Array.isArray(propertyData.currencies)) {
+        return NextResponse.json(
+          { error: 'currencies must be an array' },
+          { status: 400 }
+        );
+      }
+
+      for (const currency of propertyData.currencies) {
+        if (!currency.id || !currency.code || !currency.name || !currency.euro_forex || !currency.symbol) {
+          return NextResponse.json(
+            { error: 'Each currency must have id, code, name, euro_forex, and symbol' },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     await connectDB();
 
     const property = await Property.findByIdAndUpdate(

@@ -23,6 +23,8 @@ async function getProperties() {
     },
   });
 
+
+
   if (!response.ok) {
     throw new Error('Failed to fetch properties');
   }
@@ -49,6 +51,7 @@ export default async function CMSPage() {
   }
 
   const properties: Property[] = await getProperties();
+  console.log(properties)
 
   return (
     <div className="min-h-screen bg-gray-50">

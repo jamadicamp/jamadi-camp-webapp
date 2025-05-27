@@ -2,9 +2,18 @@ import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 import connectDB from '@/lib/db';
 import User from '@/lib/models/User';
+import { cookies } from 'next/headers';
 
 async function verifyAdmin(request: Request) {
-  const token = request.headers.get('cookie')?.split('token=')[1]?.split(';')[0];
+  // Try to get token from Authorization header first
+  const authHeader = request.headers.get('authorization');
+  let token = authHeader?.replace('Bearer ', '');
+  
+  // If no Authorization header, try cookies
+  if (!token) {
+    const cookieStore = await cookies();
+    token = cookieStore.get('token')?.value;
+  }
 
   if (!token) {
     return null;

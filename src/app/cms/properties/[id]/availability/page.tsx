@@ -1,80 +1,16 @@
-"use client";
+'use client';
 
-import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-
-export const metadata: Metadata = {
-  title: 'Property Availability',
-  description: 'Manage property availability',
-};
-
-interface Property {
-  id: string;
-  name: string;
-  internal_name: string;
-  description: string;
-  latitude: number;
-  longitude: number;
-  address: string;
-  hide_address: boolean;
-  zip: string;
-  city: string;
-  state: string;
-  country: string;
-  images: { url: string }[];
-  has_addons: boolean;
-  has_agreement: boolean;
-  agreement_text?: string;
-  agreement_url?: string;
-  contact: {
-    spoken_languages: string[];
-  };
-  rating: number;
-  price_unit_in_days: number;
-  min_price: number;
-  max_price: number;
-  currency_code: string;
-  is_active: boolean;
-  currencies: {
-    id: number;
-    code: string;
-    name: string;
-    euro_forex: number;
-    symbol: string;
-  }[];
-  subscription_plans: string[];
-  amenities: {
-    additionalProp: {
-      name: string;
-      prefix: string;
-      bracket: string;
-      text: string;
-    }[];
-  };
-  breakfast_included: boolean;
-  has_parking: boolean;
-  adults_only: boolean;
-  pets_allowed: boolean;
-  show_additional_key_facts: boolean;
-  image_url?: string;
-  max_people: number;
-  units: number;
-  has_wifi: boolean;
-  has_meal_plan: boolean;
-  bedrooms: number;
-  bathrooms: number;
-  area_unit: string;
-  area: number;
-}
+import { updateProperty } from '@/app/actions/property-action';
+import { Property } from '@/app/types/models';
 
 export default function AvailabilityPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -87,6 +23,7 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
         setProperty(data);
       } catch (error) {
         console.error('Error fetching property:', error);
+        setError('Failed to fetch property details');
       } finally {
         setLoading(false);
       }
@@ -95,42 +32,15 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
     fetchProperty();
   }, [params.id]);
 
-  async function handleSubmit(formData: FormData) {
-    'use server';
-    
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      redirect('/cms/login');
-    }
-
+  const handleSubmit = async (formData: FormData) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          units: parseInt(formData.get('units') as string),
-          max_people: parseInt(formData.get('max_people') as string),
-          is_active: formData.get('is_active') === 'true',
-          currencies: JSON.parse(formData.get('currencies') as string)
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update property');
-      }
-
-      redirect('/cms/properties');
+      await updateProperty(params.id, formData);
+      router.back();
     } catch (error) {
       console.error('Error updating property:', error);
-      throw error;
+      setError('Failed to update property');
     }
-  }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -145,6 +55,12 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Property Availability</h1>
         
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
+            {error}
+          </div>
+        )}
+
         <form action={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -176,17 +92,56 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="currencies" className="block text-sm font-medium text-gray-700">
-                Currencies (JSON array)
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Currencies
               </label>
-              <textarea
-                id="currencies"
-                name="currencies"
-                rows={4}
-                required
-                defaultValue={JSON.stringify(property.currencies, null, 2)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              />
+              <div className="space-y-4">
+                {/* USD Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_usd"
+                    name="currency_usd"
+                    defaultChecked={property.currencies.some(c => c.code === 'USD')}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_usd" className="text-sm text-gray-700">
+                    USD (US Dollar)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="usd_forex"
+                    name="usd_forex"
+                    defaultValue={property.currencies.find(c => c.code === 'USD')?.euro_forex || 1.1}
+                    placeholder="EUR to USD rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+
+                {/* MXN Currency */}
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    id="currency_mxn"
+                    name="currency_mxn"
+                    defaultChecked={property.currencies.some(c => c.code === 'MXN')}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="currency_mxn" className="text-sm text-gray-700">
+                    MXN (Mexican Peso)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="mxn_forex"
+                    name="mxn_forex"
+                    defaultValue={property.currencies.find(c => c.code === 'MXN')?.euro_forex || 20.0}
+                    placeholder="EUR to MXN rate"
+                    className="w-32 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="md:col-span-2">
@@ -217,4 +172,4 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
       </div>
     </div>
   );
-} 
+}

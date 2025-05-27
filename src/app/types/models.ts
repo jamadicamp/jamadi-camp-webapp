@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Property {
-  id: number;
+  _id?: string;
+  id: string;
   name: string;
   internal_name: string;
   description: string;
@@ -11,22 +13,42 @@ export interface Property {
   city: string;
   state: string;
   country: string;
-  images: Image[];
+  images: { url: string }[];
   has_addons: boolean;
+  has_agreement: boolean;
+  agreement_text?: string;
+  agreement_url?: string;
+  contact: {
+    spoken_languages: string[];
+  };
   rating: number;
-  created_at: string;
-  updated_at: string;
+  price_unit_in_days: number;
+  min_price: number;
+  max_price: number;
+  currency_code: string;
   is_active: boolean;
-  currencies: Currency[];
-  
-  // Room fields merged into Property
-  amenities: Amenities;
+  currencies: {
+    id: number;
+    code: string;
+    name: string;
+    euro_forex: number;
+    symbol: string;
+  }[];
+  subscription_plans: string[];
+  amenities: {
+    additionalProp: {
+      name: string;
+      prefix: string;
+      bracket: string;
+      text: string;
+    }[];
+  };
   breakfast_included: boolean;
   has_parking: boolean;
   adults_only: boolean;
   pets_allowed: boolean;
   show_additional_key_facts: boolean;
-  image_url: string;
+  image_url?: string;
   max_people: number;
   units: number;
   has_wifi: boolean;
@@ -35,6 +57,12 @@ export interface Property {
   bathrooms: number;
   area_unit: string;
   area: number;
+  availability: {
+    blockedDates: {
+      from: Date;
+      to: Date;
+    }[];
+  };
 }
 
 export interface Image {
