@@ -35,6 +35,7 @@ const getCacheProperty = cache(async () => {
 });
 
 export default async function Home() {
+
 	const properties = await getCacheProperty();
 
 	const images = properties.items
