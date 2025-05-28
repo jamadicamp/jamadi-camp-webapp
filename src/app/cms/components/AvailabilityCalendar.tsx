@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -52,11 +52,7 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
   });
 
   // Fetch availability data
-  useEffect(() => {
-    fetchAvailability();
-  }, [propertyId]);
-
-  const fetchAvailability = async () => {
+  const fetchAvailability = useCallback(async () => {
     try {
       const response = await fetch(`/api/properties/${propertyId}/availability`);
       if (!response.ok) throw new Error('Failed to fetch availability');
@@ -67,7 +63,11 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
       console.error('Error fetching availability:', error);
       setError('Failed to load availability data');
     }
-  };
+  }, [propertyId]);
+
+  useEffect(() => {
+    fetchAvailability();
+  }, [fetchAvailability]);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return;

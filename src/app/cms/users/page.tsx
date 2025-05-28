@@ -44,7 +44,7 @@ async function getUsers(token: string): Promise<User[]> {
 export default async function UserManagementPage({
   searchParams,
 }: {
-  searchParams: { success?: string; error?: string }
+  searchParams: Promise<{ success?: string; error?: string }>
 }) {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
@@ -162,7 +162,7 @@ export default async function UserManagementPage({
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Success Message */}
-          {searchParams.success === 'user-deleted' && (
+          {((await searchParams).success === 'user-deleted') && (
             <div className="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -179,7 +179,7 @@ export default async function UserManagementPage({
             </div>
           )}
 
-          {searchParams.success === 'user-created' && (
+          {((await searchParams).success === 'user-created') && (
             <div className="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -197,7 +197,7 @@ export default async function UserManagementPage({
           )}
 
           {/* Error Message */}
-          {searchParams.error && (
+          {((await searchParams).error) && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -207,7 +207,7 @@ export default async function UserManagementPage({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-red-800">
-                    {decodeURIComponent(searchParams.error)}
+                    {decodeURIComponent((await searchParams).error || '')}
                   </p>
                 </div>
               </div>

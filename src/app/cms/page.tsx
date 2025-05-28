@@ -35,7 +35,7 @@ async function getProperties() {
 export default async function CMSPage({
   searchParams,
 }: {
-  searchParams: { success?: string }
+  searchParams: Promise<{ success?: string }>
 }) {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
@@ -79,7 +79,7 @@ export default async function CMSPage({
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Success Message */}
-          {searchParams.success === 'user-created' && (
+          {((await searchParams).success === 'user-created') && (
             <div className="mb-6 bg-green-50 border border-green-200 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">

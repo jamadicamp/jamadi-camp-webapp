@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Property } from '@/app/types/models';
 import AvailabilityCalendar from '@/app/cms/components/AvailabilityCalendar';
+import { use } from 'react';
 
-export default function AvailabilityPage({ params }: { params: { id: string } }) {
+export default function AvailabilityPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
+  const { id } = use(params);
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +17,7 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${params.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch property');
         }
@@ -30,7 +32,7 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
     };
 
     fetchProperty();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -95,7 +97,7 @@ export default function AvailabilityPage({ params }: { params: { id: string } })
             </p>
           </div>
           
-          <AvailabilityCalendar propertyId={params.id} />
+          <AvailabilityCalendar propertyId={id} />
         </div>
 
         <div className="mt-6 bg-gray-50 rounded-lg p-4">

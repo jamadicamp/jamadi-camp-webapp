@@ -38,7 +38,7 @@ async function verifyAuth(request: Request) {
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(request);
@@ -74,7 +74,7 @@ export async function PUT(
     await connectDB();
 
     const property = await Property.findByIdAndUpdate(
-      params.id,
+      (await params).id,
       propertyData,
       { new: true, runValidators: true }
     );
@@ -98,7 +98,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(request);
@@ -111,7 +111,7 @@ export async function DELETE(
     }
 
     await connectDB();
-    const property = await Property.findByIdAndDelete(params.id);
+    const property = await Property.findByIdAndDelete((await params).id);
 
     if (!property) {
       return NextResponse.json(

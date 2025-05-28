@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Image from 'next/image';
 
 interface PropertyListProps {
   properties: Property[];
@@ -44,8 +45,9 @@ export default function PropertyList({ properties }: PropertyListProps) {
           className="bg-white overflow-hidden shadow rounded-lg"
         >
           <div className="relative h-48">
-            <img
-              src={property.images[0].url}
+            <Image
+              src={property.images[0]?.url || ''}
+              objectFit="cover"
               alt={property.name}
               className="w-full h-full object-cover"
             />

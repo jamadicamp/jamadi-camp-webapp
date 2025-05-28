@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import * as React from "react";
@@ -281,7 +282,7 @@ export default function AvailabilityCalendar({
 			);
 
 			const response = await getAvailablities(from, to);
-			const data = response?.response as AvailabilityData[];
+			const data = response?.response as unknown as AvailabilityData[];
 
 			const newMap = convertAvailability(data);
 			// Merge newMap into dayAvailMap

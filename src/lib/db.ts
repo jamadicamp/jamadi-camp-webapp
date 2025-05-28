@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import mongoose from 'mongoose';
 
 declare global {
@@ -29,6 +30,7 @@ async function connectDB() {
       bufferCommands: false,
     };
 
+    // @ts-expect-error - mongoose is not typed
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });

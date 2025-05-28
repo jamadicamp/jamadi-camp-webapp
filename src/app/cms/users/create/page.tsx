@@ -13,8 +13,9 @@ export const metadata: Metadata = {
 export default async function CreateUserPage({
   searchParams,
 }: {
-  searchParams: { error?: string }
+  searchParams: Promise<{ error?: string }>
 }) {
+  const params = await searchParams;
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
@@ -114,7 +115,7 @@ export default async function CreateUserPage({
       <main className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Error Message */}
-          {searchParams.error && (
+          {params.error && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -124,7 +125,7 @@ export default async function CreateUserPage({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-red-800">
-                    {decodeURIComponent(searchParams.error)}
+                    {decodeURIComponent(params.error)}
                   </p>
                 </div>
               </div>
