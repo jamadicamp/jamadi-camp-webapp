@@ -7,19 +7,21 @@ import { DateRange } from "react-day-picker";
 export default function RenderPropertiesList({
 	properties,
 	date,
+	guests = "1",
 }: {
 	properties: Property[];
 	date?: DateRange;
+	guests?: string;
 }) {
 	return (
 		<div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-16">
 			{properties.map((property) => (
 				<Link
-					href={routes.cabin.path}
-					as={routes.cabin.href(
+					href={routes.cabin.href(
 						property._id || property.id,
 						date?.from?.toISOString(),
-						date?.to?.toISOString()
+						date?.to?.toISOString(),
+						guests
 					)}
 					key={property._id || property.id}
 					className="space-y-6"

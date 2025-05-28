@@ -134,7 +134,7 @@ export default async function Home() {
 				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
 					Our Cabins in Jamadi
 				</h3>
-				<RenderPropertiesList properties={properties} />
+				<RenderPropertiesList properties={properties} guests="1" />
 			</section>
 
 			{/* Call to Action / Booking Section */}

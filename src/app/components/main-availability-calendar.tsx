@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { addDays, format, addMonths } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Users } from "lucide-react";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ import { Property } from "../types/models";
 
 interface MainAvailabilityCalendarProps {
 	className?: string;
-	onSearch: (properties: Property[], date: DateRange) => void;
+	onSearch: (properties: Property[], date: DateRange, guests: number) => void;
 	allProperties: Property[];
 }
 
@@ -36,6 +36,9 @@ export default function MainAvailabilityCalendar({
 		from: new Date(),
 		to: addDays(new Date(), 2),
 	});
+
+	// Track guest count
+	const [guests, setGuests] = React.useState<number>(1);
 
 	// Track the loaded date range for availability data (2 months by default)
 	const [loadedStart, setLoadedStart] = React.useState<Date>(new Date());
@@ -150,7 +153,7 @@ export default function MainAvailabilityCalendar({
 	}
 
 	// -------------------------------------------------
-	// 7) Get available properties for the selected date range
+	// 7) Get available properties for the selected date range and guest count
 	// -------------------------------------------------
 	function getAvailableProperties(): Property[] {
 		if (!date?.from || !date?.to) return [];
@@ -158,6 +161,11 @@ export default function MainAvailabilityCalendar({
 		return allProperties.filter(property => {
 			const fromDate = new Date(date.from!);
 			const toDate = new Date(date.to!);
+
+			// Check guest capacity
+			if (property.max_people < guests) {
+				return false;
+			}
 
 			// Check if any blocked date range overlaps with the requested date range
 			const hasBlockedDateConflict = property.availability?.blockedDates?.some((blockedDate) => {
@@ -190,7 +198,7 @@ export default function MainAvailabilityCalendar({
 		
 		const availableProperties = getAvailableProperties();
 		console.log("Available properties for selected range:", availableProperties);
-		onSearch(availableProperties, date);
+		onSearch(availableProperties, date, guests);
 	}
 
 	return (
@@ -258,6 +266,22 @@ export default function MainAvailabilityCalendar({
 							</div>
 						</PopoverContent>
 					</Popover>
+				</div>
+
+				{/* Guest Selection */}
+				<div className="flex items-center gap-2 border p-2 rounded">
+					<Users className="h-4 w-4" />
+					<select
+						value={guests}
+						onChange={(e) => setGuests(parseInt(e.target.value))}
+						className="bg-transparent outline-none"
+					>
+						{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+							<option key={num} value={num}>
+								{num} {num === 1 ? 'Guest' : 'Guests'}
+							</option>
+						))}
+					</select>
 				</div>
 
 				<div>

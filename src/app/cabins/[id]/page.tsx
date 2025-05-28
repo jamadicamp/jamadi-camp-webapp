@@ -7,6 +7,7 @@ import { PageProps } from "../../../../.next/types/app/cabins/[id]/page";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import routes from "@/app/lib/routes";
+import { BookingModal } from "@/components/BookingModal";
 
 const getCacheProperty = cache(async (id: string) => {
   const property = await getProperty(id);
@@ -59,6 +60,11 @@ export default async function PropertyPage(props: Props) {
   console.log(params?.from, params?.to, params?.guests);
 
   const amenities = property.amenities?.additionalProp || [];
+
+  // Parse URL parameters for initial booking data
+  const initialCheckIn = params?.from ? new Date(params.from as string) : undefined;
+  const initialCheckOut = params?.to ? new Date(params.to as string) : undefined;
+  const initialGuests = params?.guests ? parseInt(params.guests as string) : 1;
 
   return (
     <div className="bg-orange-50 pt-8 font-[family-name:var(--font-geist-sans)] space-y-32 pb-20">
@@ -137,12 +143,21 @@ export default async function PropertyPage(props: Props) {
               Breakfast Included
             </li>
           </ul>
-          <a
-            href="#search"
-            className="inline-block bg-orange-50 text-black px-6 py-2 mt-8 border border-[#3a383a] uppercase transition-colors"
-          >
-            Book Now
-          </a>
+          <BookingModal
+            property={{
+              id: property.id || id,
+              name: property.name,
+              image_url: property.image_url,
+              images: property.images,
+              currencies: property.currencies,
+              max_people: property.max_people || 2,
+              bedrooms: property.bedrooms || 1,
+              bathrooms: property.bathrooms || 1
+            }}
+            initialCheckIn={initialCheckIn}
+            initialCheckOut={initialCheckOut}
+            initialGuests={initialGuests}
+          />
         </div>
       </section>
 	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
