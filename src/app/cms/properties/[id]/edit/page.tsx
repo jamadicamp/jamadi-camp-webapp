@@ -1,25 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Property } from '@/app/types/models';
 import { updateFullProperty } from '@/app/actions/property-action';
+import ImageUpload from '@/components/ImageUpload';
 
-export default function EditPropertyPage({ params }: { params: { id: string } }) {
+export default function EditPropertyPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const router = useRouter();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${params.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch property');
         }
         const data = await response.json();
         setProperty(data);
+        // Set existing images
+        setImages(data.images?.map((img: { url: string }) => img.url) || []);
       } catch (error) {
         console.error('Error fetching property:', error);
       } finally {
@@ -28,11 +34,24 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
     };
 
     fetchProperty();
-  }, [params.id]);
+  }, [id]);
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      await updateFullProperty(params.id, formData);
+      // Create a new FormData with updated images
+      const updatedFormData = new FormData();
+      
+      // Copy all existing form data
+      for (const [key, value] of formData.entries()) {
+        if (key !== 'images') {
+          updatedFormData.append(key, value);
+        }
+      }
+      
+      // Add the updated images
+      updatedFormData.append('images', images.join(','));
+      
+      await updateFullProperty(id, updatedFormData);
     } catch (error) {
       console.error('Error updating property:', error);
       // Handle error (show toast, etc.)
@@ -330,16 +349,11 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
               />
             </div>
 
+            {/* Image Upload Section */}
             <div className="md:col-span-2">
-              <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-                Image URLs (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="images"
-                name="images"
-                defaultValue={property.images?.map(img => img.url).join(', ') || ''}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              <ImageUpload
+                images={images}
+                onImagesChange={setImages}
               />
             </div>
 

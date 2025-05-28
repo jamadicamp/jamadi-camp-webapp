@@ -1,107 +1,19 @@
-import { Metadata } from 'next';
+'use client';
+
 import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { useState } from 'react';
+import ImageUpload from '@/components/ImageUpload';
+import { createProperty } from '@/app/actions/property-action';
 
-export const metadata: Metadata = {
-  title: 'Add New Property',
-  description: 'Add a new property to the system',
-};
+export default function NewPropertyPage() {
+  const [images, setImages] = useState<string[]>([]);
 
-export default async function NewPropertyPage() {
   async function handleSubmit(formData: FormData) {
-    'use server';
-    
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
-    if (!token) {
-      redirect('/cms/login');
-    }
-
-    console.log(token)
-
-    // Build currencies array based on checkboxes
-    const currencies = [];
-    if (formData.get('currency_usd') === 'true') {
-      currencies.push({
-        id: 1,
-        code: 'USD',
-        name: 'US Dollar',
-        euro_forex: parseFloat(formData.get('usd_forex') as string),
-        symbol: '$'
-      });
-    }
-    if (formData.get('currency_mxn') === 'true') {
-      currencies.push({
-        id: 2,
-        code: 'MXN',
-        name: 'Mexican Peso',
-        euro_forex: parseFloat(formData.get('mxn_forex') as string),
-        symbol: 'MX$'
-      });
-    }
-
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cms/properties`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          internal_name: formData.get('internal_name'),
-          description: formData.get('description'),
-          latitude: parseFloat(formData.get('latitude') as string),
-          longitude: parseFloat(formData.get('longitude') as string),
-          address: formData.get('address'),
-          hide_address: formData.get('hide_address') === 'true',
-          zip: formData.get('zip'),
-          city: formData.get('city'),
-          state: formData.get('state'),
-          country: formData.get('country'),
-          images: (formData.get('images') as string).split(',').map(url => ({ url: url.trim() })),
-          has_addons: formData.get('has_addons') === 'true',
-          rating: parseFloat(formData.get('rating') as string),
-          is_active: formData.get('is_active') === 'true',
-          currencies: currencies,
-          
-          // Room fields
-          amenities: {
-            additionalProp: (formData.get('amenities') as string).split(',').map(amenity => ({
-              name: amenity.trim(),
-              prefix: '',
-              bracket: '',
-              text: ''
-            }))
-          },
-          breakfast_included: formData.get('breakfast_included') === 'true',
-          has_parking: formData.get('has_parking') === 'true',
-          adults_only: formData.get('adults_only') === 'true',
-          pets_allowed: formData.get('pets_allowed') === 'true',
-          show_additional_key_facts: formData.get('show_additional_key_facts') === 'true',
-          image_url: formData.get('image_url'),
-          max_people: parseInt(formData.get('max_people') as string),
-          units: parseInt(formData.get('units') as string),
-          has_wifi: formData.get('has_wifi') === 'true',
-          has_meal_plan: formData.get('has_meal_plan') === 'true',
-          bedrooms: parseInt(formData.get('bedrooms') as string),
-          bathrooms: parseInt(formData.get('bathrooms') as string),
-          area_unit: formData.get('area_unit'),
-          area: parseFloat(formData.get('area') as string)
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response?.json();
-        throw new Error(data.error || 'Failed to create property');
-      }
-
-      redirect('/cms/properties');
+      await createProperty(formData);
     } catch (error) {
       console.error('Error creating property:', error);
-      // throw error;
+      alert('Failed to create property. Please try again.');
     }
   }
 
@@ -261,6 +173,19 @@ export default async function NewPropertyPage() {
             </div>
 
             <div>
+              <label htmlFor="units" className="block text-sm font-medium text-gray-700">
+                Units
+              </label>
+              <input
+                type="number"
+                id="units"
+                name="units"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div>
               <label htmlFor="bedrooms" className="block text-sm font-medium text-gray-700">
                 Bedrooms
               </label>
@@ -315,6 +240,34 @@ export default async function NewPropertyPage() {
               </select>
             </div>
 
+            <div>
+              <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
+                Rating
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                max="5"
+                id="rating"
+                name="rating"
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">
+                Main Image URL
+              </label>
+              <input
+                type="url"
+                id="image_url"
+                name="image_url"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              />
+            </div>
+
             {/* Features */}
             <div className="md:col-span-2">
               <label htmlFor="amenities" className="block text-sm font-medium text-gray-700">
@@ -329,16 +282,11 @@ export default async function NewPropertyPage() {
               />
             </div>
 
+            {/* Image Upload Section */}
             <div className="md:col-span-2">
-              <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-                Image URLs (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="images"
-                name="images"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              <ImageUpload
+                images={images}
+                onImagesChange={setImages}
               />
             </div>
 
@@ -464,6 +412,42 @@ export default async function NewPropertyPage() {
                 />
                 <label htmlFor="has_meal_plan" className="ml-2 block text-sm text-gray-700">
                   Has Meal Plan
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="breakfast_included"
+                  name="breakfast_included"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="breakfast_included" className="ml-2 block text-sm text-gray-700">
+                  Breakfast Included
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="has_parking"
+                  name="has_parking"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="has_parking" className="ml-2 block text-sm text-gray-700">
+                  Has Parking
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="show_additional_key_facts"
+                  name="show_additional_key_facts"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <label htmlFor="show_additional_key_facts" className="ml-2 block text-sm text-gray-700">
+                  Show Key Facts
                 </label>
               </div>
 

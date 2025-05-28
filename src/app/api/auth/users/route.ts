@@ -31,6 +31,33 @@ async function verifyAdmin(request: Request) {
   }
 }
 
+// GET - List all users
+export async function GET(request: Request) {
+  try {
+    const admin = await verifyAdmin(request);
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+
+    // Get all users excluding passwords
+    const users = await User.find({}, { password: 0 }).sort({ createdAt: -1 });
+
+    return NextResponse.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const admin = await verifyAdmin(request);
@@ -79,6 +106,7 @@ export async function POST(request: Request) {
       role,
     });
 
+    console.log('User created:', user);
     return NextResponse.json({
       id: user._id,
       username: user.username,

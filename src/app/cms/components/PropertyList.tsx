@@ -45,7 +45,7 @@ export default function PropertyList({ properties }: PropertyListProps) {
         >
           <div className="relative h-48">
             <img
-              src={property.images[0]}
+              src={property.images[0].url}
               alt={property.name}
               className="w-full h-full object-cover"
             />
@@ -64,7 +64,7 @@ export default function PropertyList({ properties }: PropertyListProps) {
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => handleDelete(property?._id?.toString())}
+                    onClick={() => handleDelete(property?._id?.toString() || '')}
                     className="text-red-600"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
