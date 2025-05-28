@@ -38,11 +38,10 @@ export default async function Home() {
 
 	const properties = await getCacheProperty();
 
-	const images = properties.items
-	// For each property, map to an array of all room images
-	.flatMap(property => 
-	  (property.rooms || []).flatMap(room => room.images || [])
-	);
+	const images = properties
+	// For each property, map to an array of all property images
+	.flatMap(property => property.images || []);
+	
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			{/* Hero Section */}
@@ -70,7 +69,7 @@ export default async function Home() {
 			</div>
 
 			<div id="search">
-				<Search properties={properties.items} />
+				<Search properties={properties} />
 			</div>
 			{/* Highlight / Intro Section */}
 			<section
@@ -135,7 +134,7 @@ export default async function Home() {
 				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
 					Our Cabins in Jamadi
 				</h3>
-				<RenderPropertiesList properties={properties.items} />
+				<RenderPropertiesList properties={properties} />
 			</section>
 
 			{/* Call to Action / Booking Section */}

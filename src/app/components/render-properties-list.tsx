@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Property } from "../types";
+import { Property } from "../types/models";
 import routes from "../lib/routes";
 import Link from "next/link";
 import { DateRange } from "react-day-picker";
@@ -17,16 +17,16 @@ export default function RenderPropertiesList({
 				<Link
 					href={routes.cabin.path}
 					as={routes.cabin.href(
-						property.id,
+						property._id || property.id,
 						date?.from?.toISOString(),
 						date?.to?.toISOString()
 					)}
-					key={property.id}
+					key={property._id || property.id}
 					className="space-y-6"
 				>
 					<div className="relative w-full" style={{ aspectRatio: "377/251" }}>
 						<Image
-							src={"https:" + property.image_url}
+							src={property.images?.[0]?.url || property.image_url || "/placeholder.jpg"}
 							alt={property.name}
 							fill
 							style={{ objectFit: "cover" }}
@@ -39,19 +39,19 @@ export default function RenderPropertiesList({
 						<h6 className="text-lg md:text-xl">
 							Hosts:{" "}
 							<span className="font-thin">
-								{property.rooms[0]?.max_people || "N/A"}
+								{property.max_people || "N/A"}
 							</span>
 						</h6>
 						<h6 className="text-lg md:text-xl">
 							Bedrooms:{" "}
 							<span className="font-thin">
-								{property.rooms[0]?.bedrooms || "N/A"}
+								{property.bedrooms || "N/A"}
 							</span>
 						</h6>
 						<h6 className="text-lg md:text-xl">
 							FROM:{" "}
 							<span className="font-thin">
-								${property.original_min_price || "N/A"} / night
+								{property.currencies[0].symbol}{property.currencies[0].euro_forex || "N/A"} / night
 							</span>
 						</h6>
 					</div>

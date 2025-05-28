@@ -44,7 +44,7 @@ export default function ImageSlider({ images }: ImageSliderProps) {
           className="absolute inset-0"
         >
           <Image
-            src={"https:" + currentImage.url}
+            src={currentImage.url}
             alt={currentImage.alt || "Slider Image"}
             fill
             className="object-cover"

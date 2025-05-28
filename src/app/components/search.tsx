@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import AvailabilityCalendar from "./availability-calendar";
-import { Property } from "../types";
+import { Property } from "../types/models";
 import RenderPropertiesList from "./render-properties-list";
 import { DateRange } from "react-day-picker";
 
@@ -20,7 +20,7 @@ export default function Search({ properties }: Props) {
 	const data: Property[] = [];
 	availableProperties.forEach((value) => {
 		const info = properties.find(
-			(e) => e.id === value.property_id && e.rooms[0].id === value.room_type_id
+			(e) => e._id === value.property_id.toString()
 		);
 		if (info) data.push(info);
 	});

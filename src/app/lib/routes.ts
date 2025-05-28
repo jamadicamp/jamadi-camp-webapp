@@ -21,7 +21,7 @@ const routes = {
   },
   cabin: {
     path: "/cabins/:id",
-    href: (id: number, from?: string, to?: string, guests?: string) =>
+    href: (id: string | number, from?: string, to?: string, guests?: string) =>
       `/cabins/${id}${from ? `?from=${from}&to=${to}&guests=${guests}` : ""}`,
   },
 };

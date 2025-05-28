@@ -91,7 +91,7 @@ export default function ImageSlides({ images }: { images: Image[] }) {
 					>
 						<div className="aspect-square relative overflow-hidden">
 							<img
-								src={"https:" + (src.url || src.src)}
+								src={(src.url || src.src)}
 								alt={src?.alt || src?.text}
 								className="absolute w-full h-full object-cover"
 							/>
