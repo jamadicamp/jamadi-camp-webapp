@@ -49,6 +49,7 @@ export default function PropertyList({ properties }: PropertyListProps) {
               src={property.images[0]?.url || ''}
               objectFit="cover"
               alt={property.name}
+              fill
               className="w-full h-full object-cover"
             />
             <div className="absolute top-2 right-2">

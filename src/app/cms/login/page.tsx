@@ -1,52 +1,17 @@
 import { Metadata } from 'next';
-import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import LoginForm from './LoginForm';
 
 export const metadata: Metadata = {
   title: 'CMS Login',
   description: 'Login to the Content Management System',
 };
 
-export default async function LoginPage() {
-  async function handleSubmit(formData: FormData) {
-    'use server';
-    
-    const username = formData.get('username') as string;
-    const password = formData.get('password') as string;
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Login failed');
-      }
-
-      const data = await response.json();
-      
-      // Set cookie using next/headers
-      const cookieStore = await cookies();
-      cookieStore.set('token', data.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 60 * 24, // 24 hours
-      });
-
-      redirect('/cms');
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
-  }
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; success?: string }>
+}) {
+  const params = await searchParams;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -56,45 +21,26 @@ export default async function LoginPage() {
             Login to CMS
           </h2>
         </div>
-        <form className="mt-8 space-y-6" action={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Username"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Password"
-              />
+        
+        {/* Setup completion message */}
+        {params.error === 'setup-already-completed' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-blue-800">
+                  Setup has already been completed. Please login with your admin credentials.
+                </p>
+              </div>
             </div>
           </div>
-
-          <div>
-            <Button
-              type="submit"
-              className="w-full"
-            >
-              Login
-            </Button>
-          </div>
-        </form>
+        )}
+        
+        <LoginForm />
       </div>
     </div>
   );
