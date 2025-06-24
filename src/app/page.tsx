@@ -85,9 +85,9 @@ export default async function Home() {
 					{/* Highlight 1 */}
 					<div className="flex flex-col items-center">
 						<img
-							src="/images/icon-bonfire.png"
+							src="/images/Campfire-cuate.png"
 							alt="Bonfire Icon"
-							className="h-16 w-16 mb-4"
+							className="h-64 w-64 mb-4"
 						/>
 						<h3 className="text-xl font-semibold mb-2">Cozy Bonfires</h3>
 						<p className="text-gray-500">
@@ -98,9 +98,9 @@ export default async function Home() {
 					{/* Highlight 2 */}
 					<div className="flex flex-col items-center">
 						<img
-							src="/images/icon-mountain.png"
+							src="/images/Mountain biking-bro.png"
 							alt="Mountain Icon"
-							className="h-16 w-16 mb-4"
+							className="h-64 w-64 mb-4"
 						/>
 						<h3 className="text-xl font-semibold mb-2">Breathtaking Views</h3>
 						<p className="text-gray-500">
@@ -111,9 +111,9 @@ export default async function Home() {
 					{/* Highlight 3 */}
 					<div className="flex flex-col items-center">
 						<img
-							src="/images/icon-hiking.png"
+							src="/images/Hiking-bro.png"
 							alt="Hiking Icon"
-							className="h-16 w-16 mb-4"
+							className="h-64 w-64 mb-4"
 						/>
 						<h3 className="text-xl font-semibold mb-2">Adventure Trails</h3>
 						<p className="text-gray-500">
