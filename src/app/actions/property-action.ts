@@ -170,7 +170,7 @@ export async function updateFullProperty(propertyId: string, formData: FormData)
       symbol: '$'
     });
   }
-  if (formData.get('currency_mxn') === 'true') {
+  if (formData.get('currency_mxn') === 'on') {
     currencies.push({
       id: 2,
       code: 'MXN',

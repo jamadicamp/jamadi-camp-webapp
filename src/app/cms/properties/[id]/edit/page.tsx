@@ -46,6 +46,8 @@ export default function EditPropertyPage({ params }: { params: Promise<{ id: str
           updatedFormData.append(key, value);
         }
       }
+
+      console.log(updatedFormData);
       
       // Add the updated images
       updatedFormData.append('images', images.join(','));
