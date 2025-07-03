@@ -18,6 +18,7 @@ import {
 import { CalendarIcon, Mail, Phone, User } from "lucide-react"
 import Image from "next/image"
 import { format, differenceInDays, addDays } from "date-fns"
+import { sendBookingEmail } from "@/lib/emailjs"
 
 // You'll need to install @emailjs/browser: npm install @emailjs/browser
 // import emailjs from '@emailjs/browser'
@@ -175,7 +176,7 @@ export function BookingModal({
     try {
       // Prepare email data
       const emailData = {
-        to_email: "your-email@example.com", // Replace with your email
+        to_email: process.env.NEXT_PUBLIC_TO_EMAIL as string, // Replace with your email
         from_name: `${formData.firstName} ${formData.lastName}`,
         from_email: formData.email,
         phone: formData.phone,
@@ -193,12 +194,7 @@ export function BookingModal({
       }
 
       // EmailJS configuration - you need to set these up in your EmailJS account
-      // await emailjs.send(
-      //   'YOUR_SERVICE_ID',
-      //   'YOUR_TEMPLATE_ID',
-      //   emailData,
-      //   'YOUR_PUBLIC_KEY'
-      // )
+      await sendBookingEmail(emailData)
 
       // For now, just log the data (remove this when EmailJS is configured)
       console.log("Booking request:", emailData)

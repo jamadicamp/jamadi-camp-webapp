@@ -24,6 +24,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 	  return notFound();
 	}
 
+
 	const pathname = routes.cabin.href(id)
 
   
@@ -160,6 +161,19 @@ export default async function PropertyPage(props: Props) {
           />
         </div>
       </section>
+      
+      {/* Description Section */}
+      {property.description && (
+        <section className="max-w-[960px] mx-auto px-8 lg:px-0">
+          <div className="rounded-lg p-8">
+            <h2 className="text-2xl font-bold mb-2 text-center">About this place</h2>
+            <p className="text-gray-700 leading-relaxed text-lg text-center">
+              {property.description}
+            </p>
+          </div>
+        </section>
+      )}
+      
 	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
 		<h3 className="text-center text-3xl font-bold mb-2">Gallery</h3>
 		<p className="text-center max-w-[600px] mx-auto mb-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum magni autem nisi ut corporis deleniti, odit ipsum, soluta sapiente fugiat vero? Earum vitae libero nostrum incidunt cum quia vel quas!</p>
@@ -176,6 +190,26 @@ export default async function PropertyPage(props: Props) {
 			))}
 		</div>
 
+	  </section>
+
+	  {/* Location Section */}
+	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
+		<h3 className="text-center text-3xl font-bold mb-2">Location</h3>
+		<p className="text-center max-w-[600px] mx-auto mb-6">
+		  {property.address}, {property.city}, {property.state} {property.zip}
+		</p>
+		<div className="w-full h-96 rounded-lg overflow-hidden shadow-lg">
+		  <iframe
+			src={`https://maps.google.com/maps?q=${property.latitude},${property.longitude}&z=15&output=embed`}
+			width="100%"
+			height="100%"
+			style={{ border: 0 }}
+			allowFullScreen={true}
+			loading="lazy"
+			referrerPolicy="no-referrer-when-downgrade"
+			title={`Location of ${property.name}`}
+		  />
+		</div>
 	  </section>
       
     </div>

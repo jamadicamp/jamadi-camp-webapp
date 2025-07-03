@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // EmailJS Configuration
 // To set up EmailJS:
 // 1. Go to https://www.emailjs.com/ and create an account
@@ -66,7 +67,7 @@ export interface BookingEmailData {
 }
 
 // Uncomment and use this function when EmailJS is configured
-/*
+
 import emailjs from '@emailjs/browser'
 
 export const sendBookingEmail = async (data: BookingEmailData): Promise<void> => {
@@ -74,13 +75,15 @@ export const sendBookingEmail = async (data: BookingEmailData): Promise<void> =>
     const result = await emailjs.send(
       EMAILJS_CONFIG.SERVICE_ID,
       EMAILJS_CONFIG.TEMPLATE_ID,
-      data,
-      EMAILJS_CONFIG.PUBLIC_KEY
+      data as any as Record<string, unknown>,
+      {publicKey: EMAILJS_CONFIG.PUBLIC_KEY}
     )
+    console.log(result)
+    console.log(data)
+    console.log(EMAILJS_CONFIG)
     console.log('Email sent successfully:', result.text)
   } catch (error) {
     console.error('Failed to send email:', error)
     throw new Error('Failed to send booking request')
   }
 }
-*/ 
