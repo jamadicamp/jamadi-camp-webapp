@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import LoginForm from './LoginForm';
 
 export const metadata: Metadata = {
-  title: 'CMS Login',
-  description: 'Login to the Content Management System',
+  title: 'Iniciar Sesión CMS',
+  description: 'Iniciar sesión en el Sistema de Gestión de Contenido',
 };
 
 export default async function LoginPage({
@@ -18,7 +18,7 @@ export default async function LoginPage({
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login to CMS
+            Iniciar Sesión en CMS
           </h2>
         </div>
         
@@ -33,7 +33,7 @@ export default async function LoginPage({
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-blue-800">
-                  Setup has already been completed. Please login with your admin credentials.
+                  La configuración ya ha sido completada. Por favor inicia sesión con tus credenciales de administrador.
                 </p>
               </div>
             </div>

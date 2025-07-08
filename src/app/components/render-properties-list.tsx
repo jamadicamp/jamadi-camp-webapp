@@ -39,21 +39,21 @@ export default function RenderPropertiesList({
 					</h2>
 					<div className="flex justify-center gap-8 items-center">
 						<h6 className="text-lg md:text-xl">
-							Hosts:{" "}
+							Huéspedes:{" "}
 							<span className="font-thin">
 								{property.max_people || "N/A"}
 							</span>
 						</h6>
 						<h6 className="text-lg md:text-xl">
-							Bedrooms:{" "}
+							Habitaciones:{" "}
 							<span className="font-thin">
 								{property.bedrooms || "N/A"}
 							</span>
 						</h6>
 						<h6 className="text-lg md:text-xl">
-							FROM:{" "}
+							DESDE:{" "}
 							<span className="font-thin">
-								{property.currencies[0].symbol}{property.currencies[0].euro_forex || "N/A"} / night
+								{property.currencies[0].symbol}{property.currencies[0].euro_forex || "N/A"} / noche
 							</span>
 						</h6>
 					</div>

@@ -167,7 +167,7 @@ export function BookingModal({
     
     // Check for availability conflicts before submitting
     if (hasAvailabilityConflict()) {
-      alert("Some dates in your selected range are not available. Please choose different dates.")
+      alert("Algunas fechas en tu rango seleccionado no están disponibles. Por favor elige fechas diferentes.")
       return
     }
 
@@ -199,7 +199,7 @@ export function BookingModal({
       // For now, just log the data (remove this when EmailJS is configured)
       console.log("Booking request:", emailData)
       
-      alert("Booking request sent successfully! We'll contact you soon.")
+      alert("¡Solicitud de reservación enviada exitosamente! Te contactaremos pronto.")
       setIsOpen(false)
       
       // Reset form
@@ -215,7 +215,7 @@ export function BookingModal({
       })
     } catch (error) {
       console.error("Error sending booking request:", error)
-      alert("Failed to send booking request. Please try again.")
+      alert("Error al enviar la solicitud de reservación. Por favor intenta de nuevo.")
     } finally {
       setIsSubmitting(false)
     }
@@ -239,7 +239,7 @@ export function BookingModal({
     <Button 
       className="bg-orange-50 text-black px-6 py-2 border border-[#3a383a] uppercase transition-colors hover:bg-orange-100"
     >
-      Book Now
+      Reservar Ahora
     </Button>
   )
 
@@ -250,15 +250,15 @@ export function BookingModal({
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Book Your Stay</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">Reserva tu Estadía</DialogTitle>
           <DialogDescription>
-            Complete your booking for {property.name}
+            Completa tu reservación para {property.name}
           </DialogDescription>
         </DialogHeader>
 
         {loadingAvailability && (
           <div className="text-center py-4">
-            <p className="text-sm text-gray-600">Loading availability...</p>
+            <p className="text-sm text-gray-600">Cargando disponibilidad...</p>
           </div>
         )}
 
@@ -277,20 +277,20 @@ export function BookingModal({
               <div className="flex-1">
                 <h3 className="font-semibold text-lg">{property.name}</h3>
                 <p className="text-sm text-gray-600">
-                  Up to {property.max_people} guests • {property.bedrooms} bedroom(s) • {property.bathrooms} bathroom(s)
+                  Hasta {property.max_people} huéspedes • {property.bedrooms} habitación(es) • {property.bathrooms} baño(s)
                 </p>
                 <p className="text-lg font-semibold mt-2">
-                  {property.currencies[0]?.symbol}{property.currencies[0]?.euro_forex} / night
+                  {property.currencies[0]?.symbol}{property.currencies[0]?.euro_forex} / noche
                 </p>
                 {formData.checkIn && formData.checkOut && (
                   <div className="mt-2">
                     <p className="text-sm font-medium text-green-600">
                       Total: {property.currencies[0]?.symbol}{calculatePrice()} 
-                      ({differenceInDays(formData.checkOut, formData.checkIn)} nights)
+                      ({differenceInDays(formData.checkOut, formData.checkIn)} noches)
                     </p>
                     {hasAvailabilityConflict() && (
                       <p className="text-sm font-medium text-red-600 mt-1">
-                        ⚠️ Some dates in this range are not available
+                        ⚠️ Algunas fechas en este rango no están disponibles
                       </p>
                     )}
                   </div>
@@ -304,12 +304,12 @@ export function BookingModal({
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <User className="w-5 h-5" />
-                Guest Information
+                Información del Huésped
               </h3>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="firstName">First Name *</Label>
+                  <Label htmlFor="firstName">Nombre *</Label>
                   <Input
                     id="firstName"
                     value={formData.firstName}
@@ -318,7 +318,7 @@ export function BookingModal({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="lastName">Last Name *</Label>
+                  <Label htmlFor="lastName">Apellido *</Label>
                   <Input
                     id="lastName"
                     value={formData.lastName}
@@ -331,7 +331,7 @@ export function BookingModal({
               <div>
                 <Label htmlFor="email" className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  Email Address *
+                  Correo Electrónico *
                 </Label>
                 <Input
                   id="email"
@@ -345,7 +345,7 @@ export function BookingModal({
               <div>
                 <Label htmlFor="phone" className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  Phone Number *
+                  Número de Teléfono *
                 </Label>
                 <Input
                   id="phone"
@@ -357,7 +357,7 @@ export function BookingModal({
               </div>
 
               <div>
-                <Label htmlFor="guests">Number of Guests *</Label>
+                <Label htmlFor="guests">Número de Huéspedes *</Label>
                 <Input
                   id="guests"
                   type="number"
@@ -370,11 +370,11 @@ export function BookingModal({
               </div>
 
               <div>
-                <Label htmlFor="specialRequests">Special Requests</Label>
+                <Label htmlFor="specialRequests">Solicitudes Especiales</Label>
                 <textarea
                   id="specialRequests"
                   className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  placeholder="Any special requests or requirements..."
+                  placeholder="Cualquier solicitud especial o requisito..."
                   value={formData.specialRequests}
                   onChange={(e) => setFormData(prev => ({ ...prev, specialRequests: e.target.value }))}
                 />
@@ -385,12 +385,12 @@ export function BookingModal({
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5" />
-                Select Dates
+                Seleccionar Fechas
               </h3>
               
               <div className="space-y-4">
                 <div>
-                  <Label>Check-in Date *</Label>
+                  <Label>Fecha de Llegada *</Label>
                   <Calendar
                     mode="single"
                     selected={formData.checkIn}
@@ -423,7 +423,7 @@ export function BookingModal({
                 </div>
 
                 <div>
-                  <Label>Check-out Date *</Label>
+                  <Label>Fecha de Salida *</Label>
                   <Calendar
                     mode="single"
                     selected={formData.checkOut}
@@ -451,17 +451,17 @@ export function BookingModal({
               {formData.checkIn && formData.checkOut && (
                 <div className={`p-3 rounded-lg ${hasAvailabilityConflict() ? 'bg-red-50 border border-red-200' : 'bg-green-50'}`}>
                   <p className="text-sm font-medium">
-                    <strong>Check-in:</strong> {format(formData.checkIn, "PPP")}
+                    <strong>Llegada:</strong> {format(formData.checkIn, "PPP")}
                   </p>
                   <p className="text-sm font-medium">
-                    <strong>Check-out:</strong> {format(formData.checkOut, "PPP")}
+                    <strong>Salida:</strong> {format(formData.checkOut, "PPP")}
                   </p>
                   <p className="text-sm font-medium">
-                    <strong>Duration:</strong> {differenceInDays(formData.checkOut, formData.checkIn)} nights
+                    <strong>Duración:</strong> {differenceInDays(formData.checkOut, formData.checkIn)} noches
                   </p>
                   {hasAvailabilityConflict() && (
                     <p className="text-sm font-medium text-red-600 mt-2">
-                      ⚠️ This date range includes unavailable dates. Please select different dates.
+                      ⚠️ Este rango de fechas incluye fechas no disponibles. Por favor selecciona fechas diferentes.
                     </p>
                   )}
                 </div>
@@ -471,9 +471,9 @@ export function BookingModal({
               <div className="text-xs text-gray-600 space-y-1">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-                  <span>Unavailable dates</span>
+                  <span>Fechas no disponibles</span>
                 </div>
-                <p>Unavailable dates are crossed out and cannot be selected.</p>
+                <p>Las fechas no disponibles están tachadas y no se pueden seleccionar.</p>
               </div>
             </div>
           </div>
@@ -484,14 +484,14 @@ export function BookingModal({
               variant="outline"
               onClick={() => setIsOpen(false)}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               type="submit"
               disabled={!isFormValid() || isSubmitting || loadingAvailability}
               className="bg-orange-500 hover:bg-orange-600 text-white"
             >
-              {isSubmitting ? "Sending..." : "Send Booking Request"}
+              {isSubmitting ? "Enviando..." : "Enviar Solicitud de Reservación"}
             </Button>
           </DialogFooter>
         </form>

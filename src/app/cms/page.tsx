@@ -9,8 +9,8 @@ import PropertyList from './components/PropertyList';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'CMS Dashboard',
-  description: 'Content Management System Dashboard',
+  title: 'Panel de Administración',
+  description: 'Panel del Sistema de Gestión de Contenido',
 };
 
 async function getProperties() {
@@ -64,12 +64,12 @@ export default async function CMSPage({
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900">
-            CMS Dashboard
+            Panel de Administración
           </h1>
           <div className="flex items-center space-x-4">
             <form action="/api/auth/logout" method="POST">
               <Button variant="outline" type="submit">
-                Logout
+                Cerrar Sesión
               </Button>
             </form>
           </div>
@@ -89,7 +89,7 @@ export default async function CMSPage({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-green-800">
-                    User created successfully!
+                    ¡Usuario creado exitosamente!
                   </p>
                 </div>
               </div>
@@ -101,17 +101,17 @@ export default async function CMSPage({
             <div className="mb-8">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-gray-900">
-                  User Management
+                  Gestión de Usuarios
                 </h2>
                 <Link href="/cms/users">
                   <ClientButton>
-                    Manage Users
+                    Administrar Usuarios
                   </ClientButton>
                 </Link>
               </div>
               <div className="bg-white shadow rounded-lg p-6">
                 <p className="text-gray-600">
-                  Manage user accounts and permissions. View all users, create new accounts, and remove existing users.
+                  Administra cuentas de usuario y permisos. Ve todos los usuarios, crea nuevas cuentas y elimina usuarios existentes.
                 </p>
               </div>
             </div>
@@ -120,11 +120,11 @@ export default async function CMSPage({
           {/* Properties Section */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-gray-900">
-              Properties
+              Propiedades
             </h2>
             <Link href="/cms/properties/new">
               <ClientButton>
-                Create Property
+                Crear Propiedad
               </ClientButton>
             </Link>
           </div>

@@ -7,20 +7,20 @@ export default function Faq() {
 	return (
 		<div className="bg-orange-50 py-8 px-4 md:px-8"  id="faq">
 			<h2 className="text-2xl text-center font-bold">
-				Frequently Asked Questions
+				Preguntas Frecuentes
 			</h2>
 			<div className="grid grid-cols-1 md:grid-cols-2 mt-8 gap-x-4 md:gap-x-12 max-w-[800px] mx-auto">
 				<Item
-					title="What time is check-in and check-out?"
-					text="Check in at 3pm and Check out at 11am"
+					title="¿A qué hora es el check-in y check-out?"
+					text="Check-in a las 3:00 pm y Check-out a las 11:00 am"
 				/>
 				<Item
-					title="Do they have parking?"
-					text="Jamadi Camp has free parking."
+					title="¿Tienen estacionamiento?"
+					text="Jamadi Camp tiene estacionamiento gratuito."
 				/>
 				<Item
-					title="How do I get into my cabin?"
-					text="You will be sent a code via WhatsApp two days before your reservation, which must be entered into the black storage box next to the main door, where you will find the keys to your cabin. At the end of your stay you must return them to the same place."
+					title="¿Cómo entro a mi cabaña?"
+					text="Se te enviará un código por WhatsApp dos días antes de tu reservación, que debe ingresarse en la caja de almacenamiento negra junto a la puerta principal, donde encontrarás las llaves de tu cabaña. Al final de tu estadía debes devolverlas al mismo lugar."
 				/>
 			</div>
 		</div>

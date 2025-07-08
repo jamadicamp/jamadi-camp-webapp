@@ -74,28 +74,28 @@ export default async function PropertyPage(props: Props) {
           <div className="relative w-full aspect-square">
             <Image
               src={property.images?.[0]?.url || property.image_url || "/placeholder.jpg"}
-              alt={property?.name || "Property Image"}
+              alt={property?.name || "Imagen de la propiedad"}
               fill
               className="object-cover"
             />
           </div>
         </div>
         <div className="flex-1 mt-12">
-          <p className="uppercase">home</p>
+          <p className="uppercase">inicio</p>
           <h1 className="text-4xl font-bold my-1">{property?.name}</h1>
           <p className="text-lg font-extralight">
-            FROM {property.currencies[0].symbol}{property.currencies[0].euro_forex || "N/A"} / night
+            DESDE {property.currencies[0].symbol}{property.currencies[0].euro_forex || "N/A"} / noche
           </p>
           <hr className="w-24 bg-black border-black mt-8 mb-2" />
           <p className="text-lg font-semibold">
-            1 to {property.max_people || 2} guests (
-            {`${property.bedrooms || 1} bedroom and ${
+            1 a {property.max_people || 2} huéspedes (
+            {`${property.bedrooms || 1} habitación y ${
                 property.bathrooms || 1
-              } bathroom`}
+              } baño`}
             )
           </p>
           <p className="text-lg font-light">
-            Check in - 3.00pm | Check out - 11.00am
+            Check-in - 3:00 pm | Check-out - 11:00 am
           </p>
           <ul className="p-4 pl-8 grid grid-cols-2 gap-y-2">
             {amenities?.map((item: any, index: number) => (
@@ -113,35 +113,35 @@ export default async function PropertyPage(props: Props) {
                 "line-through": !property.has_wifi,
               })}
             >
-              WiFi Available
+              WiFi Disponible
             </li>
             <li
               className={cn("list-disc", {
                 "line-through": !property.pets_allowed,
               })}
             >
-              Pet friendly
+              Mascotas permitidas
             </li>
             <li
               className={cn("list-disc", {
                 "line-through": !property.adults_only,
               })}
             >
-              Adults only
+              Solo adultos
             </li>
             <li
               className={cn("list-disc", {
                 "line-through": !property.has_parking,
               })}
             >
-              Parking Available
+              Estacionamiento Disponible
             </li>
             <li
               className={cn("list-disc", {
                 "line-through": !property.breakfast_included,
               })}
             >
-              Breakfast Included
+              Desayuno Incluido
             </li>
           </ul>
           <BookingModal
@@ -166,7 +166,7 @@ export default async function PropertyPage(props: Props) {
       {property.description && (
         <section className="max-w-[960px] mx-auto px-8 lg:px-0">
           <div className="rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-2 text-center">About this place</h2>
+            <h2 className="text-2xl font-bold mb-2 text-center">Acerca de este lugar</h2>
             <p className="text-gray-700 leading-relaxed text-lg text-center">
               {property.description}
             </p>
@@ -175,14 +175,14 @@ export default async function PropertyPage(props: Props) {
       )}
       
 	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
-		<h3 className="text-center text-3xl font-bold mb-2">Gallery</h3>
-		<p className="text-center max-w-[600px] mx-auto mb-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum magni autem nisi ut corporis deleniti, odit ipsum, soluta sapiente fugiat vero? Earum vitae libero nostrum incidunt cum quia vel quas!</p>
+		<h3 className="text-center text-3xl font-bold mb-2">Galería</h3>
+		<p className="text-center max-w-[600px] mx-auto mb-6">Explora las imágenes de nuestra hermosa cabaña y sus alrededores. Cada foto captura la esencia de la tranquilidad y la belleza natural que te espera en Jamadi Camp.</p>
 		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
 			{property.images?.map((image, index) => (
 				<div key={index} className="relative aspect-[2/3] w-full">
 				<Image 
 					src={image?.url || "/placeholder.jpg"}
-					alt={property?.name || "Property Image"}
+					alt={property?.name || "Imagen de la propiedad"}
 					fill
 					className="object-cover"
 				/>
@@ -194,7 +194,7 @@ export default async function PropertyPage(props: Props) {
 
 	  {/* Location Section */}
 	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
-		<h3 className="text-center text-3xl font-bold mb-2">Location</h3>
+		<h3 className="text-center text-3xl font-bold mb-2">Ubicación</h3>
 		<p className="text-center max-w-[600px] mx-auto mb-6">
 		  {property.address}, {property.city}, {property.state} {property.zip}
 		</p>
@@ -207,7 +207,7 @@ export default async function PropertyPage(props: Props) {
 			allowFullScreen={true}
 			loading="lazy"
 			referrerPolicy="no-referrer-when-downgrade"
-			title={`Location of ${property.name}`}
+			title={`Ubicación de ${property.name}`}
 		  />
 		</div>
 	  </section>

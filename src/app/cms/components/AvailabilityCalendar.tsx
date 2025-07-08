@@ -20,11 +20,11 @@ interface UnavailabilityFormData {
 }
 
 const reasonLabels = {
-  maintenance: 'Maintenance',
-  booking: 'Booking',
-  owner_use: 'Owner Use',
-  seasonal_closure: 'Seasonal Closure',
-  other: 'Other'
+  maintenance: 'Mantenimiento',
+  booking: 'Reservación',
+  owner_use: 'Uso del Propietario',
+  seasonal_closure: 'Cierre Estacional',
+  other: 'Otro'
 };
 
 const reasonColors = {
@@ -55,13 +55,13 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
   const fetchAvailability = useCallback(async () => {
     try {
       const response = await fetch(`/api/properties/${propertyId}/availability`);
-      if (!response.ok) throw new Error('Failed to fetch availability');
+      if (!response.ok) throw new Error('Error al cargar disponibilidad');
       
       const data = await response.json();
       setUnavailableDays(data.unavailableDays || []);
     } catch (error) {
       console.error('Error fetching availability:', error);
-      setError('Failed to load availability data');
+      setError('Error al cargar datos de disponibilidad');
     }
   }, [propertyId]);
 
@@ -142,7 +142,7 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save availability');
+        throw new Error(errorData.error || 'Error al guardar disponibilidad');
       }
 
       await fetchAvailability();
@@ -151,14 +151,14 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
       setSelectedDates([]);
     } catch (error) {
       console.error('Error saving availability:', error);
-      setError(error instanceof Error ? error.message : 'Failed to save availability');
+      setError(error instanceof Error ? error.message : 'Error al guardar disponibilidad');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (date: Date) => {
-    if (!confirm('Are you sure you want to remove this unavailable day?')) return;
+    if (!confirm('¿Estás seguro de que quieres eliminar este día no disponible?')) return;
 
     setLoading(true);
     try {
@@ -169,13 +169,13 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete availability');
+        throw new Error(errorData.error || 'Error al eliminar disponibilidad');
       }
 
       await fetchAvailability();
     } catch (error) {
       console.error('Error deleting availability:', error);
-      setError(error instanceof Error ? error.message : 'Failed to delete availability');
+      setError(error instanceof Error ? error.message : 'Error al eliminar disponibilidad');
     } finally {
       setLoading(false);
     }
@@ -211,7 +211,7 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
         <div className="border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-4">
             <CalendarIcon className="h-5 w-5" />
-            <h3 className="text-lg font-semibold">Availability Calendar</h3>
+            <h3 className="text-lg font-semibold">Calendario de Disponibilidad</h3>
           </div>
           
           <Calendar
@@ -237,11 +237,11 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
           <div className="mt-4 space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-              <span className="text-sm">Unavailable</span>
+              <span className="text-sm">No Disponible</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-blue-100 border border-blue-300 rounded"></div>
-              <span className="text-sm">Selected for bulk action</span>
+              <span className="text-sm">Seleccionado para acción masiva</span>
             </div>
           </div>
 
@@ -249,7 +249,7 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
             <div className="mt-4">
               <Button onClick={handleMultiDateSelect} className="w-full">
                 <PlusIcon className="h-4 w-4 mr-2" />
-                Mark {selectedDates.length} days as unavailable
+                Marcar {selectedDates.length} días como no disponibles
               </Button>
             </div>
           )}
@@ -257,11 +257,11 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
 
         {/* Unavailable Days List */}
         <div className="border rounded-lg p-4">
-          <h3 className="text-lg font-semibold mb-4">Unavailable Days</h3>
+          <h3 className="text-lg font-semibold mb-4">Días No Disponibles</h3>
           
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {unavailableDays.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No unavailable days set</p>
+              <p className="text-gray-500 text-center py-4">No hay días no disponibles configurados</p>
             ) : (
               unavailableDays
                 .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
@@ -280,7 +280,7 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
                         <p className="text-sm text-gray-600">{day.description}</p>
                       )}
                       {day.bookingGuestName && (
-                        <p className="text-sm text-gray-600">Guest: {day.bookingGuestName}</p>
+                        <p className="text-sm text-gray-600">Huésped: {day.bookingGuestName}</p>
                       )}
                     </div>
                     <div className="flex gap-1">
@@ -312,16 +312,16 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">
               {isEditMode 
-                ? `Edit Unavailability - ${selectedDate ? format(selectedDate, 'MMM dd, yyyy') : ''}`
+                ? `Editar No Disponibilidad - ${selectedDate ? format(selectedDate, 'MMM dd, yyyy') : ''}`
                 : selectedDate 
-                  ? `Mark ${format(selectedDate, 'MMM dd, yyyy')} as Unavailable`
-                  : `Mark ${selectedDates.length} days as Unavailable`
+                  ? `Marcar ${format(selectedDate, 'MMM dd, yyyy')} como No Disponible`
+                  : `Marcar ${selectedDates.length} días como No Disponibles`
               }
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Razón</label>
                 <select
                   value={formData.reason}
                   onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value as UnavailabilityFormData['reason'] }))}
@@ -334,11 +334,11 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Optional description..."
+                  placeholder="Descripción opcional..."
                   className="w-full border border-gray-300 rounded-md px-3 py-2 h-20"
                 />
               </div>
@@ -346,34 +346,34 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
               {formData.reason === 'booking' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Booking ID</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Reservación</label>
                     <input
                       type="text"
                       value={formData.bookingId}
                       onChange={(e) => setFormData(prev => ({ ...prev, bookingId: e.target.value }))}
-                      placeholder="Booking reference number"
+                      placeholder="Número de referencia de reservación"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Guest Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del Huésped</label>
                     <input
                       type="text"
                       value={formData.bookingGuestName}
                       onChange={(e) => setFormData(prev => ({ ...prev, bookingGuestName: e.target.value }))}
-                      placeholder="Guest name"
+                      placeholder="Nombre del huésped"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Information</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Información de Contacto</label>
                     <input
                       type="text"
                       value={formData.bookingContactInfo}
                       onChange={(e) => setFormData(prev => ({ ...prev, bookingContactInfo: e.target.value }))}
-                      placeholder="Email or phone number"
+                      placeholder="Email o número de teléfono"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                     />
                   </div>
@@ -382,10 +382,10 @@ export default function AvailabilityCalendar({ propertyId }: AvailabilityCalenda
 
               <div className="flex justify-end gap-2 pt-4">
                 <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button onClick={handleSubmit} disabled={loading}>
-                  {loading ? 'Saving...' : isEditMode ? 'Update' : 'Save'}
+                  {loading ? 'Guardando...' : isEditMode ? 'Actualizar' : 'Guardar'}
                 </Button>
               </div>
             </div>

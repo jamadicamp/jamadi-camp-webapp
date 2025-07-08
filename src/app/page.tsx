@@ -13,7 +13,7 @@ import routes from "./lib/routes";
 
 export const metadata: Metadata = {
 	title: "Jamadi Camp",
-	description: "Escape the city and immerse yourself in nature. Experience fresh air, cozy fires, and unforgettable moments in our scenic hideaway.",
+	description: "Escapa de la ciudad y sumérgete en la naturaleza. Experimenta aire fresco, fogatas acogedoras y momentos inolvidables en nuestro refugio escénico.",
 	robots: {
 		index: true,
 		follow: true,
@@ -52,18 +52,18 @@ export default async function Home() {
 				{/* Hero Content */}
 				<div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
 					<h1 className="text-[#3a383a] text-xl font-bold md:text-4xl mb-4">
-						Come and enjoy the tranquility of our <br />
-						<span className="italic font-normal">rustic cabins in Jamadi</span>.
+						Ven y disfruta de la tranquilidad de nuestras <br />
+						<span className="italic font-normal">cabañas rústicas en Jamadi</span>.
 					</h1>
 					<p className="text-gray-800 max-w-xl mb-8">
-						Escape the city and immerse yourself in nature. Experience fresh
-						air, cozy fires, and unforgettable moments in our scenic hideaway.
+						Escapa de la ciudad y sumérgete en la naturaleza. Experimenta aire
+						fresco, fogatas acogedoras y momentos inolvidables en nuestro refugio escénico.
 					</p>
 					<a
 						href="#highlights"
 						className="inline-block bg-orange-50 text-[#3a383a] px-6 py-2 border border-[#3a383a] uppercase transition-colors"
 					>
-						Learn More
+						Conoce Más
 					</a>
 				</div>
 			</div>
@@ -76,48 +76,48 @@ export default async function Home() {
 				id="highlights"
 				className="bg-white py-12 md:py-16 px-4 md:px-20 text-center"
 			>
-				<h2 className="text-3xl md:text-4xl font-bold mb-4">Why Jamadi?</h2>
+				<h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por qué Jamadi?</h2>
 				<p className="text-gray-600 max-w-3xl mx-auto mb-10">
-					We strive to make your stay memorable with rustic charm and modern
-					comfort. Discover our top features:
+					Nos esforzamos por hacer que tu estadía sea memorable con encanto rústico y
+					comodidad moderna. Descubre nuestras características principales:
 				</p>
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 					{/* Highlight 1 */}
 					<div className="flex flex-col items-center">
 						<img
 							src="/images/Campfire-cuate.png"
-							alt="Bonfire Icon"
+							alt="Icono de Fogata"
 							className="h-64 w-64 mb-4"
 						/>
-						<h3 className="text-xl font-semibold mb-2">Cozy Bonfires</h3>
+						<h3 className="text-xl font-semibold mb-2">Fogatas Acogedoras</h3>
 						<p className="text-gray-500">
-							Gather around the fire pit for stories, marshmallows, and
-							star-filled nights.
+							Reúnete alrededor de la fogata para historias, malvaviscos y
+							noches llenas de estrellas.
 						</p>
 					</div>
 					{/* Highlight 2 */}
 					<div className="flex flex-col items-center">
 						<img
 							src="/images/Mountain biking-bro.png"
-							alt="Mountain Icon"
+							alt="Icono de Montaña"
 							className="h-64 w-64 mb-4"
 						/>
-						<h3 className="text-xl font-semibold mb-2">Breathtaking Views</h3>
+						<h3 className="text-xl font-semibold mb-2">Vistas Impresionantes</h3>
 						<p className="text-gray-500">
-							Wake up to panoramic mountain vistas, perfect for nature
-							photography.
+							Despierta con vistas panorámicas de montañas, perfectas para
+							fotografía de naturaleza.
 						</p>
 					</div>
 					{/* Highlight 3 */}
 					<div className="flex flex-col items-center">
 						<img
 							src="/images/Hiking-bro.png"
-							alt="Hiking Icon"
+							alt="Icono de Senderismo"
 							className="h-64 w-64 mb-4"
 						/>
-						<h3 className="text-xl font-semibold mb-2">Adventure Trails</h3>
+						<h3 className="text-xl font-semibold mb-2">Senderos de Aventura</h3>
 						<p className="text-gray-500">
-							Embark on nearby hiking trails and enjoy breathtaking landscapes.
+							Embárcate en senderos de senderismo cercanos y disfruta de paisajes impresionantes.
 						</p>
 					</div>
 				</div>
@@ -132,7 +132,7 @@ export default async function Home() {
 				className="bg-orange-50 py-12 md:py-16 px-4 md:px-20 text-center"
 			>
 				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
-					Our Cabins in Jamadi
+					Nuestras Cabañas en Jamadi
 				</h3>
 				<RenderPropertiesList properties={properties} guests="1" />
 			</section>
@@ -140,17 +140,17 @@ export default async function Home() {
 			{/* Call to Action / Booking Section */}
 			<section className="relative bg-white text-[#3a383a] py-12 md:py-16 px-4 md:px-20 text-center">
 				<h3 className="text-3xl md:text-4xl font-bold mb-4">
-					Ready to Book Your Getaway?
+					¿Listo para Reservar tu Escape?
 				</h3>
 				<p className="text-[#3a383a] max-w-lg mx-auto mb-8">
-					Don&apos;t miss the chance to recharge in our tranquil cabins. Reserve
-					your spot now and experience Jamadi at its best.
+					No te pierdas la oportunidad de recargar energías en nuestras cabañas tranquilas. Reserva
+					tu lugar ahora y experimenta Jamadi en su mejor momento.
 				</p>
 				<a
 					href="#search"
 					className="inline-block bg-orange-50 text-black px-6 py-2 border border-[#3a383a] uppercase transition-colors"
 				>
-					Book Now
+					Reservar Ahora
 				</a>
 			</section>
 		</div>

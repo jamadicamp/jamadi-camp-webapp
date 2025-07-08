@@ -45,7 +45,7 @@ export default function Navbar() {
 					<Image
 						fill
 						src={"/images/logo-main.webp"}
-						alt="Main logo"
+						alt="Logo principal"
 						objectFit="cover"
 					/>
 				</div>
@@ -58,28 +58,28 @@ export default function Navbar() {
 					as={routes.home.path}
 					active={pathname === routes.home.href}
 				>
-					home
+					inicio
 				</NavLink>
 				<NavLink
 					href={routes.faq.href}
 					as={routes.faq.path}
 					active={pathname === routes.faq.href}
 				>
-					Faq
+					Preguntas Frecuentes
 				</NavLink>
 				<NavLink
 					href={routes.cabins.href}
 					as={routes.cabins.path}
 					active={pathname === routes.cabins.href}
 				>
-					our cabins
+					nuestras cabañas
 				</NavLink>
 				<NavLink
 					href={routes.contact.href}
 					as={routes.contact.path}
 					active={pathname === routes.contact.href}
 				>
-					contact
+					contacto
 				</NavLink>
 			</ul>
 
@@ -129,7 +129,7 @@ export default function Navbar() {
 									active={pathname === routes.home.href}
 									onClick={() => setIsOpen(false)}
 								>
-									home
+									inicio
 								</NavLink>
 							</li>
 							<li>
@@ -139,7 +139,7 @@ export default function Navbar() {
 									active={pathname === routes.faq.href}
 									onClick={() => setIsOpen(false)}
 								>
-									Faq
+									Preguntas Frecuentes
 								</NavLink>
 							</li>
 							<li>
@@ -149,7 +149,7 @@ export default function Navbar() {
 									active={pathname === routes.cabins.href}
 									onClick={() => setIsOpen(false)}
 								>
-									our cabins
+									nuestras cabañas
 								</NavLink>
 							</li>
 							<li>
@@ -159,7 +159,7 @@ export default function Navbar() {
 									active={pathname === routes.contact.href}
 									onClick={() => setIsOpen(false)}
 								>
-									contact
+									contacto
 								</NavLink>
 							</li>
 						</ul>

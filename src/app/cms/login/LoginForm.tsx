@@ -25,14 +25,14 @@ export default function LoginForm() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Error al iniciar sesión');
       }
 
       // Redirect to CMS on successful login
       window.location.href = '/cms';
     } catch (error) {
       console.error('Login error:', error);
-      setError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      setError(error instanceof Error ? error.message : 'Ocurrió un error inesperado');
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +50,7 @@ export default function LoginForm() {
         <div className="rounded-md shadow-sm -space-y-px">
           <div>
             <label htmlFor="username" className="sr-only">
-              Username
+              Nombre de Usuario
             </label>
             <input
               id="username"
@@ -58,12 +58,12 @@ export default function LoginForm() {
               type="text"
               required
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-              placeholder="Username"
+              placeholder="Nombre de Usuario"
             />
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
-              Password
+              Contraseña
             </label>
             <input
               id="password"
@@ -71,7 +71,7 @@ export default function LoginForm() {
               type="password"
               required
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-              placeholder="Password"
+              placeholder="Contraseña"
             />
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function LoginForm() {
             className="w-full"
             disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </Button>
         </div>
       </form>

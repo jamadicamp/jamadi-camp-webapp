@@ -15,17 +15,17 @@ export default function Footer() {
 								<Image
 									fill
 									src={"/images/logo-main.webp"}
-									alt="Main logo"
+									alt="Logo principal"
 									objectFit="cover"
 								/>
 							</div>
 						</Link>
 
 						<div className="text-lg space-y-2">
-							<h3 className="text-2xl">Contact</h3>
+							<h3 className="text-2xl">Contacto</h3>
 							<div>
 								<a href="tel:+19999999999" className="opacity-80">
-									Whatsapp: +1 999 999 9999
+									WhatsApp: +1 999 999 9999
 								</a>
 							</div>
 							<div>

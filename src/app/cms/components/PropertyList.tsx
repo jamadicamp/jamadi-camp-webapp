@@ -17,20 +17,20 @@ interface PropertyListProps {
 
 export default function PropertyList({ properties }: PropertyListProps) {
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this property?')) {
+    if (window.confirm('¿Estás seguro de que quieres eliminar esta propiedad?')) {
       try {
         const response = await fetch(`/api/cms/properties/${id}`, {
           method: 'DELETE',
         });
 
         if (!response.ok) {
-          throw new Error('Failed to delete property');
+          throw new Error('Error al eliminar la propiedad');
         }
 
         window.location.reload();
       } catch (error) {
         console.error('Error deleting property:', error);
-        alert('Failed to delete property');
+        alert('Error al eliminar la propiedad');
       }
     }
   };
@@ -64,14 +64,14 @@ export default function PropertyList({ properties }: PropertyListProps) {
                     onClick={() => window.location.href = `/cms/properties/${property._id}/edit`}
                   >
                     <Edit className="mr-2 h-4 w-4" />
-                    Edit
+                    Editar
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => handleDelete(property?._id?.toString() || '')}
                     className="text-red-600"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
+                    Eliminar
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -90,14 +90,14 @@ export default function PropertyList({ properties }: PropertyListProps) {
                   ${property?.currencies[0]?.euro_forex}
                 </p>
                 <p className="text-xs text-gray-500">
-                  per night
+                  por noche
                 </p>
               </div>
               <Button
                 variant="outline"
                 onClick={() => window.location.href = `/cms/properties/${property._id}/availability`}
               >
-                Manage Availability
+                Administrar Disponibilidad
               </Button>
             </div>
           </div>

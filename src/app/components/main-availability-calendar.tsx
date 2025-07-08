@@ -122,7 +122,7 @@ export default function MainAvailabilityCalendar({
 			setAvailabilityData(data);
 		} catch (error) {
 			console.error("Error fetching availability data:", error);
-			setError(error instanceof Error ? error.message : 'Failed to load availability data');
+			setError(error instanceof Error ? error.message : 'Error al cargar datos de disponibilidad');
 		} finally {
 			setLoading(false);
 		}
@@ -223,18 +223,18 @@ export default function MainAvailabilityCalendar({
 							>
 								<CalendarIcon className="mr-2 h-4 w-4" />
 								{loading ? (
-									<span>Loading availability...</span>
+									<span>Cargando disponibilidad...</span>
 								) : date?.from ? (
 									date.to ? (
 										<>
-											From <b>{format(date.from, "LLL dd, y")}</b> to{" "}
+											Desde <b>{format(date.from, "LLL dd, y")}</b> hasta{" "}
 											<b>{format(date.to, "LLL dd, y")}</b>
 										</>
 									) : (
 										format(date.from, "LLL dd, y")
 									)
 								) : (
-									<span>Select Arrival and Departure date</span>
+									<span>Selecciona fecha de llegada y salida</span>
 								)}
 							</button>
 						</PopoverTrigger>
@@ -261,7 +261,7 @@ export default function MainAvailabilityCalendar({
 							<div className="p-3 border-t">
 								<div className="flex items-center gap-2 text-sm">
 									<div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-									<span>No properties available</span>
+									<span>No hay propiedades disponibles</span>
 								</div>
 							</div>
 						</PopoverContent>
@@ -278,7 +278,7 @@ export default function MainAvailabilityCalendar({
 					>
 						{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
 							<option key={num} value={num}>
-								{num} {num === 1 ? 'Guest' : 'Guests'}
+								{num} {num === 1 ? 'Huésped' : 'Huéspedes'}
 							</option>
 						))}
 					</select>
@@ -290,7 +290,7 @@ export default function MainAvailabilityCalendar({
 						onClick={handleSearch}
 						disabled={!date?.from || !date?.to || loading}
 					>
-						{loading ? 'Loading...' : 'Search'}
+						{loading ? 'Cargando...' : 'Buscar'}
 					</button>
 				</div>
 			</div>

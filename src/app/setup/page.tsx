@@ -5,8 +5,8 @@ import connectDB from '@/lib/db';
 import User from '@/lib/models/User';
 
 export const metadata: Metadata = {
-  title: 'Initial Setup - Jamadi Camp',
-  description: 'Create the first admin user for the application',
+  title: 'Configuración Inicial - Jamadi Camp',
+  description: 'Crear el primer usuario administrador para la aplicación',
 };
 
 export default async function SetupPage({
@@ -61,14 +61,14 @@ export default async function SetupPage({
 
       if (!response.ok) {
         const data = await response.json();
-        const errorMessage = encodeURIComponent(data.error || 'Setup failed');
+        const errorMessage = encodeURIComponent(data.error || 'Error en la configuración');
         redirect(`/setup?error=${errorMessage}`);
       }
 
       redirect('/setup?success=setup-completed');
     } catch (error) {
       console.error('Setup error:', error);
-      const errorMessage = encodeURIComponent('An unexpected error occurred');
+      const errorMessage = encodeURIComponent('Ocurrió un error inesperado');
       redirect(`/setup?error=${errorMessage}`);
     }
   }
@@ -83,10 +83,10 @@ export default async function SetupPage({
             </svg>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Initial Setup
+            Configuración Inicial
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Create the first admin user for Jamadi Camp
+            Crear el primer usuario administrador para Jamadi Camp
           </p>
         </div>
 
@@ -101,10 +101,10 @@ export default async function SetupPage({
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-red-800">
-                  {params.error === 'all-fields-required' && 'All fields are required'}
-                  {params.error === 'passwords-dont-match' && 'Passwords do not match'}
-                  {params.error === 'password-too-short' && 'Password must be at least 6 characters'}
-                  {params.error === 'setup-already-completed' && 'Setup has already been completed'}
+                  {params.error === 'all-fields-required' && 'Todos los campos son requeridos'}
+                  {params.error === 'passwords-dont-match' && 'Las contraseñas no coinciden'}
+                  {params.error === 'password-too-short' && 'La contraseña debe tener al menos 6 caracteres'}
+                  {params.error === 'setup-already-completed' && 'La configuración ya ha sido completada'}
                   {!['all-fields-required', 'passwords-dont-match', 'password-too-short', 'setup-already-completed'].includes(params.error) && params.error}
                 </p>
               </div>
@@ -123,13 +123,13 @@ export default async function SetupPage({
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-green-800">
-                  Setup completed successfully! You can now login to the CMS.
+                  ¡Configuración completada exitosamente! Ahora puedes iniciar sesión en el CMS.
                 </p>
               </div>
             </div>
             <div className="mt-4">
               <Button asChild className="w-full">
-                <a href="/cms/login">Go to Login</a>
+                <a href="/cms/login">Ir al Login</a>
               </Button>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default async function SetupPage({
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
                 <label htmlFor="username" className="sr-only">
-                  Username
+                  Nombre de Usuario
                 </label>
                 <input
                   id="username"
@@ -149,12 +149,12 @@ export default async function SetupPage({
                   type="text"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Username"
+                  placeholder="Nombre de Usuario"
                 />
               </div>
               <div>
                 <label htmlFor="email" className="sr-only">
-                  Email address
+                  Correo Electrónico
                 </label>
                 <input
                   id="email"
@@ -163,12 +163,12 @@ export default async function SetupPage({
                   autoComplete="email"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Email address"
+                  placeholder="Correo Electrónico"
                 />
               </div>
               <div>
                 <label htmlFor="password" className="sr-only">
-                  Password
+                  Contraseña
                 </label>
                 <input
                   id="password"
@@ -177,12 +177,12 @@ export default async function SetupPage({
                   autoComplete="new-password"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Password (min 6 characters)"
+                  placeholder="Contraseña (mín 6 caracteres)"
                 />
               </div>
               <div>
                 <label htmlFor="confirmPassword" className="sr-only">
-                  Confirm Password
+                  Confirmar Contraseña
                 </label>
                 <input
                   id="confirmPassword"
@@ -191,7 +191,7 @@ export default async function SetupPage({
                   autoComplete="new-password"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Confirm Password"
+                  placeholder="Confirmar Contraseña"
                 />
               </div>
             </div>
@@ -201,7 +201,7 @@ export default async function SetupPage({
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
-                Create Admin User
+                Crear Usuario Administrador
               </Button>
             </div>
 
@@ -214,7 +214,7 @@ export default async function SetupPage({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-blue-800">
-                    This will create the first admin user for the application. After setup, you can login to the CMS and create additional users.
+                    Esto creará el primer usuario administrador para la aplicación. Después de la configuración, podrás iniciar sesión en el CMS y crear usuarios adicionales.
                   </p>
                 </div>
               </div>
