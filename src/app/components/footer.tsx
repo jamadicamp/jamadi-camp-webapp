@@ -24,14 +24,14 @@ export default function Footer() {
 						<div className="text-lg space-y-2">
 							<h3 className="text-2xl">Contacto</h3>
 							<div>
-								<a href="tel:+19999999999" className="opacity-80">
-									WhatsApp: +1 999 999 9999
+								<a href="https://wa.me/524464109800?text=Hola%2C%20quiero%20reservar%20una%20cabaña%20en%20Jämadi%20Camp" className="opacity-80 hover:opacity-100 transition-opacity">
+									WhatsApp: +52 446 410 9800
 								</a>
 							</div>
 							<div>
 								{" "}
-								<a href="mailto:jamadicamp@gmail.com" className="opacity-80">
-									Email: jamadicamp@gmail.com
+								<a href={`mailto:${process.env.NEXT_PUBLIC_TO_EMAIL}`} className="opacity-80 hover:opacity-100 transition-opacity">
+									Email: {process.env.NEXT_PUBLIC_TO_EMAIL}
 								</a>
 							</div>
 						</div>
