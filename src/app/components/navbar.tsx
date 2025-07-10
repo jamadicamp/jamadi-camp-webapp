@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import routes from "../lib/routes";
 import { usePathname } from "next/navigation";
@@ -10,7 +10,13 @@ import Image from "next/image";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
+	const [mounted, setMounted] = useState(false);
 	const pathname = usePathname();
+
+	// Ensure consistent hydration by only showing active states after mount
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	// Sidebar slide-in variants
 	const sidebarVariants = {
@@ -56,28 +62,28 @@ export default function Navbar() {
 				<NavLink
 					href={routes.home.href}
 					as={routes.home.path}
-					active={pathname === routes.home.href}
+					active={mounted && pathname === routes.home.href}
 				>
 					inicio
 				</NavLink>
 				<NavLink
 					href={routes.faq.href}
 					as={routes.faq.path}
-					active={pathname === routes.faq.href}
+					active={mounted && pathname === routes.faq.href}
 				>
 					Preguntas Frecuentes
 				</NavLink>
 				<NavLink
 					href={routes.cabins.href}
 					as={routes.cabins.path}
-					active={pathname === routes.cabins.href}
+					active={mounted && pathname === routes.cabins.href}
 				>
 					nuestras cabañas
 				</NavLink>
 				<NavLink
 					href={routes.contact.href}
 					as={routes.contact.path}
-					active={pathname === routes.contact.href}
+					active={mounted && pathname === routes.contact.href}
 				>
 					contacto
 				</NavLink>
@@ -126,7 +132,7 @@ export default function Navbar() {
 								<NavLink
 									href={routes.home.href}
 									as={routes.home.path}
-									active={pathname === routes.home.href}
+									active={mounted && pathname === routes.home.href}
 									onClick={() => setIsOpen(false)}
 								>
 									inicio
@@ -136,7 +142,7 @@ export default function Navbar() {
 								<NavLink
 									href={routes.faq.href}
 									as={routes.faq.path}
-									active={pathname === routes.faq.href}
+									active={mounted && pathname === routes.faq.href}
 									onClick={() => setIsOpen(false)}
 								>
 									Preguntas Frecuentes
@@ -146,7 +152,7 @@ export default function Navbar() {
 								<NavLink
 									href={routes.cabins.href}
 									as={routes.cabins.path}
-									active={pathname === routes.cabins.href}
+									active={mounted && pathname === routes.cabins.href}
 									onClick={() => setIsOpen(false)}
 								>
 									nuestras cabañas
@@ -156,7 +162,7 @@ export default function Navbar() {
 								<NavLink
 									href={routes.contact.href}
 									as={routes.contact.path}
-									active={pathname === routes.contact.href}
+									active={mounted && pathname === routes.contact.href}
 									onClick={() => setIsOpen(false)}
 								>
 									contacto
