@@ -1,15 +1,18 @@
-import { createI18nMiddleware } from 'next-international/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const I18nMiddleware = createI18nMiddleware({
-  locales: ['en', 'es'],
-  defaultLocale: 'en',
-  urlMappingStrategy: 'rewrite',
-});
-
 export async function middleware(request: NextRequest) {
+  // Redirect /es routes back to home
+  if (request.nextUrl.pathname === '/es') {
+    const response = NextResponse.redirect(new URL('/', request.url));
+    // Add cache-busting headers to prevent Chrome from caching the redirect
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    return response;
+  }
+
   // Handle CMS routes separately
   if (request.nextUrl.pathname.startsWith('/cms')) {
     // Skip auth check for login page
@@ -36,8 +39,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Handle internationalization for non-CMS routes
-  return I18nMiddleware(request);
+  // Allow all other routes to pass through
+  return NextResponse.next();
 }
 
 export const config = {
@@ -46,8 +49,5 @@ export const config = {
     // Skip all api routes
     // Skip all static files
     '/((?!api|_next|.*\\..*).*)',
-    // Optional: Only run on specific paths
-    // '/',
-    // '/(en|es)/:path*'
   ],
 }; 
