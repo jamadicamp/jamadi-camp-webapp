@@ -198,14 +198,12 @@ export async function PUT(
       );
     }
 
-    property.availability.unavailableDays[dayIndex] = {
-      ...property.availability.unavailableDays[dayIndex],
-      reason,
-      description: description || '',
-      bookingId: bookingId || null,
-      bookingGuestName: bookingGuestName || null,
-      bookingContactInfo: bookingContactInfo || null,
-    };
+    const day = property.availability.unavailableDays[dayIndex];
+    day.reason = reason;
+    day.description = description || '';
+    day.bookingId = bookingId || null;
+    day.bookingGuestName = bookingGuestName || null;
+    day.bookingContactInfo = bookingContactInfo || null;
 
     await property.save();
 
@@ -214,9 +212,9 @@ export async function PUT(
       unavailableDay: property.availability.unavailableDays[dayIndex]
     });
   } catch (error) {
-    console.error('Error updating unavailable day:', error);
+    console.error( error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: `Error updating unavailable day: ${error}` },
       { status: 500 }
     );
   }
