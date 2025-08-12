@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       role: user.role 
     })
       .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('24h')
+      .setExpirationTime('1y') // 1 year
       .sign(secret);
 
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       secure: false,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 24 * 365, // 1 year
     });
 
     console.log('Setting cookie:', {
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
       secure: false,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 24 * 365, // 1 year
     });
 
     return response;
