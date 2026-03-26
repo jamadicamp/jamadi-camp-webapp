@@ -49,7 +49,7 @@ export default function Navbar() {
     conoceMasLinks.some((link) => pathname.startsWith(link.href));
 
   return (
-    <nav className="flex items-center justify-between px-4 md:px-20 bg-orange-50">
+    <nav className="flex items-center justify-between px-4 md:px-20 bg-orange-50 border-b border-[#3a383a]/15 shadow-sm">
       {/* LOGO */}
       <Link href={routes.home.href} className="text-4xl font-bold">
         <div className="relative w-24 h-24 md:w-28 md:h-28">
