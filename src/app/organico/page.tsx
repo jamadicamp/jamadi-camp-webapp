@@ -1,5 +1,3 @@
-import Link from "next/link";
-import routes from "../lib/routes";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
