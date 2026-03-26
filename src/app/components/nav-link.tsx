@@ -16,7 +16,7 @@ export default function NavLink(props: PropsWithChildren<Props>) {
     <Link
       href={href}
       as={as}
-      className={cn("uppercase hover:text-yellow-700 tracking-widest font-light", {
+      className={cn("uppercase text-[#3a383a] hover:text-yellow-700 tracking-widest font-light", {
         "text-yellow-700": active,
       }, className)}
       {...other}

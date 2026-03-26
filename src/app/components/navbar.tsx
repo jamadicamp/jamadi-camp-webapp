@@ -86,7 +86,7 @@ export default function Navbar() {
           onMouseLeave={() => setDropdownOpen(false)}
         >
           <button
-            className={`uppercase tracking-widest font-light flex items-center gap-1 hover:text-yellow-700 transition-colors ${
+            className={`uppercase tracking-widest font-light flex items-center gap-1 text-[#3a383a] hover:text-yellow-700 transition-colors ${
               conoceMasActive ? "text-yellow-700" : ""
             }`}
           >
