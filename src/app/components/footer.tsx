@@ -6,10 +6,10 @@ import routes from "../lib/routes";
 export default function Footer() {
 	return (
 		<footer className="bg-orange-50 text-[#3a383a]">
-			<div className=" max-w-[800px] mx-auto">
+			<div className="max-w-[800px] mx-auto">
 				<Faq />
 				<div className="py-12 flex flex-col md:flex-row gap-8 px-4 md:px-8" id="contact">
-					<div className="space-y-2">
+					<div className="space-y-2 flex-1">
 						<Link href={routes.home.href} className="text-4xl font-bold">
 							<div className="relative w-24 h-24 md:w-28 md:h-28">
 								<Image
@@ -24,19 +24,46 @@ export default function Footer() {
 						<div className="text-lg space-y-2">
 							<h3 className="text-2xl">Contacto</h3>
 							<div>
-								<a href="https://wa.me/524464109800?text=Hola%2C%20quiero%20reservar%20una%20cabaña%20en%20Jämadi%20Camp" className="opacity-80 hover:opacity-100 transition-opacity">
+								<a
+									href="https://wa.me/524464109800?text=Hola%2C%20quiero%20reservar%20una%20cabaña%20en%20Jämadi%20Camp"
+									className="opacity-80 hover:opacity-100 transition-opacity"
+								>
 									WhatsApp: +52 446 410 9800
 								</a>
 							</div>
 							<div>
-								{" "}
-								<a href={`mailto:${process.env.NEXT_PUBLIC_TO_EMAIL}`} className="opacity-80 hover:opacity-100 transition-opacity">
+								<a
+									href={`mailto:${process.env.NEXT_PUBLIC_TO_EMAIL}`}
+									className="opacity-80 hover:opacity-100 transition-opacity"
+								>
 									Email: {process.env.NEXT_PUBLIC_TO_EMAIL}
 								</a>
 							</div>
 						</div>
+
+						<div className="text-base space-y-3 pt-2">
+							<h3 className="text-lg font-semibold">Nuestras Ubicaciones</h3>
+							<div className="space-y-1">
+								<p className="font-medium text-sm uppercase tracking-wider opacity-70">
+									Jamädi Camp &amp; Camping
+								</p>
+								<p className="opacity-80 text-sm">
+									Ave. Puerta de San Juan 3<br />
+									La Manzana, Amealco, Querétaro
+								</p>
+							</div>
+							<div className="space-y-1">
+								<p className="font-medium text-sm uppercase tracking-wider opacity-70">
+									Jamädi San José
+								</p>
+								<p className="opacity-80 text-sm">
+									Emiliano Zapata 51<br />
+									San José Itho, Amealco, Querétaro
+								</p>
+							</div>
+						</div>
 					</div>
-					
+
 					<div className="flex flex-col items-center md:items-end space-y-4">
 						<div className="text-center md:text-right">
 							<h4 className="text-lg font-semibold mb-2">Escanea para contactarnos</h4>

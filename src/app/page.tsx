@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 		index: true,
 		follow: true,
 	},
-	metadataBase: new URL(routes.home.href, process.env.CLIENT_URL),
+	metadataBase: new URL(routes.home.href, process.env.CLIENT_URL ?? "http://localhost:3000"),
 	alternates: {
 		canonical: routes.home.href
 	},
