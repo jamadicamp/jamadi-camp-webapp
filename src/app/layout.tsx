@@ -7,11 +7,11 @@ import Footer from "./components/footer";
 
 const cormorant = Cormorant({
   variable: "--font-comorant",
-  subsets: ["latin"]
+  subsets: ["latin", "latin-ext"]
 })
 
 export const metadata: Metadata = {
-  title: "Jamadi Camp",
+  title: "Jamädi Camp",
   description: "Escapa de la ciudad y sumérgete en la naturaleza. Experimenta aire fresco, fogatas acogedoras y momentos inolvidables en nuestro refugio escénico.",
 };
 

@@ -33,7 +33,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 		description: property.description,
 		openGraph: {
 			images: property.images?.[0]?.url || property.image_url,
-			siteName: "Jamadi Camp"
+			siteName: "Jamädi Camp"
 		},
 		metadataBase: new URL(pathname, process.env.CLIENT_URL),
 		alternates: {
@@ -176,7 +176,7 @@ export default async function PropertyPage(props: Props) {
       
 	  <section className="max-w-[960px] mx-auto px-8 lg:px-0 mt-12 mb-20">
 		<h3 className="text-center text-3xl font-bold mb-2">Galería</h3>
-		<p className="text-center max-w-[600px] mx-auto mb-6">Explora las imágenes de nuestra hermosa cabaña y sus alrededores. Cada foto captura la esencia de la tranquilidad y la belleza natural que te espera en Jamadi Camp.</p>
+		<p className="text-center max-w-[600px] mx-auto mb-6">Explora las imágenes de nuestra hermosa cabaña y sus alrededores. Cada foto captura la esencia de la tranquilidad y la belleza natural que te espera en Jamädi Camp.</p>
 		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
 			{property.images?.map((image, index) => (
 				<div key={index} className="relative aspect-[2/3] w-full">

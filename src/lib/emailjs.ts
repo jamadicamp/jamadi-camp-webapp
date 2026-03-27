@@ -46,7 +46,7 @@ Property Image: {{property_image}}
 Please contact the guest to confirm the booking.
 
 Best regards,
-Jamadi Camp Booking System
+Jamädi Camp Booking System
 */
 
 export interface BookingEmailData {

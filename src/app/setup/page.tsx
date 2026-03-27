@@ -5,7 +5,7 @@ import connectDB from '@/lib/db';
 import User from '@/lib/models/User';
 
 export const metadata: Metadata = {
-  title: 'Configuración Inicial - Jamadi Camp',
+  title: 'Configuración Inicial - Jamädi Camp',
   description: 'Crear el primer usuario administrador para la aplicación',
 };
 
@@ -86,7 +86,7 @@ export default async function SetupPage({
             Configuración Inicial
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Crear el primer usuario administrador para Jamadi Camp
+            Crear el primer usuario administrador para Jamädi Camp
           </p>
         </div>
 

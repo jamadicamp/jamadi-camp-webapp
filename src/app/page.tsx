@@ -12,7 +12,7 @@ import routes from "./lib/routes";
 // metadata
 
 export const metadata: Metadata = {
-	title: "Jamadi Camp",
+	title: "Jamädi Camp",
 	description: "Escapa de la ciudad y sumérgete en la naturaleza. Experimenta aire fresco, fogatas acogedoras y momentos inolvidables en nuestro refugio escénico.",
 	robots: {
 		index: true,
@@ -76,7 +76,7 @@ export default async function Home() {
 				id="highlights"
 				className="bg-white py-12 md:py-16 px-4 md:px-20 text-center"
 			>
-				<h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por qué Jamadi?</h2>
+				<h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por qué Jamädi?</h2>
 				<p className="text-gray-600 max-w-3xl mx-auto mb-10">
 					Nos esforzamos por hacer que tu estadía sea memorable con encanto rústico y
 					comodidad moderna. Descubre nuestras características principales:
@@ -132,7 +132,7 @@ export default async function Home() {
 				className="bg-orange-50 py-12 md:py-16 px-4 md:px-20 text-center"
 			>
 				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
-					Nuestras Cabañas en Jamadi
+					Nuestras Cabañas en Jamädi
 				</h3>
 				<RenderPropertiesList properties={properties} guests="1" />
 			</section>
@@ -144,7 +144,7 @@ export default async function Home() {
 				</h3>
 				<p className="text-[#3a383a] max-w-lg mx-auto mb-8">
 					No te pierdas la oportunidad de recargar energías en nuestras cabañas tranquilas. Reserva
-					tu lugar ahora y experimenta Jamadi en su mejor momento.
+					tu lugar ahora y experimenta Jamädi en su mejor momento.
 				</p>
 				<a
 					href="#search"

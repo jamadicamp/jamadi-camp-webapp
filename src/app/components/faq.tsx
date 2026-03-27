@@ -16,7 +16,7 @@ export default function Faq() {
 				/>
 				<Item
 					title="¿Tienen estacionamiento?"
-					text="Jamadi Camp tiene estacionamiento gratuito."
+					text="Jamädi Camp tiene estacionamiento gratuito."
 				/>
 				<Item
 					title="¿Cómo entro a mi cabaña?"
