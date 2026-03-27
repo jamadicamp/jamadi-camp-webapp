@@ -1,6 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import routes from "../../lib/routes";
 import { Metadata } from "next";
+import { PhotoSlot } from "@/app/components/photo-slot";
+import { getPagePhotos } from "@/app/lib/page-photos";
 
 export const metadata: Metadata = {
   title: "Jamädi Camping",
@@ -17,25 +20,48 @@ const includes = [
   { icon: "🅿️", name: "Estacionamiento", desc: "Gratuito para todos los campistas" },
 ];
 
-export default function CampingPage() {
+export default async function CampingPage() {
+  const photos = await getPagePhotos("campamentos/camping");
   return (
     <main>
       {/* Hero */}
-      <section className="bg-[#3a383a] text-white py-20 px-4 md:px-20">
-        <Link
-          href={routes.campamentos.href}
-          className="text-xs uppercase tracking-widest opacity-50 hover:opacity-80 transition-opacity mb-4 inline-block"
-        >
-          ← Jamädi Campamentos
-        </Link>
-        <h1 className="text-5xl md:text-7xl font-light italic mb-6">Jamädi Camping</h1>
-        <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-          Para quienes quieren ir más allá. Duerme bajo las estrellas, respira aire puro
-          y desconéctate del mundo con la naturaleza como única compañía.
-        </p>
-        <p className="mt-4 text-sm opacity-50">
-          Ave. Puerta de San Juan 3, La Manzana, Amealco, Querétaro
-        </p>
+      <section className="relative bg-[#3a383a] text-white py-20 px-4 md:px-20 overflow-hidden">
+        {photos.hero && (
+          <Image fill src={photos.hero} alt="Hero" className="object-cover opacity-40" />
+        )}
+        <div className="relative z-10">
+          <Link
+            href={routes.campamentos.href}
+            className="text-xs uppercase tracking-widest opacity-50 hover:opacity-80 transition-opacity mb-4 inline-block"
+          >
+            ← Jamädi Campamentos
+          </Link>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Jamädi Camping</h1>
+          <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
+            Para quienes quieren ir más allá. Duerme bajo las estrellas, respira aire puro
+            y desconéctate del mundo con la naturaleza como única compañía.
+          </p>
+          <p className="mt-4 text-sm opacity-50">
+            Ave. Puerta de San Juan 3, La Manzana, Amealco, Querétaro
+          </p>
+        </div>
+      </section>
+
+      {/* Feature Photo */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <PhotoSlot url={photos.feature} alt="Foto principal" className="aspect-[4/3] w-full" />
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-light italic text-[#3a383a]">
+              Acampa en pleno bosque
+            </h2>
+            <p className="text-[#3a383a] opacity-70 leading-relaxed">
+              Nuestra área de camping se ubica dentro de los terrenos de Jamädi, rodeada
+              de vegetación nativa y con vistas al cerro. Es la forma más auténtica
+              de vivir Jamädi: todo lo esencial, nada superfluo.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* About */}
@@ -125,6 +151,15 @@ export default function CampingPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <PhotoSlot url={photos.gallery_1} alt="Galería 1" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_2} alt="Galería 2" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_3} alt="Galería 3" className="aspect-[4/3] w-full" />
         </div>
       </section>
 

@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { jwtVerify } from 'jose';
 import PropertyList from './components/PropertyList';
+import PagePhotoManager from './components/PagePhotoManager';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -130,6 +131,16 @@ export default async function CMSPage({
           </div>
 
           <PropertyList properties={properties} />
+
+          {/* Page Photos Section */}
+          <div className="mt-10">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">
+                Fotos de Páginas
+              </h2>
+            </div>
+            <PagePhotoManager />
+          </div>
         </div>
       </main>
     </div>

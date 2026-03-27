@@ -1,6 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import routes from "../lib/routes";
 import { Metadata } from "next";
+import { PhotoSlot } from "@/app/components/photo-slot";
+import { getPagePhotos } from "@/app/lib/page-photos";
 
 export const metadata: Metadata = {
   title: "Jamädi Campamentos",
@@ -38,17 +41,40 @@ const locations = [
   },
 ];
 
-export default function CampamentosPage() {
+export default async function CampamentosPage() {
+  const photos = await getPagePhotos("campamentos");
   return (
     <main>
       {/* Hero */}
-      <section className="bg-[#3a383a] text-white py-20 px-4 md:px-20">
-        <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-        <h1 className="text-5xl md:text-7xl font-light italic mb-6">Campamentos</h1>
-        <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-          Tres destinos, una misma esencia natural. Cada lugar tiene su propia personalidad,
-          pero todos comparten el espíritu Jamädi: conexión, descanso y aventura.
-        </p>
+      <section className="relative bg-[#3a383a] text-white py-20 px-4 md:px-20 overflow-hidden">
+        {photos.hero && (
+          <Image fill src={photos.hero} alt="Hero" className="object-cover opacity-40" />
+        )}
+        <div className="relative z-10">
+          <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Campamentos</h1>
+          <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
+            Tres destinos, una misma esencia natural. Cada lugar tiene su propia personalidad,
+            pero todos comparten el espíritu Jamädi: conexión, descanso y aventura.
+          </p>
+        </div>
+      </section>
+
+      {/* Feature Photo */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <PhotoSlot url={photos.feature} alt="Foto principal" className="aspect-[4/3] w-full" />
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-light italic text-[#3a383a]">
+              Tres destinos, una misma esencia
+            </h2>
+            <p className="text-[#3a383a] opacity-70 leading-relaxed">
+              Cada campamento Jamädi tiene su propio carácter, pero todos comparten el mismo
+              compromiso: brindarte una conexión auténtica con la naturaleza de Amealco, con
+              la atención y el cuidado que nos distinguen.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Locations */}
@@ -90,6 +116,15 @@ export default function CampamentosPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <PhotoSlot url={photos.gallery_1} alt="Galería 1" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_2} alt="Galería 2" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_3} alt="Galería 3" className="aspect-[4/3] w-full" />
         </div>
       </section>
 

@@ -1,4 +1,7 @@
+import Image from "next/image";
 import { Metadata } from "next";
+import { PhotoSlot } from "@/app/components/photo-slot";
+import { getPagePhotos } from "@/app/lib/page-photos";
 
 export const metadata: Metadata = {
   title: "Jamädi Natura",
@@ -51,18 +54,42 @@ const experiencias = [
   },
 ];
 
-export default function NaturaPage() {
+export default async function NaturaPage() {
+  const photos = await getPagePhotos("natura");
   return (
     <main>
       {/* Hero */}
-      <section className="bg-[#3a383a] text-white py-20 px-4 md:px-20">
-        <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-        <h1 className="text-5xl md:text-7xl font-light italic mb-6">Natura</h1>
-        <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-          La naturaleza no es el escenario, es la experiencia misma. En Jamädi Natura
-          te invitamos a conectar, observar, respirar y descubrir el mundo natural
-          que nos rodea.
-        </p>
+      <section className="relative bg-[#3a383a] text-white py-20 px-4 md:px-20 overflow-hidden">
+        {photos.hero && (
+          <Image fill src={photos.hero} alt="Hero" className="object-cover opacity-40" />
+        )}
+        <div className="relative z-10">
+          <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Natura</h1>
+          <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
+            La naturaleza no es el escenario, es la experiencia misma. En Jamädi Natura
+            te invitamos a conectar, observar, respirar y descubrir el mundo natural
+            que nos rodea.
+          </p>
+        </div>
+      </section>
+
+      {/* Feature Photo */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <PhotoSlot url={photos.feature} alt="Foto principal" className="aspect-[4/3] w-full" />
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-light italic text-[#3a383a]">
+              Más que un paseo, una reconexión
+            </h2>
+            <p className="text-[#3a383a] opacity-70 leading-relaxed">
+              Amealco es uno de los municipios con mayor biodiversidad en Querétaro.
+              Su bosque templado, sus arroyos y su cielo sin contaminación lo convierten
+              en un laboratorio natural excepcional para redescubrir la relación entre
+              el ser humano y su entorno.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Intro */}
@@ -103,6 +130,15 @@ export default function NaturaPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="bg-white py-16 px-4 md:px-20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <PhotoSlot url={photos.gallery_1} alt="Galería 1" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_2} alt="Galería 2" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_3} alt="Galería 3" className="aspect-[4/3] w-full" />
         </div>
       </section>
 
