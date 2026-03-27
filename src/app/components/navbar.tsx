@@ -136,17 +136,17 @@ export default function Navbar() {
         onClick={toggleSidebar}
       >
         <motion.span
-          className="block h-[2px] w-6 bg-black"
+          className={`block h-[2px] w-6 ${isOpen ? "bg-white" : "bg-[#3a383a]"}`}
           animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.3 }}
         />
         <motion.span
-          className="block h-[2px] w-6 bg-black"
+          className={`block h-[2px] w-6 ${isOpen ? "bg-white" : "bg-[#3a383a]"}`}
           animate={isOpen ? { width: 0, opacity: 0 } : { width: "100%", opacity: 1 }}
           transition={{ duration: 0.3 }}
         />
         <motion.span
-          className="block h-[2px] w-6 bg-black"
+          className={`block h-[2px] w-6 ${isOpen ? "bg-white" : "bg-[#3a383a]"}`}
           animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.3 }}
         />
