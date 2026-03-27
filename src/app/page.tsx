@@ -53,17 +53,17 @@ export default async function Home() {
 				<div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
 					<h1 className="text-[#3a383a] text-xl font-bold md:text-4xl mb-4">
 						Ven y disfruta de la tranquilidad de nuestras <br />
-						<span className="italic font-normal">cabañas rústicas en Jamadi</span>.
+						<span className="italic font-normal">cabañas rústicas en Jamädi</span>.
 					</h1>
 					<p className="text-gray-800 max-w-xl mb-8">
 						Escapa de la ciudad y sumérgete en la naturaleza. Experimenta aire
 						fresco, fogatas acogedoras y momentos inolvidables en nuestro refugio escénico.
 					</p>
 					<a
-						href="#highlights"
+						href="#cabins"
 						className="inline-block bg-orange-50 text-[#3a383a] px-6 py-2 border border-[#3a383a] uppercase transition-colors"
 					>
-						Conoce Más
+						Ver Cabañas
 					</a>
 				</div>
 			</div>

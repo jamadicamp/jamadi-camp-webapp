@@ -276,7 +276,7 @@ export default function MainAvailabilityCalendar({
 						onChange={(e) => setGuests(parseInt(e.target.value))}
 						className="bg-transparent outline-none"
 					>
-						{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+						{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
 							<option key={num} value={num}>
 								{num} {num === 1 ? 'Huésped' : 'Huéspedes'}
 							</option>
