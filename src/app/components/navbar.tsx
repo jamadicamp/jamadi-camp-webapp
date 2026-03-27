@@ -9,16 +9,40 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
-const conoceMasLinks = [
-  { label: "Jamädi Campamentos", href: routes.campamentos.href },
-  { label: "Jamädi Orgánico", href: routes.organico.href },
-  { label: "Jamädi Celebración", href: routes.celebracion.href },
-  { label: "Jamädi Empresarial", href: routes.empresarial.href },
-  { label: "Jamädi Natura", href: routes.natura.href },
-  { label: "Jamädi Kids", href: routes.kids.href },
-  { label: "Jamädi Experiencias", href: routes.experiencias.href },
-  { label: "Jamädi Bienes Raíces", href: routes.bienesRaices.href },
+const megaMenuColumns = [
+  {
+    heading: "Campamentos",
+    links: [
+      { label: "Jamädi Camp", href: routes.camp.href },
+      { label: "Jamädi Camping", href: routes.camping.href },
+      { label: "Jamädi San José", href: routes.sanJose.href },
+    ],
+  },
+  {
+    heading: "Eventos",
+    links: [
+      { label: "Jamädi Celebración", href: routes.celebracion.href },
+      { label: "Jamädi Empresarial", href: routes.empresarial.href },
+    ],
+  },
+  {
+    heading: "Experiencias",
+    links: [
+      { label: "Jamädi Natura", href: routes.natura.href },
+      { label: "Jamädi Kids", href: routes.kids.href },
+      { label: "Jamädi Experiencias", href: routes.experiencias.href },
+    ],
+  },
+  {
+    heading: "Servicios",
+    links: [
+      { label: "Jamädi Orgánico", href: routes.organico.href },
+      { label: "Jamädi Bienes Raíces", href: routes.bienesRaices.href },
+    ],
+  },
 ];
+
+const allMegaLinks = megaMenuColumns.flatMap((col) => col.links);
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,11 +69,13 @@ export default function Navbar() {
   const toggleSidebar = () => setIsOpen((prev) => !prev);
 
   const conoceMasActive =
-    mounted &&
-    conoceMasLinks.some((link) => pathname.startsWith(link.href));
+    mounted && allMegaLinks.some((link) => pathname.startsWith(link.href));
 
   return (
-    <nav className="flex items-center justify-between px-4 md:px-20 bg-orange-50 border-b border-[#3a383a]/15 shadow-sm">
+    <nav
+      className="relative flex items-center justify-between px-4 md:px-20 bg-orange-50 border-b border-[#3a383a]/15 shadow-sm"
+      onMouseLeave={() => setDropdownOpen(false)}
+    >
       {/* LOGO */}
       <Link href={routes.home.href} className="text-4xl font-bold">
         <div className="relative w-24 h-24 md:w-28 md:h-28">
@@ -79,11 +105,10 @@ export default function Navbar() {
           Preguntas Frecuentes
         </NavLink>
 
-        {/* Conoce Más Dropdown */}
+        {/* Conoce Más trigger */}
         <li
-          className="relative list-none"
+          className="list-none"
           onMouseEnter={() => setDropdownOpen(true)}
-          onMouseLeave={() => setDropdownOpen(false)}
         >
           <button
             className={`uppercase tracking-widest font-light flex items-center gap-1 text-[#3a383a] hover:text-yellow-700 transition-colors ${
@@ -99,27 +124,6 @@ export default function Navbar() {
               <ChevronDown className="w-3 h-3" />
             </motion.span>
           </button>
-          <AnimatePresence>
-            {dropdownOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.15 }}
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-orange-50 border border-orange-200 shadow-lg min-w-[220px] py-2 z-50"
-              >
-                {conoceMasLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="block px-5 py-2 text-xs uppercase tracking-widest hover:text-yellow-700 text-[#3a383a] font-light transition-colors whitespace-nowrap"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
         </li>
 
         <NavLink
@@ -129,6 +133,45 @@ export default function Navbar() {
           Jamädi Reservas
         </NavLink>
       </ul>
+
+      {/* Desktop Mega Menu — full-width panel */}
+      <AnimatePresence>
+        {dropdownOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="absolute top-full left-0 right-0 hidden md:block bg-orange-50 border-b border-[#3a383a]/15 shadow-md z-50 px-20 py-8"
+          >
+            <div className="grid grid-cols-4">
+              {megaMenuColumns.map((col, i) => (
+                <div
+                  key={col.heading}
+                  className={`px-8 ${i === 0 ? "pl-0" : "border-l border-[#3a383a]/10"}`}
+                >
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#3a383a] opacity-40 mb-5 font-medium">
+                    {col.heading}
+                  </p>
+                  <ul className="space-y-3">
+                    {col.links.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          onClick={() => setDropdownOpen(false)}
+                          className="text-sm text-[#3a383a] opacity-60 hover:opacity-100 hover:text-yellow-700 transition-all font-light tracking-wide block"
+                        >
+                          › {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Hamburger Icon */}
       <div
@@ -185,7 +228,7 @@ export default function Navbar() {
                 </NavLink>
               </li>
 
-              {/* Mobile Conoce Más */}
+              {/* Mobile Conoce Más — grouped sections */}
               <li>
                 <button
                   onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
@@ -204,26 +247,35 @@ export default function Navbar() {
                 </button>
                 <AnimatePresence>
                   {mobileDropdownOpen && (
-                    <motion.ul
+                    <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.25 }}
                       style={{ overflow: "hidden" }}
-                      className="mt-4 ml-2 space-y-4"
+                      className="mt-5 ml-1 space-y-6"
                     >
-                      {conoceMasLinks.map((link) => (
-                        <li key={link.href}>
-                          <Link
-                            href={link.href}
-                            onClick={() => setIsOpen(false)}
-                            className="text-xs uppercase tracking-widest font-light hover:text-yellow-700 transition-colors block"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
+                      {megaMenuColumns.map((col) => (
+                        <div key={col.heading}>
+                          <p className="text-[9px] uppercase tracking-[0.2em] opacity-40 mb-3 font-medium">
+                            {col.heading}
+                          </p>
+                          <ul className="space-y-3">
+                            {col.links.map((link) => (
+                              <li key={link.href}>
+                                <Link
+                                  href={link.href}
+                                  onClick={() => setIsOpen(false)}
+                                  className="text-xs uppercase tracking-widest font-light opacity-75 hover:opacity-100 hover:text-yellow-700 transition-colors block"
+                                >
+                                  › {link.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       ))}
-                    </motion.ul>
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </li>
