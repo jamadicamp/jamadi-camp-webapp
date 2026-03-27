@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import connectDB from "@/lib/db";
 import PagePhoto from "@/lib/models/PagePhoto";
 
@@ -10,6 +11,7 @@ export type PhotoSlots = {
 };
 
 export async function getPagePhotos(pageSlug: string): Promise<PhotoSlots> {
+  noStore();
   try {
     await connectDB();
     const photos = await PagePhoto.find({ pageSlug }).lean();

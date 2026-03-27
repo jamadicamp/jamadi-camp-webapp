@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Jamädi Bienes Raíces",
   description:
