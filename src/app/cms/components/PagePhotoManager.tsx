@@ -266,8 +266,8 @@ export default function PagePhotoManager() {
           {/* Extra cabin slots for Jamädi Camp */}
           {page.slug === "campamentos/camp" && (
             <>
-              <div className="px-5 py-2 border-t border-gray-100 bg-orange-50">
-                <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+              <div className="px-5 py-2 border-t border-gray-100 bg-gray-50">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Cabañas — Fotos para slideshow
                 </p>
               </div>

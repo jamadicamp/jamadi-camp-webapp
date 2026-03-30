@@ -36,7 +36,7 @@ export default function Footer() {
 									href={`mailto:${process.env.NEXT_PUBLIC_TO_EMAIL}`}
 									className="opacity-80 hover:opacity-100 transition-opacity"
 								>
-									Email: {process.env.NEXT_PUBLIC_TO_EMAIL}
+									{process.env.NEXT_PUBLIC_TO_EMAIL}
 								</a>
 							</div>
 						</div>
