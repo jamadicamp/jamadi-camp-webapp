@@ -133,16 +133,16 @@ export default async function OrganicoPage() {
               Horarios
             </h3>
             <div className="flex justify-between border-b border-[#3a383a]/10 pb-3">
-              <span className="opacity-70">Lunes – Viernes</span>
-              <span className="font-medium">8:00 am – 8:00 pm</span>
+              <span className="opacity-70">Viernes</span>
+              <span className="font-medium">3:00 pm – 8:00 pm</span>
             </div>
             <div className="flex justify-between border-b border-[#3a383a]/10 pb-3">
               <span className="opacity-70">Sábado</span>
-              <span className="font-medium">7:00 am – 9:00 pm</span>
+              <span className="font-medium">8:00 am – 8:00 pm</span>
             </div>
             <div className="flex justify-between border-b border-[#3a383a]/10 pb-3">
               <span className="opacity-70">Domingo</span>
-              <span className="font-medium">7:00 am – 6:00 pm</span>
+              <span className="font-medium">8:00 am – 1:00 pm</span>
             </div>
             <p className="text-xs opacity-50 pt-2">
               Reservaciones recomendadas para grupos de 6 o más personas.
