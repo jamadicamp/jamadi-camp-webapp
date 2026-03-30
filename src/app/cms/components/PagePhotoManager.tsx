@@ -64,7 +64,18 @@ const SLOTS = [
   { key: "gallery_3", label: "Galería 3" },
 ] as const;
 
-type SlotKey = (typeof SLOTS)[number]["key"];
+const CABIN_SLOTS = [
+  { key: "cabin_1", label: "Cabaña 01" },
+  { key: "cabin_2", label: "Cabaña 02" },
+  { key: "cabin_3", label: "Cabaña 03" },
+  { key: "cabin_4", label: "Cabaña 04" },
+  { key: "cabin_5", label: "Cabaña 05" },
+  { key: "cabin_6", label: "Cabaña 06" },
+  { key: "cabin_7", label: "Cabaña 07" },
+  { key: "cabin_8", label: "Cabaña 08" },
+];
+
+type SlotKey = string;
 
 interface StoredPhoto {
   _id: string;
@@ -218,90 +229,128 @@ export default function PagePhotoManager() {
             <p className="text-xs text-gray-400 mt-0.5">/{page.slug}</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-px bg-gray-100">
-            {SLOTS.map((slot) => {
-              const key = `${page.slug}::${slot.key}`;
-              const entry = photos[key];
-              const isUploading = uploading === key;
-
-              return (
-                <div key={slot.key} className="bg-white p-3 space-y-2">
-                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                    {slot.label}
-                  </p>
-
-                  {/* Photo preview or placeholder */}
-                  <div className="relative aspect-[4/3] bg-gray-100 rounded overflow-hidden group">
-                    {entry ? (
-                      <>
-                        <Image
-                          fill
-                          src={entry.url}
-                          alt={`${page.name} — ${slot.label}`}
-                          className="object-cover"
-                        />
-                        {/* Overlay with replace/delete on hover */}
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                          <button
-                            onClick={() => handleSlotClick(page.slug, slot.key)}
-                            title="Reemplazar"
-                            className="p-1.5 bg-white rounded-full text-gray-700 hover:bg-gray-100"
-                          >
-                            <Upload className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(page.slug, slot.key)}
-                            title="Eliminar"
-                            className="p-1.5 bg-white rounded-full text-red-600 hover:bg-red-50"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => handleSlotClick(page.slug, slot.key)}
-                        disabled={isUploading}
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-gray-300 hover:text-gray-400 hover:bg-gray-50 transition-colors w-full disabled:cursor-not-allowed"
-                      >
-                        {isUploading ? (
-                          <>
-                            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
-                            <span className="text-[9px] text-blue-500 uppercase tracking-wide">
-                              {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-5 h-5" />
-                            <span className="text-[10px] uppercase tracking-wide">Subir foto</span>
-                          </>
-                        )}
-                      </button>
-                    )}
-
-                    {/* Uploading overlay over existing photo */}
-                    {isUploading && entry && (
-                      <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-1">
-                        <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
-                        <span className="text-[9px] text-blue-500 uppercase tracking-wide">
-                          {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Success overlay */}
-                    {success === key && !isUploading && (
-                      <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center pointer-events-none">
-                        <CheckCircle2 className="w-8 h-8 text-green-600 drop-shadow" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {SLOTS.map((slot) => (
+              <SlotCell
+                key={slot.key}
+                pageSlug={page.slug}
+                pageName={page.name}
+                slotKey={slot.key}
+                slotLabel={slot.label}
+                entry={photos[`${page.slug}::${slot.key}`]}
+                isUploading={uploading === `${page.slug}::${slot.key}`}
+                phase={phase}
+                success={success}
+                onUpload={handleSlotClick}
+                onDelete={handleDelete}
+              />
+            ))}
           </div>
+
+          {/* Extra cabin slots for Jamädi Camp */}
+          {page.slug === "campamentos/camp" && (
+            <>
+              <div className="px-5 py-2 border-t border-gray-100 bg-orange-50">
+                <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                  Cabañas — Fotos para slideshow
+                </p>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-px bg-gray-100">
+                {CABIN_SLOTS.map((slot) => (
+                  <SlotCell
+                    key={slot.key}
+                    pageSlug={page.slug}
+                    pageName={page.name}
+                    slotKey={slot.key}
+                    slotLabel={slot.label}
+                    entry={photos[`${page.slug}::${slot.key}`]}
+                    isUploading={uploading === `${page.slug}::${slot.key}`}
+                    phase={phase}
+                    success={success}
+                    onUpload={handleSlotClick}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       ))}
+    </div>
+  );
+}
+
+interface SlotCellProps {
+  pageSlug: string;
+  pageName: string;
+  slotKey: string;
+  slotLabel: string;
+  entry?: { url: string; id: string };
+  isUploading: boolean;
+  phase: "compressing" | "uploading" | null;
+  success: string | null;
+  onUpload: (pageSlug: string, slot: SlotKey) => void;
+  onDelete: (pageSlug: string, slot: SlotKey) => void;
+}
+
+function SlotCell({
+  pageSlug, pageName, slotKey, slotLabel,
+  entry, isUploading, phase, success,
+  onUpload, onDelete,
+}: SlotCellProps) {
+  const key = `${pageSlug}::${slotKey}`;
+  return (
+    <div className="bg-white p-3 space-y-2">
+      <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+        {slotLabel}
+      </p>
+      <div className="relative aspect-[4/3] bg-gray-100 rounded overflow-hidden group">
+        {entry ? (
+          <>
+            <Image fill src={entry.url} alt={`${pageName} — ${slotLabel}`} className="object-cover" />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+              <button onClick={() => onUpload(pageSlug, slotKey)} title="Reemplazar" className="p-1.5 bg-white rounded-full text-gray-700 hover:bg-gray-100">
+                <Upload className="w-3.5 h-3.5" />
+              </button>
+              <button onClick={() => onDelete(pageSlug, slotKey)} title="Eliminar" className="p-1.5 bg-white rounded-full text-red-600 hover:bg-red-50">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </>
+        ) : (
+          <button
+            onClick={() => onUpload(pageSlug, slotKey)}
+            disabled={isUploading}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-gray-300 hover:text-gray-400 hover:bg-gray-50 transition-colors w-full disabled:cursor-not-allowed"
+          >
+            {isUploading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                <span className="text-[9px] text-blue-500 uppercase tracking-wide">
+                  {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
+                </span>
+              </>
+            ) : (
+              <>
+                <Upload className="w-5 h-5" />
+                <span className="text-[10px] uppercase tracking-wide">Subir foto</span>
+              </>
+            )}
+          </button>
+        )}
+        {isUploading && entry && (
+          <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-1">
+            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+            <span className="text-[9px] text-blue-500 uppercase tracking-wide">
+              {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
+            </span>
+          </div>
+        )}
+        {success === key && !isUploading && (
+          <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center pointer-events-none">
+            <CheckCircle2 className="w-8 h-8 text-green-600 drop-shadow" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
 import { getPageContent } from "@/app/lib/page-content";
+import CabinSlideshow from "@/app/components/cabin-slideshow";
 
 export const revalidate = 0;
 
@@ -67,6 +68,14 @@ export default async function CampPage() {
           </div>
         </div>
       </section>
+
+      {/* Cabin Slideshow */}
+      {(() => {
+        const cabinSlides = [1, 2, 3, 4, 5, 6, 7, 8]
+          .map((n) => ({ url: photos[`cabin_${n}` as keyof typeof photos] || "", label: `Cabaña 0${n}` }))
+          .filter((s) => s.url);
+        return cabinSlides.length > 0 ? <CabinSlideshow slides={cabinSlides} /> : null;
+      })()}
 
       {/* About */}
       <section className="bg-orange-50 py-16 px-4 md:px-20">
