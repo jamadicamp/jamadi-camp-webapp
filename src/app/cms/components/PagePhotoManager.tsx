@@ -4,6 +4,44 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
 
+const MAX_WIDTH = 1200;
+const JPEG_QUALITY = 0.8;
+
+function compressImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let { width, height } = img;
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas not supported"));
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return reject(new Error("Compression failed"));
+          const outName = file.name.replace(/\.[^.]+$/, ".jpg");
+          resolve(new File([blob], outName, { type: "image/jpeg" }));
+        },
+        "image/jpeg",
+        JPEG_QUALITY
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Failed to load image for compression"));
+    };
+    img.src = objectUrl;
+  });
+}
+
 const PAGE_DEFINITIONS = [
   { slug: "campamentos", name: "Jamädi Campamentos" },
   { slug: "campamentos/camp", name: "Jamädi Camp" },
@@ -42,6 +80,7 @@ type PhotoMap = Record<string, { url: string; id: string }>;
 export default function PagePhotoManager() {
   const [photos, setPhotos] = useState<PhotoMap>({});
   const [uploading, setUploading] = useState<string | null>(null);
+  const [phase, setPhase] = useState<"compressing" | "uploading" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,12 +111,17 @@ export default function PagePhotoManager() {
     const { pageSlug, slot } = pendingSlotRef.current;
     const key = `${pageSlug}::${slot}`;
     setUploading(key);
+    setPhase("compressing");
     setError(null);
 
     try {
+      // 0. Compress image client-side before sending (avoids 413 on large photos)
+      const compressed = await compressImage(file);
+      setPhase("uploading");
+
       // 1. Upload to Cloudinary via existing endpoint
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", compressed);
       const uploadRes = await fetch("/api/upload", {
         method: "POST",
         body: formData,
@@ -113,6 +157,7 @@ export default function PagePhotoManager() {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setUploading(null);
+      setPhase(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -215,10 +260,16 @@ export default function PagePhotoManager() {
                     ) : (
                       <button
                         onClick={() => handleSlotClick(page.slug, slot.key)}
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-gray-300 hover:text-gray-400 hover:bg-gray-50 transition-colors w-full"
+                        disabled={isUploading}
+                        className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-gray-300 hover:text-gray-400 hover:bg-gray-50 transition-colors w-full disabled:cursor-not-allowed"
                       >
                         {isUploading ? (
-                          <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                            <span className="text-[9px] text-blue-500 uppercase tracking-wide">
+                              {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
+                            </span>
+                          </>
                         ) : (
                           <>
                             <Upload className="w-5 h-5" />
@@ -230,8 +281,11 @@ export default function PagePhotoManager() {
 
                     {/* Uploading overlay over existing photo */}
                     {isUploading && entry && (
-                      <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-1">
                         <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                        <span className="text-[9px] text-blue-500 uppercase tracking-wide">
+                          {phase === "compressing" ? "Comprimiendo..." : "Subiendo..."}
+                        </span>
                       </div>
                     )}
 

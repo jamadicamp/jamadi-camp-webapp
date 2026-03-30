@@ -3,6 +3,17 @@ import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 import cloudinary from '@/lib/cloudinary';
 
+// Increase body size limit (note: effective for Pages Router; App Router limit
+// is controlled at the Vercel infrastructure level — client-side compression
+// is the primary safeguard against 413 errors)
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+};
+
 interface CloudinaryUploadResult {
   secure_url: string;
   public_id: string;
