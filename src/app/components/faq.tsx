@@ -22,6 +22,22 @@ export default function Faq() {
 					title="¿Cómo entro a mi cabaña?"
 					text="Se te enviará un código por WhatsApp dos días antes de tu reservación, que debe ingresarse en la caja de almacenamiento negra junto a la puerta principal, donde encontrarás las llaves de tu cabaña. Al final de tu estadía debes devolverlas al mismo lugar."
 				/>
+				<Item
+					title="¿Qué debo llevar?"
+					text="Debes de llevar todo lo necesario para tu estancia, ya que no contamos con venta de comidas ni bebidas. La tienda más cercana está a 15 minutos de la cabaña."
+				/>
+				<Item
+					title="¿Cómo puedo cancelar mi reserva?"
+					text="No contamos con reembolsos. Sin embargo, se puede solicitar un cambio de fecha hasta 72 horas antes del día de tu reserva. Para ello tendrás que enviarnos un WhatsApp mandando tu comprobante de pago para ajustar la fecha requerida."
+				/>
+				<Item
+					title="¿Cuentan con WiFi o señal de teléfono?"
+					text="Todas las cabañas cuentan con WiFi (7.5 Mbps de descarga / 4.5 Mbps de carga en promedio) y la zona sí cuenta con señal de teléfono."
+				/>
+				<Item
+					title="¿Cómo llego a las cabañas?"
+					text="En el WhatsApp de confirmación obtendrás todos los detalles necesarios para llegar."
+				/>
 			</div>
 		</div>
 	);

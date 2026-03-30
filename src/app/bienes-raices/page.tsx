@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -45,6 +46,7 @@ const ventajas = [
 
 export default async function BienesRaicesPage() {
   const photos = await getPagePhotos("bienes-raices");
+  const content = await getPageContent("bienes-raices");
   return (
     <main>
       {/* Hero */}
@@ -54,10 +56,9 @@ export default async function BienesRaicesPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Bienes Raíces</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Bienes Raíces"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Encuentra tu lugar en la naturaleza. Si quedaste enamorado de Amealco,
-            te ayudamos a hacer de este rincón tu hogar, tu inversión o tu refugio.
+            {content.subtitle || "Encuentra tu lugar en la naturaleza. Si quedaste enamorado de Amealco, te ayudamos a hacer de este rincón tu hogar, tu inversión o tu refugio."}
           </p>
         </div>
       </section>

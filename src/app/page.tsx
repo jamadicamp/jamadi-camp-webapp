@@ -129,12 +129,43 @@ export default async function Home() {
 			{/* Cabins Section */}
 			<section
 				id="cabins"
-				className="bg-orange-50 py-12 md:py-16 px-4 md:px-20 text-center"
+				className="bg-orange-50 py-12 md:py-16 px-4 md:px-20"
 			>
-				<h3 className="text-3xl md:text-5xl font-medium italic mb-16">
+				<h3 className="text-3xl md:text-5xl font-medium italic mb-16 text-center">
 					Nuestras Cabañas en Jamädi
 				</h3>
-				<RenderPropertiesList properties={properties} guests="1" />
+
+				{/* Jamädi Camp */}
+				{properties.filter(p => !p.location || p.location === 'camp').length > 0 && (
+					<div className="mb-16">
+						<h4 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-8 text-center border-b border-[#3a383a]/20 pb-4 max-w-xs mx-auto">
+							Jamädi Camp
+						</h4>
+						<RenderPropertiesList properties={properties.filter(p => !p.location || p.location === 'camp')} guests="1" />
+					</div>
+				)}
+
+				{/* Jamädi San José */}
+				{properties.filter(p => p.location === 'san-jose').length > 0 && (
+					<div className="mb-16">
+						<h4 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-8 text-center border-b border-[#3a383a]/20 pb-4 max-w-xs mx-auto">
+							Jamädi San José
+						</h4>
+						<RenderPropertiesList properties={properties.filter(p => p.location === 'san-jose')} guests="1" />
+					</div>
+				)}
+
+				{/* Jamädi Camping */}
+				{properties.filter(p => p.location === 'camping').length > 0 && (
+					<div className="mb-8">
+						<h4 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-8 text-center border-b border-[#3a383a]/20 pb-4 max-w-xs mx-auto">
+							Jamädi Camping
+						</h4>
+						<p className="text-center text-[#3a383a] opacity-70 italic">
+							Área de campismo — trae tu equipo y duerme bajo las estrellas.
+						</p>
+					</div>
+				)}
 			</section>
 
 			{/* Call to Action / Booking Section */}

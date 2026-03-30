@@ -55,8 +55,9 @@ export async function createProperty(formData: FormData) {
         has_addons: formData.get('has_addons') === 'on',
         rating: parseFloat(formData.get('rating') as string),
         is_active: formData.get('is_active') === 'on',
+        location: formData.get('location') || 'camp',
         currencies: currencies,
-        
+
         // Room fields
         amenities: {
           additionalProp: (formData.get('amenities') as string || '').split(',').filter(amenity => amenity.trim()).map(amenity => ({
@@ -198,6 +199,7 @@ export async function updateFullProperty(propertyId: string, formData: FormData)
       has_addons: formData.get('has_addons') === 'on',
       rating: parseFloat(formData.get('rating') as string) || 0,
       is_active: formData.get('is_active') === 'on',
+      location: formData.get('location') || 'camp',
       currencies: currencies,
       
       // Room fields

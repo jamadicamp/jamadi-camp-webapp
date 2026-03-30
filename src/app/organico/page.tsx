@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -48,6 +49,7 @@ const menuBebidas = [
 
 export default async function OrganicoPage() {
   const photos = await getPagePhotos("organico");
+  const content = await getPageContent("organico");
   return (
     <main>
       {/* Hero */}
@@ -57,10 +59,9 @@ export default async function OrganicoPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Orgánico</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Orgánico"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Sabores del campo, corazón de la naturaleza. Una cocina honesta hecha con
-            ingredientes orgánicos de la región, preparada con técnicas tradicionales.
+            {content.subtitle || "Sabores del campo, corazón de la naturaleza. Una cocina honesta hecha con ingredientes orgánicos de la región, preparada con técnicas tradicionales."}
           </p>
         </div>
       </section>
@@ -91,18 +92,18 @@ export default async function OrganicoPage() {
               Santiago Zolliker
             </h2>
             <p className="opacity-75 leading-relaxed">
-              10 años de experiencia internacional en Suiza, Suecia, Canadá y Australia,
-              combinados con la esencia de la cocina de campo mexicana. El menú usa
-              ingredientes orgánicos y tradicionales donde la técnica global se encuentra
-              con el sabor local.
+              Descubre la propuesta del Chef Santiago Zolliker: una firma de autor que combina
+              10 años de trayectoria internacional (Suiza, Suecia, Canadá y Australia) con la
+              esencia del campo. Disfruta de un menú diseñado con ingredientes orgánicos y
+              tradicionales, donde la técnica global se encuentra con el sabor local.
             </p>
           </div>
           <div className="border border-white/20 p-8 space-y-4 text-white">
             <p className="text-xs uppercase tracking-widest opacity-50 mb-2">Especial del Domingo</p>
             <h3 className="text-2xl font-light italic">Barbacoa de Borrego</h3>
             <p className="opacity-70 leading-relaxed text-sm">
-              Un platillo que requiere tiempo, tradición y dedicación. Se prepara bajo pedido
-              — contáctanos con anticipación para reservar tu lugar.
+              Pregunta por nuestro especial de los domingos: Barbacoa de Borrego. Favor de
+              realizar su pedido con anticipación para garantizar disponibilidad.
             </p>
             <a
               href="https://wa.me/524464109800?text=Hola%2C%20quiero%20ordenar%20Barbacoa%20de%20Borrego%20del%20domingo"

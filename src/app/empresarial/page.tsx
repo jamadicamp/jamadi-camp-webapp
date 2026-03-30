@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -58,6 +59,7 @@ const paquetes = [
 
 export default async function EmpresarialPage() {
   const photos = await getPagePhotos("empresarial");
+  const content = await getPageContent("empresarial");
   return (
     <main>
       {/* Hero */}
@@ -67,10 +69,9 @@ export default async function EmpresarialPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Empresarial</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Empresarial"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Fortalece tu equipo en la naturaleza. Cuando cambias el entorno, cambias
-            la conversación. Descubre lo que Jamädi puede hacer por tu organización.
+            {content.subtitle || "Fortalece tu equipo en la naturaleza. Cuando cambias el entorno, cambias la conversación. Descubre lo que Jamädi puede hacer por tu organización."}
           </p>
         </div>
       </section>

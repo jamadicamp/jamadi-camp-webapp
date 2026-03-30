@@ -4,6 +4,7 @@ import routes from "../../lib/routes";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -24,6 +25,7 @@ const amenities = [
 
 export default async function CampPage() {
   const photos = await getPagePhotos("campamentos/camp");
+  const content = await getPageContent("campamentos/camp");
   return (
     <main>
       {/* Hero */}
@@ -38,10 +40,9 @@ export default async function CampPage() {
           >
             ← Jamädi Campamentos
           </Link>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Jamädi Camp</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Jamädi Camp"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            El corazón de Jamädi. Cabañas rústicas con todo el confort moderno, pensadas
-            para quienes quieren descansar sin renunciar a la comodidad.
+            {content.subtitle || "El corazón de Jamädi. Cabañas rústicas con todo el confort moderno, pensadas para quienes quieren descansar sin renunciar a la comodidad."}
           </p>
           <p className="mt-4 text-sm opacity-50">
             Ave. Puerta de San Juan 3, La Manzana, Amealco, Querétaro

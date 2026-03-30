@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -48,6 +49,7 @@ const programas = [
 
 export default async function KidsPage() {
   const photos = await getPagePhotos("kids");
+  const content = await getPageContent("kids");
   return (
     <main>
       {/* Hero */}
@@ -57,10 +59,9 @@ export default async function KidsPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Kids</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Kids"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Aventuras pensadas para los más pequeños. Un espacio seguro donde los niños
-            descubren la naturaleza, aprenden del campo y crean memorias que duran toda la vida.
+            {content.subtitle || "Aventuras pensadas para los más pequeños. Un espacio seguro donde los niños descubren la naturaleza, aprenden del campo y crean memorias que duran toda la vida."}
           </p>
         </div>
       </section>

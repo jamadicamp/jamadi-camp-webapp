@@ -291,6 +291,22 @@ export default function EditPropertyPage({ params }: { params: Promise<{ id: str
             </div>
 
             <div>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                Ubicación / Campamento
+              </label>
+              <select
+                id="location"
+                name="location"
+                defaultValue={property.location || 'camp'}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              >
+                <option value="camp">Jamädi Camp</option>
+                <option value="san-jose">Jamädi San José</option>
+                <option value="camping">Jamädi Camping</option>
+              </select>
+            </div>
+
+            <div>
               <label htmlFor="area_unit" className="block text-sm font-medium text-gray-700">
                 Area Unit
               </label>

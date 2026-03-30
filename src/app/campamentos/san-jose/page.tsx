@@ -4,6 +4,7 @@ import routes from "../../lib/routes";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -24,6 +25,7 @@ const features = [
 
 export default async function SanJosePage() {
   const photos = await getPagePhotos("campamentos/san-jose");
+  const content = await getPageContent("campamentos/san-jose");
   return (
     <main>
       {/* Hero */}
@@ -38,10 +40,9 @@ export default async function SanJosePage() {
           >
             ← Jamädi Campamentos
           </Link>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Jamädi San José</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Jamädi San José"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Un rincón íntimo en San José Itho. Aquí la naturaleza se mezcla con la
-            cultura local, la cocina de leña y el ritmo tranquilo de la vida de campo.
+            {content.subtitle || "Un rincón íntimo en San José Itho. Aquí la naturaleza se mezcla con la cultura local, la cocina de leña y el ritmo tranquilo de la vida de campo."}
           </p>
           <p className="mt-4 text-sm opacity-50">
             Emiliano Zapata 51, San José Itho, Amealco, Querétaro

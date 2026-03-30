@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -58,6 +59,7 @@ const experiencias = [
 
 export default async function NaturaPage() {
   const photos = await getPagePhotos("natura");
+  const content = await getPageContent("natura");
   return (
     <main>
       {/* Hero */}
@@ -67,11 +69,9 @@ export default async function NaturaPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Natura</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Natura"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            La naturaleza no es el escenario, es la experiencia misma. En Jamädi Natura
-            te invitamos a conectar, observar, respirar y descubrir el mundo natural
-            que nos rodea.
+            {content.subtitle || "La naturaleza no es el escenario, es la experiencia misma. En Jamädi Natura te invitamos a conectar, observar, respirar y descubrir el mundo natural que nos rodea."}
           </p>
         </div>
       </section>

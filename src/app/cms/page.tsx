@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { jwtVerify } from 'jose';
 import PropertyList from './components/PropertyList';
 import PagePhotoManager from './components/PagePhotoManager';
+import PageContentManager from './components/PageContentManager';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -131,6 +132,16 @@ export default async function CMSPage({
           </div>
 
           <PropertyList properties={properties} />
+
+          {/* Page Content Section */}
+          <div className="mt-10">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">
+                Textos de Páginas
+              </h2>
+            </div>
+            <PageContentManager />
+          </div>
 
           {/* Page Photos Section */}
           <div className="mt-10">

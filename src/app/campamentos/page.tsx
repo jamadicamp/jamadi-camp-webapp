@@ -4,6 +4,7 @@ import routes from "../lib/routes";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -45,6 +46,7 @@ const locations = [
 
 export default async function CampamentosPage() {
   const photos = await getPagePhotos("campamentos");
+  const content = await getPageContent("campamentos");
   return (
     <main>
       {/* Hero */}
@@ -54,10 +56,9 @@ export default async function CampamentosPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Campamentos</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Campamentos"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Tres destinos, una misma esencia natural. Cada lugar tiene su propia personalidad,
-            pero todos comparten el espíritu Jamädi: conexión, descanso y aventura.
+            {content.subtitle || "Tres destinos, una misma esencia natural. Cada lugar tiene su propia personalidad, pero todos comparten el espíritu Jamädi: conexión, descanso y aventura."}
           </p>
         </div>
       </section>

@@ -4,6 +4,7 @@ import routes from "../../lib/routes";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -24,6 +25,7 @@ const includes = [
 
 export default async function CampingPage() {
   const photos = await getPagePhotos("campamentos/camping");
+  const content = await getPageContent("campamentos/camping");
   return (
     <main>
       {/* Hero */}
@@ -38,10 +40,9 @@ export default async function CampingPage() {
           >
             ← Jamädi Campamentos
           </Link>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Jamädi Camping</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Jamädi Camping"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Para quienes quieren ir más allá. Duerme bajo las estrellas, respira aire puro
-            y desconéctate del mundo con la naturaleza como única compañía.
+            {content.subtitle || "Para quienes quieren ir más allá. Duerme bajo las estrellas, respira aire puro y desconéctate del mundo con la naturaleza como única compañía."}
           </p>
           <p className="mt-4 text-sm opacity-50">
             Ave. Puerta de San Juan 3, La Manzana, Amealco, Querétaro

@@ -19,6 +19,7 @@ const propertySchema = new mongoose.Schema<Property>({
   has_addons: { type: Boolean, default: false },
   rating: { type: Number, default: 5 },
   is_active: { type: Boolean, default: true },
+  location: { type: String, enum: ['camp', 'san-jose', 'camping'], default: 'camp' },
   currencies: [{
     id: { type: Number, required: true },
     code: { type: String, required: true },

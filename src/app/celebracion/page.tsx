@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { PhotoSlot } from "@/app/components/photo-slot";
 import { getPagePhotos } from "@/app/lib/page-photos";
+import { getPageContent } from "@/app/lib/page-content";
 
 export const revalidate = 0;
 
@@ -51,6 +52,7 @@ const servicios = [
 
 export default async function CelebracionPage() {
   const photos = await getPagePhotos("celebracion");
+  const content = await getPageContent("celebracion");
   return (
     <main>
       {/* Hero */}
@@ -60,10 +62,9 @@ export default async function CelebracionPage() {
         )}
         <div className="relative z-10">
           <p className="text-xs uppercase tracking-widest opacity-60 mb-4">Jamädi</p>
-          <h1 className="text-5xl md:text-7xl font-light italic mb-6">Celebración</h1>
+          <h1 className="text-5xl md:text-7xl font-light italic mb-6">{content.title || "Celebración"}</h1>
           <p className="text-lg opacity-80 max-w-2xl leading-relaxed">
-            Los momentos más importantes de la vida merecen un escenario a la altura.
-            En Jamädi, la naturaleza es el mejor telón de fondo para tus celebraciones.
+            {content.subtitle || "Los momentos más importantes de la vida merecen un escenario a la altura. En Jamädi, la naturaleza es el mejor telón de fondo para tus celebraciones."}
           </p>
         </div>
       </section>

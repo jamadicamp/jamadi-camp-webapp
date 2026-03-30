@@ -38,6 +38,7 @@ export interface Property {
   max_price: number;
   currency_code: string;
   is_active: boolean;
+  location?: 'camp' | 'san-jose' | 'camping';
   currencies: {
     id: number;
     code: string;
