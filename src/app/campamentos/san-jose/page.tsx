@@ -126,10 +126,11 @@ export default async function SanJosePage() {
 
       {/* Gallery */}
       <section className="bg-white py-16 px-4 md:px-20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
           <PhotoSlot url={photos.gallery_1} alt="Galería 1" className="aspect-[4/3] w-full" />
           <PhotoSlot url={photos.gallery_2} alt="Galería 2" className="aspect-[4/3] w-full" />
           <PhotoSlot url={photos.gallery_3} alt="Galería 3" className="aspect-[4/3] w-full" />
+          <PhotoSlot url={photos.gallery_4} alt="Galería 4" className="aspect-[4/3] w-full" />
         </div>
       </section>
 

@@ -8,6 +8,7 @@ export type PhotoSlots = {
   gallery_1?: string;
   gallery_2?: string;
   gallery_3?: string;
+  gallery_4?: string;
   cabin_1?: string;
   cabin_2?: string;
   cabin_3?: string;

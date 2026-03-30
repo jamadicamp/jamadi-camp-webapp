@@ -64,6 +64,23 @@ const SLOTS = [
   { key: "gallery_3", label: "Galería 3" },
 ] as const;
 
+// Per-page slot overrides (replaces SLOTS for that page)
+const PAGE_SLOTS: Record<string, { key: string; label: string }[]> = {
+  "campamentos/camp": [
+    { key: "hero", label: "Hero" },
+    { key: "feature", label: "Principal" },
+    { key: "gallery_1", label: "Galería 1" },
+  ],
+  "campamentos/san-jose": [
+    { key: "hero", label: "Hero" },
+    { key: "feature", label: "Principal" },
+    { key: "gallery_1", label: "Galería 1" },
+    { key: "gallery_2", label: "Galería 2" },
+    { key: "gallery_3", label: "Galería 3" },
+    { key: "gallery_4", label: "Galería 4" },
+  ],
+};
+
 const CABIN_SLOTS = [
   { key: "cabin_1", label: "Cabaña 01" },
   { key: "cabin_2", label: "Cabaña 02" },
@@ -229,7 +246,7 @@ export default function PagePhotoManager() {
             <p className="text-xs text-gray-400 mt-0.5">/{page.slug}</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-px bg-gray-100">
-            {SLOTS.map((slot) => (
+            {(PAGE_SLOTS[page.slug] ?? SLOTS).map((slot) => (
               <SlotCell
                 key={slot.key}
                 pageSlug={page.slug}

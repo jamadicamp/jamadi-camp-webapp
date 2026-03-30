@@ -142,13 +142,13 @@ export default async function CampPage() {
       </section>
 
       {/* Gallery */}
-      <section className="bg-white py-16 px-4 md:px-20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <PhotoSlot url={photos.gallery_1} alt="Galería 1" className="aspect-[4/3] w-full" />
-          <PhotoSlot url={photos.gallery_2} alt="Galería 2" className="aspect-[4/3] w-full" />
-          <PhotoSlot url={photos.gallery_3} alt="Galería 3" className="aspect-[4/3] w-full" />
-        </div>
-      </section>
+      {photos.gallery_1 && (
+        <section className="bg-white py-16 px-4 md:px-20">
+          <div className="max-w-5xl mx-auto">
+            <PhotoSlot url={photos.gallery_1} alt="Galería" className="aspect-[16/7] w-full" />
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="bg-orange-50 py-16 px-4 md:px-20 text-center">
