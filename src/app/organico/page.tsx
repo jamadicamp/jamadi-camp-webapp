@@ -11,49 +11,39 @@ export const metadata: Metadata = {
     "Restaurante de cocina de campo con ingredientes orgánicos locales. Desayunos, comidas y cenas con los sabores auténticos de Amealco.",
 };
 
-const menuDesayunos = [
-  { name: "Huevos de rancho", desc: "Huevos frescos de la granja con salsa verde y tortillas de maíz" },
-  { name: "Tamales artesanales", desc: "Preparados con masa de maíz criollo y rellenos de temporada" },
-  { name: "Atole de guayaba", desc: "Bebida tradicional hecha con fruta de la región" },
-  { name: "Café de olla", desc: "Café preparado con canela y piloncillo al estilo tradicional" },
-  { name: "Enfrijoladas", desc: "Tortillas bañadas en salsa de frijol negro con queso fresco" },
+const menuSalado = [
+  {
+    name: "Huevos de Nuestra Granja",
+    desc: "Omelette, Rancheros, Motuleños, Estrellados, Revueltos o Divorciados",
+  },
+  { name: "Chilaquiles", desc: "Rojos ó verdes" },
+  { name: "Enchiladas", desc: "Rojas, verdes o enmoladas" },
+  { name: "Quesadillas", desc: "Queso ranchero" },
+  { name: "Enfrijoladas", desc: "Con queso y crema" },
+  { name: "Tamales", desc: "Verdes, rojos o dulces" },
 ];
 
-const menuComidas = [
-  { name: "Caldo de res", desc: "Caldo nutritivo con verduras de temporada del huerto propio" },
-  { name: "Chiles rellenos", desc: "Poblanos rellenos de queso Oaxaca y nuez, en caldillo de jitomate" },
-  { name: "Enchiladas verdes", desc: "Con pollo de rancho, crema fresca y queso rallado" },
-  { name: "Trucha del arroyo", desc: "Trucha local a la plancha con hierbas del campo" },
-  { name: "Pozole rojo", desc: "Los fines de semana, maíz cacahuazintle con carne de cerdo y garniciones" },
+const menuCrujiente = [
+  { name: "Molletes", desc: "Queso & pico de gallo" },
+  {
+    name: "Avocado Toast",
+    desc: "Pan de masa madre tostado a la leña, cubierto con aguacate de la región, aceite de oliva extra virgen, hojuelas de chile seco, semillas de girasol tostadas y huevo pochado de nuestra granja. Se sirve con brotes orgánicos frescos y sal de grano.",
+  },
 ];
 
-const menuPostres = [
-  { name: "Pan dulce de horno", desc: "Horneado diariamente con receta de la abuela" },
-  { name: "Cajeta artesanal", desc: "Elaborada en la región con leche de cabra" },
-  { name: "Queso con miel y nuez", desc: "Quesos locales acompañados de miel de abeja y nuez de Castilla" },
+const menuDulce = [
+  { name: "Pan Dulce", desc: "" },
+  { name: "Fruta del Tiempo", desc: "" },
+  { name: "Arroz con Leche", desc: "" },
 ];
 
-const eventos = [
-  {
-    name: "Noches de Fondue",
-    desc: "Los viernes por la noche: fondue de queso artesanal al calor de la fogata. Reservaciones previas.",
-    icon: "🫕",
-  },
-  {
-    name: "Cenas Especiales",
-    desc: "Cenas de degustación con menús de temporada diseñados por nuestros cocineros. Agenda tu mesa.",
-    icon: "🕯️",
-  },
-  {
-    name: "Maridaje de Quesos",
-    desc: "Tardes de sábado: selección de quesos artesanales de Querétaro con mermeladas y vinos locales.",
-    icon: "🧀",
-  },
-  {
-    name: "Desayunos del Campo",
-    desc: "Domingos: desayuno comunitario en la terraza con todo incluido. Familias bienvenidas.",
-    icon: "🌅",
-  },
+const menuBebidas = [
+  { name: "Café", desc: "De Olla o Americano" },
+  { name: "Frappe", desc: "" },
+  { name: "Licuados", desc: "" },
+  { name: "Smoothies", desc: "" },
+  { name: "Jugos", desc: "" },
+  { name: "Aguas de sabor", desc: "" },
 ];
 
 export default async function OrganicoPage() {
@@ -81,29 +71,56 @@ export default async function OrganicoPage() {
           <PhotoSlot url={photos.feature} alt="Foto principal" className="aspect-[4/3] w-full" />
           <div className="space-y-4">
             <h2 className="text-3xl md:text-4xl font-light italic text-[#3a383a]">
-              Del campo a tu mesa
+              Técnica global, sabor local
             </h2>
             <p className="text-[#3a383a] opacity-70 leading-relaxed">
-              En Jamädi Orgánico creemos que comer bien comienza por conocer el origen
-              de lo que ponemos en el plato. Trabajamos con productores locales de Amealco
-              y cultivamos una parte de nuestros ingredientes en el huerto propio.
+              Donde la experiencia internacional se encuentra con la esencia de la cocina
+              de campo mexicana. Ingredientes orgánicos y tradicionales, preparados con
+              técnica y cariño.
             </p>
           </div>
         </div>
       </section>
 
-      {/* About */}
+      {/* Chef Bio */}
+      <section className="bg-[#3a383a] py-16 px-4 md:px-20">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+          <div className="space-y-5 text-white">
+            <p className="text-xs uppercase tracking-widest opacity-50">El Chef</p>
+            <h2 className="text-3xl md:text-4xl font-light italic">
+              Santiago Zolliker
+            </h2>
+            <p className="opacity-75 leading-relaxed">
+              10 años de experiencia internacional en Suiza, Suecia, Canadá y Australia,
+              combinados con la esencia de la cocina de campo mexicana. El menú usa
+              ingredientes orgánicos y tradicionales donde la técnica global se encuentra
+              con el sabor local.
+            </p>
+          </div>
+          <div className="border border-white/20 p-8 space-y-4 text-white">
+            <p className="text-xs uppercase tracking-widest opacity-50 mb-2">Especial del Domingo</p>
+            <h3 className="text-2xl font-light italic">Barbacoa de Borrego</h3>
+            <p className="opacity-70 leading-relaxed text-sm">
+              Un platillo que requiere tiempo, tradición y dedicación. Se prepara bajo pedido
+              — contáctanos con anticipación para reservar tu lugar.
+            </p>
+            <a
+              href="https://wa.me/524464109800?text=Hola%2C%20quiero%20ordenar%20Barbacoa%20de%20Borrego%20del%20domingo"
+              className="inline-block border border-white/40 text-white px-5 py-2 text-xs uppercase tracking-widest hover:bg-white hover:text-[#3a383a] transition-colors"
+            >
+              Pedir con anticipación
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* About / Horarios */}
       <section className="bg-orange-50 py-16 px-4 md:px-20">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
             <h2 className="text-3xl md:text-4xl font-light italic text-[#3a383a]">
               Del campo a tu mesa
             </h2>
-            <p className="text-[#3a383a] opacity-80 leading-relaxed">
-              En Jamädi Orgánico creemos que comer bien comienza por conocer el origen
-              de lo que ponemos en el plato. Por eso trabajamos con productores locales
-              de Amealco y cultivamos una parte de nuestros ingredientes en el huerto propio.
-            </p>
             <p className="text-[#3a383a] opacity-80 leading-relaxed">
               Nuestra cocina es de temporada: lo que ofrece la tierra en cada época del año
               es lo que encontrarás en nuestro menú. Sin artificiales, sin procesos industriales,
@@ -136,51 +153,74 @@ export default async function OrganicoPage() {
       {/* Menu */}
       <section className="bg-white py-16 px-4 md:px-20" id="menu">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light italic text-[#3a383a] mb-12 text-center">
-            Menú
-          </h2>
+          <div className="text-center mb-12">
+            <p className="text-xs uppercase tracking-widest opacity-50 text-[#3a383a] mb-3">Finde</p>
+            <h2 className="text-3xl font-light italic text-[#3a383a]">
+              Desayunos y Brunch
+            </h2>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {/* Desayunos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Salado */}
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-6 border-b border-[#3a383a]/20 pb-3">
-                Desayunos
+              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-50 mb-6 border-b border-[#3a383a]/15 pb-3">
+                Salado
               </h3>
-              <ul className="space-y-5">
-                {menuDesayunos.map((item) => (
+              <ul className="space-y-4">
+                {menuSalado.map((item) => (
                   <li key={item.name}>
                     <p className="font-medium text-[#3a383a]">{item.name}</p>
-                    <p className="text-sm text-[#3a383a] opacity-60 mt-1 leading-relaxed">{item.desc}</p>
+                    {item.desc && (
+                      <p className="text-sm text-[#3a383a] opacity-55 mt-0.5 leading-relaxed">{item.desc}</p>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Comidas */}
+            {/* Crujiente */}
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-6 border-b border-[#3a383a]/20 pb-3">
-                Comidas
+              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-50 mb-6 border-b border-[#3a383a]/15 pb-3">
+                Crujiente
               </h3>
-              <ul className="space-y-5">
-                {menuComidas.map((item) => (
+              <ul className="space-y-4">
+                {menuCrujiente.map((item) => (
                   <li key={item.name}>
                     <p className="font-medium text-[#3a383a]">{item.name}</p>
-                    <p className="text-sm text-[#3a383a] opacity-60 mt-1 leading-relaxed">{item.desc}</p>
+                    {item.desc && (
+                      <p className="text-sm text-[#3a383a] opacity-55 mt-0.5 leading-relaxed">{item.desc}</p>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Postres */}
+            {/* Dulce */}
             <div>
-              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-60 mb-6 border-b border-[#3a383a]/20 pb-3">
-                Postres
+              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-50 mb-6 border-b border-[#3a383a]/15 pb-3">
+                Dulce
               </h3>
-              <ul className="space-y-5">
-                {menuPostres.map((item) => (
+              <ul className="space-y-4">
+                {menuDulce.map((item) => (
                   <li key={item.name}>
                     <p className="font-medium text-[#3a383a]">{item.name}</p>
-                    <p className="text-sm text-[#3a383a] opacity-60 mt-1 leading-relaxed">{item.desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Bebidas */}
+            <div>
+              <h3 className="text-xs uppercase tracking-widest text-[#3a383a] opacity-50 mb-6 border-b border-[#3a383a]/15 pb-3">
+                Bebidas
+              </h3>
+              <ul className="space-y-4">
+                {menuBebidas.map((item) => (
+                  <li key={item.name}>
+                    <p className="font-medium text-[#3a383a]">{item.name}</p>
+                    {item.desc && (
+                      <p className="text-sm text-[#3a383a] opacity-55 mt-0.5">{item.desc}</p>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -188,33 +228,8 @@ export default async function OrganicoPage() {
           </div>
 
           <p className="text-xs text-center opacity-40 mt-12 italic">
-            El menú varía según la temporada y disponibilidad de ingredientes locales.
+            Menú de fin de semana — disponibilidad sujeta a ingredientes de temporada.
           </p>
-        </div>
-      </section>
-
-      {/* Eventos */}
-      <section className="bg-orange-50 py-16 px-4 md:px-20" id="eventos">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light italic text-[#3a383a] mb-4 text-center">
-            Eventos especiales
-          </h2>
-          <p className="text-center text-[#3a383a] opacity-70 mb-12 max-w-xl mx-auto">
-            Más allá del menú del día, organizamos experiencias gastronómicas únicas
-            a lo largo del año.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {eventos.map((ev) => (
-              <div
-                key={ev.name}
-                className="bg-white p-8 border border-[#3a383a]/10 space-y-3"
-              >
-                <span className="text-3xl">{ev.icon}</span>
-                <h3 className="text-xl font-light italic text-[#3a383a]">{ev.name}</h3>
-                <p className="text-sm text-[#3a383a] opacity-70 leading-relaxed">{ev.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
