@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Loader2, Upload, X } from "lucide-react";
+import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
 
 const PAGE_DEFINITIONS = [
   { slug: "campamentos", name: "Jamädi Campamentos" },
@@ -43,8 +43,10 @@ export default function PagePhotoManager() {
   const [photos, setPhotos] = useState<PhotoMap>({});
   const [uploading, setUploading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pendingSlotRef = useRef<{ pageSlug: string; slot: SlotKey } | null>(null);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetch("/api/cms/page-photos")
@@ -80,7 +82,10 @@ export default function PagePhotoManager() {
         method: "POST",
         body: formData,
       });
-      if (!uploadRes.ok) throw new Error("Error subiendo imagen");
+      if (!uploadRes.ok) {
+        const errData = await uploadRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Error subiendo imagen (${uploadRes.status})`);
+      }
       const { url, public_id } = await uploadRes.json();
 
       // 2. Save to DB
@@ -89,13 +94,21 @@ export default function PagePhotoManager() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pageSlug, slot, url, publicId: public_id }),
       });
-      if (!saveRes.ok) throw new Error("Error guardando foto");
+      if (!saveRes.ok) {
+        const errData = await saveRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Error guardando foto (${saveRes.status})`);
+      }
       const saved: StoredPhoto = await saveRes.json();
 
       setPhotos((prev) => ({
         ...prev,
         [key]: { url: saved.url, id: saved._id },
       }));
+
+      // Show success confirmation
+      setSuccess(key);
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      successTimerRef.current = setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -109,15 +122,20 @@ export default function PagePhotoManager() {
     const entry = photos[key];
     if (!entry) return;
     setUploading(key);
+    setError(null);
     try {
-      await fetch(`/api/cms/page-photos/${entry.id}`, { method: "DELETE" });
+      const deleteRes = await fetch(`/api/cms/page-photos/${entry.id}`, { method: "DELETE" });
+      if (!deleteRes.ok) {
+        const errData = await deleteRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Error eliminando foto (${deleteRes.status})`);
+      }
       setPhotos((prev) => {
         const next = { ...prev };
         delete next[key];
         return next;
       });
-    } catch {
-      setError("Error eliminando foto");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error eliminando foto");
     } finally {
       setUploading(null);
     }
@@ -126,8 +144,16 @@ export default function PagePhotoManager() {
   return (
     <div className="space-y-8">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded">
-          {error}
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded flex items-start gap-2">
+          <X className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>Foto guardada correctamente</span>
         </div>
       )}
 
@@ -206,6 +232,13 @@ export default function PagePhotoManager() {
                     {isUploading && entry && (
                       <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
                         <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                      </div>
+                    )}
+
+                    {/* Success overlay */}
+                    {success === key && !isUploading && (
+                      <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center pointer-events-none">
+                        <CheckCircle2 className="w-8 h-8 text-green-600 drop-shadow" />
                       </div>
                     )}
                   </div>
