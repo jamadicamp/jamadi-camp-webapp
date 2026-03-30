@@ -53,6 +53,7 @@ export default function CabinSlideshow({ slides }: { slides: Slide[] }) {
             alt={slides[current].label}
             className="object-cover"
             sizes="100vw"
+            quality={90}
             priority={current === 0}
           />
         </motion.div>
